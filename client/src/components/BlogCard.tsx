@@ -1,5 +1,6 @@
 import { ArrowUpRight, Clock, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "wouter";
 import type { BlogPost } from "@/lib/blogData";
 
 function formatDate(dateStr: string) {
@@ -13,10 +14,8 @@ function formatDate(dateStr: string) {
 
 export function BlogCard({ post }: { post: BlogPost }) {
   return (
-    <a
-      href={post.externalUrl}
-      target="_blank"
-      rel="noopener noreferrer"
+    <Link
+      href={`/posts/${post.id}`}
       className="block hover-elevate active-elevate-2 rounded-md"
       data-testid={`card-post-${post.id}`}
     >
@@ -57,16 +56,14 @@ export function BlogCard({ post }: { post: BlogPost }) {
           )}
         </div>
       </article>
-    </a>
+    </Link>
   );
 }
 
 export function HeroBlogCard({ post }: { post: BlogPost }) {
   return (
-    <a
-      href={post.externalUrl}
-      target="_blank"
-      rel="noopener noreferrer"
+    <Link
+      href={`/posts/${post.id}`}
       className="block hover-elevate active-elevate-2 rounded-md"
       data-testid={`card-featured-${post.id}`}
     >
@@ -104,6 +101,6 @@ export function HeroBlogCard({ post }: { post: BlogPost }) {
           ))}
         </div>
       </article>
-    </a>
+    </Link>
   );
 }
