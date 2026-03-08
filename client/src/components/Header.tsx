@@ -6,8 +6,8 @@ import { useState } from "react";
 
 const navItems = [
   { label: "首頁", path: "/" },
-  { label: "分類", path: "/categories" },
-  { label: "關於我", path: "/about" },
+  { label: "文章", path: "/posts" },
+  { label: "關於", path: "/about" },
   { label: "聯繫", path: "/contact" },
 ];
 
@@ -17,17 +17,17 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/50 backdrop-blur-xl bg-background/80">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+    <header className="sticky top-0 z-50 border-b border-border/40 glass bg-background/70">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-4 h-16">
           <Link href="/" data-testid="link-home">
-            <div className="flex items-center gap-2 cursor-pointer">
-              <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-mono text-sm font-bold">N</span>
+            <div className="flex items-center gap-3 cursor-pointer">
+              <div className="w-9 h-9 rounded-md bg-gradient-to-br from-purple-500 to-cyan-400 flex items-center justify-center">
+                <span className="text-white font-mono text-sm font-bold">N</span>
               </div>
-              <div className="hidden sm:block">
-                <span className="font-semibold text-sm tracking-tight">Nick's Blog</span>
-                <span className="text-muted-foreground text-xs ml-2 font-mono">// CTO的爐邊雜談</span>
+              <div className="hidden sm:flex flex-col">
+                <span className="font-semibold text-sm leading-tight tracking-tight">Nick Zhuang</span>
+                <span className="text-muted-foreground text-[10px] font-mono leading-tight">CTO的爐邊雜談</span>
               </div>
             </div>
           </Link>
@@ -36,9 +36,9 @@ export function Header() {
             {navItems.map((item) => (
               <Link key={item.path} href={item.path}>
                 <span
-                  className={`px-3 py-2 rounded-md text-sm cursor-pointer transition-colors ${
+                  className={`px-3.5 py-2 rounded-md text-sm cursor-pointer transition-colors ${
                     location === item.path
-                      ? "text-primary font-medium"
+                      ? "text-foreground font-medium bg-muted/50"
                       : "text-muted-foreground"
                   }`}
                   data-testid={`link-nav-${item.label}`}
@@ -76,9 +76,9 @@ export function Header() {
             {navItems.map((item) => (
               <Link key={item.path} href={item.path}>
                 <span
-                  className={`block px-3 py-2 rounded-md text-sm cursor-pointer transition-colors ${
+                  className={`block px-3.5 py-2.5 rounded-md text-sm cursor-pointer ${
                     location === item.path
-                      ? "text-primary font-medium bg-primary/5"
+                      ? "text-foreground font-medium bg-muted/50"
                       : "text-muted-foreground"
                   }`}
                   onClick={() => setMobileOpen(false)}

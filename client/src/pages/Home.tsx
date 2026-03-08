@@ -1,94 +1,145 @@
 import { blogPosts, categories } from "@/lib/blogData";
-import { BlogCard, FeaturedBlogCard } from "@/components/BlogCard";
+import { BlogCard, HeroBlogCard } from "@/components/BlogCard";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
-import { ArrowRight, Terminal, Cpu, Zap } from "lucide-react";
+import { ArrowRight, Sparkles, BookOpen, Layers, Code2 } from "lucide-react";
 import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function Home() {
   usePageTitle("Nick's Blog - AI異想封印 | CTO的爐邊雜談", "CTO的爐邊雜談 — 分享 AI 技術、系統架構、與職涯探索的深度觀點。");
+
   const featured = blogPosts[0];
-  const rest = blogPosts.slice(1);
+  const recent = blogPosts.slice(1, 7);
+  const totalPosts = blogPosts.length;
 
   return (
     <div className="min-h-screen">
-      <section className="relative overflow-hidden border-b border-border/30">
-        <div className="absolute inset-0 grid-pattern opacity-40" />
-        <div className="absolute top-0 left-0 right-0 h-px glow-line opacity-50" />
+      <section className="relative overflow-hidden">
+        <div className="hero-glow bg-purple-500 -top-40 -left-40" />
+        <div className="hero-glow bg-cyan-400 -top-20 right-0" />
 
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
-          <div className="flex items-center gap-2 mb-6">
-            <Terminal className="w-4 h-4 text-primary" />
-            <span className="font-mono text-xs text-primary tracking-wider uppercase">
-              Nick's Tech Blog
-            </span>
-          </div>
-
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4 leading-tight max-w-3xl">
-            <span className="text-gradient">AI異想封印</span>
-            <br />
-            <span className="text-foreground/90">神經漫遊與模型的深層連結</span>
-          </h1>
-
-          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mb-8 leading-relaxed">
-            CTO的爐邊雜談 — 分享 AI 技術、系統架構、與職涯探索的深度觀點。
-            十年軟體開發經驗，從前端到後端，從雲端到人工智慧。
-          </p>
-
-          <div className="flex items-center gap-6 text-sm text-muted-foreground/70">
-            <div className="flex items-center gap-2">
-              <Cpu className="w-3.5 h-3.5 text-primary/70" />
-              <span>{blogPosts.length} 篇文章</span>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-12 sm:pb-16">
+          <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-3 py-1 mb-6">
+              <Sparkles className="w-3 h-3 text-primary" />
+              <span className="text-xs font-medium text-primary">Tech Blog</span>
             </div>
-            <div className="flex items-center gap-2">
-              <Zap className="w-3.5 h-3.5 text-primary/70" />
-              <span>{categories.length} 個分類</span>
+
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-5 leading-[1.1]">
+              <span className="gradient-text">AI異想封印</span>
+              <br />
+              <span className="text-foreground">Nick的職場幻界</span>
+            </h1>
+
+            <p className="text-base sm:text-lg text-muted-foreground max-w-xl mb-10 leading-relaxed">
+              十年軟體開發，從前端到後端、從雲端到 AI。
+              分享技術洞察、架構設計、與職涯成長的深度觀點。
+            </p>
+
+            <div className="grid grid-cols-3 gap-4 max-w-sm">
+              <div className="rounded-md border border-border/40 bg-card/50 p-3 text-center gradient-border" data-testid="stat-posts">
+                <p className="text-lg font-bold gradient-text">{totalPosts}+</p>
+                <p className="text-[11px] text-muted-foreground">篇文章</p>
+              </div>
+              <div className="rounded-md border border-border/40 bg-card/50 p-3 text-center gradient-border" data-testid="stat-categories">
+                <p className="text-lg font-bold gradient-text">{categories.length}</p>
+                <p className="text-[11px] text-muted-foreground">個分類</p>
+              </div>
+              <div className="rounded-md border border-border/40 bg-card/50 p-3 text-center gradient-border" data-testid="stat-experience">
+                <p className="text-lg font-bold gradient-text">10+</p>
+                <p className="text-[11px] text-muted-foreground">年經驗</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
-        <FeaturedBlogCard post={featured} />
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+        <div className="grid gap-4 lg:grid-cols-5">
+          <div className="lg:col-span-3">
+            <HeroBlogCard post={featured} />
+          </div>
+
+          <div className="lg:col-span-2 grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+            <div className="rounded-md border border-border/40 bg-card p-5 gradient-border">
+              <div className="flex items-center gap-2.5 mb-3">
+                <div className="w-8 h-8 rounded-md bg-gradient-to-br from-purple-500/20 to-cyan-400/20 flex items-center justify-center">
+                  <BookOpen className="w-4 h-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold">著作出版</p>
+                </div>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                圖像生成式AI的生存指南：以Stable Diffusion為例
+              </p>
+            </div>
+
+            <div className="rounded-md border border-border/40 bg-card p-5 gradient-border">
+              <div className="flex items-center gap-2.5 mb-3">
+                <div className="w-8 h-8 rounded-md bg-gradient-to-br from-purple-500/20 to-cyan-400/20 flex items-center justify-center">
+                  <Layers className="w-4 h-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold">系列文章</p>
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <Link href="/posts?filter=ironman-2023">
+                  <span className="flex items-center justify-between text-xs text-muted-foreground cursor-pointer hover-elevate rounded p-1 -mx-1" data-testid="link-series-2023">
+                    <span>2023 鐵人賽 - Gen AI</span>
+                    <span className="text-primary font-mono">30</span>
+                  </span>
+                </Link>
+                <Link href="/posts?filter=ironman-2019">
+                  <span className="flex items-center justify-between text-xs text-muted-foreground cursor-pointer hover-elevate rounded p-1 -mx-1" data-testid="link-series-2019">
+                    <span>2019 鐵人賽 - K8S</span>
+                    <span className="text-primary font-mono">30</span>
+                  </span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-10">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
         <div className="flex items-center justify-between gap-4 mb-6">
-          <div className="flex items-center gap-2">
-            <div className="w-1 h-5 bg-primary rounded-full" />
-            <h2 className="text-lg font-semibold" data-testid="text-all-posts">所有文章</h2>
+          <div className="flex items-center gap-2.5">
+            <Code2 className="w-4 h-4 text-primary" />
+            <h2 className="text-lg font-semibold" data-testid="text-all-posts">最新文章</h2>
           </div>
-          <Link href="/categories">
-            <span className="flex items-center gap-1 text-sm text-muted-foreground cursor-pointer transition-colors" data-testid="link-view-categories">
-              瀏覽分類
+          <Link href="/posts">
+            <span className="flex items-center gap-1 text-sm text-muted-foreground cursor-pointer" data-testid="link-view-all">
+              查看全部
               <ArrowRight className="w-3.5 h-3.5" />
             </span>
           </Link>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          {rest.map((post, i) => (
-            <BlogCard key={post.id} post={post} index={i + 1} />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {recent.map((post) => (
+            <BlogCard key={post.id} post={post} />
           ))}
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-14">
-        <div className="flex items-center gap-2 mb-5">
-          <div className="w-1 h-5 bg-primary rounded-full" />
-          <h2 className="text-lg font-semibold" data-testid="text-categories">分類標籤</h2>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        <div className="flex items-center gap-2.5 mb-5">
+          <Layers className="w-4 h-4 text-primary" />
+          <h2 className="text-lg font-semibold" data-testid="text-categories">探索主題</h2>
         </div>
 
         <div className="flex flex-wrap gap-2">
           {categories.map((cat) => (
-            <Link key={cat.id} href={`/categories?filter=${cat.id}`}>
+            <Link key={cat.id} href={`/posts?filter=${cat.id}`}>
               <Badge
                 variant="secondary"
-                className="cursor-pointer text-sm font-normal py-1.5 px-3"
+                className="cursor-pointer text-sm font-normal py-1.5 px-3.5"
                 data-testid={`badge-category-${cat.id}`}
               >
                 {cat.name}
-                <span className="ml-1.5 text-muted-foreground/60">{cat.count}</span>
+                <span className="ml-2 text-primary/60 font-mono text-xs">{cat.count}</span>
               </Badge>
             </Link>
           ))}

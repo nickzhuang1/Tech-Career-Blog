@@ -5,70 +5,44 @@ import { SiLinkedin } from "react-icons/si";
 import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function About() {
-  usePageTitle("關於我 | Nick's Blog", "十年技術旅程，從工程師到技術長。");
+  usePageTitle("關於我 | Nick's Blog", "AI 與雲端的技術探索之路 — Nick Zhuang 的職涯介紹。");
+
   return (
     <div className="min-h-screen">
-      <section className="border-b border-border/30">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+      <section className="relative overflow-hidden border-b border-border/30">
+        <div className="hero-glow bg-purple-500 -top-40 -right-40" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <div className="flex items-center gap-2 mb-4">
             <User className="w-4 h-4 text-primary" />
-            <span className="font-mono text-xs text-primary tracking-wider uppercase">
-              About Me
-            </span>
+            <span className="font-mono text-xs text-primary tracking-wider uppercase">About</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-3">
-            關於我
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-2">
+            {aboutData.nameZh}{" "}
+            <span className="gradient-text">{aboutData.name}</span>
           </h1>
-          <p className="text-muted-foreground text-sm sm:text-base max-w-xl">
-            十年技術旅程，從工程師到技術長。
-          </p>
+          <p className="text-muted-foreground text-sm sm:text-base">{aboutData.title}</p>
+          <p className="text-muted-foreground text-xs">{aboutData.titleZh}</p>
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
-        <div className="grid gap-8 lg:grid-cols-3">
-          <div className="lg:col-span-2 space-y-8">
-            <div>
-              <h2 className="text-xl font-bold mb-1" data-testid="text-name">
-                {aboutData.name}
-              </h2>
-              <p className="text-primary font-mono text-sm mb-4" data-testid="text-title">
-                {aboutData.title}
-              </p>
-              <p className="text-muted-foreground leading-relaxed text-sm sm:text-base" data-testid="text-bio">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+        <div className="grid gap-4 lg:grid-cols-3">
+          <div className="lg:col-span-2 space-y-4">
+            <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
+              <h2 className="font-semibold mb-3 text-sm">關於我</h2>
+              <p className="text-sm text-muted-foreground leading-relaxed" data-testid="text-bio">
                 {aboutData.bio}
               </p>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-md border border-border/50 bg-card p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <GraduationCap className="w-4 h-4 text-primary" />
-                  <span className="text-sm font-medium">學歷</span>
-                </div>
-                <p className="text-sm text-muted-foreground" data-testid="text-education">
-                  {aboutData.education}
-                </p>
-              </div>
-
-              <div className="rounded-md border border-border/50 bg-card p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <Briefcase className="w-4 h-4 text-primary" />
-                  <span className="text-sm font-medium">經驗</span>
-                </div>
-                <p className="text-sm text-muted-foreground" data-testid="text-experience">
-                  {aboutData.experience}
-                </p>
-              </div>
-            </div>
-
-            <div>
+            <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-1 h-5 bg-primary rounded-full" />
-                <h3 className="font-semibold">專業領域</h3>
+                <Briefcase className="w-4 h-4 text-primary" />
+                <h2 className="font-semibold text-sm">專業領域</h2>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2" data-testid="text-expertise">
                 {aboutData.expertise.map((skill) => (
                   <Badge key={skill} variant="secondary" className="text-sm font-normal py-1.5 px-3" data-testid={`badge-skill-${skill}`}>
                     {skill}
@@ -77,47 +51,62 @@ export default function About() {
               </div>
             </div>
 
-            <div className="rounded-md border border-border/50 bg-card p-5">
-              <div className="flex items-center gap-2 mb-3">
+            <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
+              <div className="flex items-center gap-2 mb-4">
                 <BookOpen className="w-4 h-4 text-primary" />
-                <span className="text-sm font-medium">著作</span>
+                <h2 className="font-semibold text-sm">著作出版</h2>
               </div>
-              <p className="text-sm font-medium mb-1" data-testid="text-book-title">
-                {aboutData.book.title}
-              </p>
-              <p className="text-xs text-muted-foreground">
-                {aboutData.book.titleEn}
-              </p>
+              <div className="rounded-md bg-gradient-to-br from-purple-500/10 via-background to-cyan-400/5 border border-purple-500/20 p-4">
+                <p className="text-sm font-medium mb-1" data-testid="text-book-title">
+                  {aboutData.book.title}
+                </p>
+                <p className="text-xs text-muted-foreground">{aboutData.book.titleEn}</p>
+              </div>
             </div>
           </div>
 
           <div className="space-y-4">
-            <div className="rounded-md border border-border/50 bg-card p-5">
-              <h3 className="text-sm font-medium mb-4">社群連結</h3>
+            <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
+              <div className="flex items-center gap-2 mb-4">
+                <GraduationCap className="w-4 h-4 text-primary" />
+                <h2 className="font-semibold text-sm">背景</h2>
+              </div>
+              <div className="space-y-3 text-sm">
+                <div>
+                  <p className="text-muted-foreground text-xs mb-0.5">學歷</p>
+                  <p data-testid="text-education">{aboutData.education}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs mb-0.5">經驗</p>
+                  <p data-testid="text-experience">{aboutData.experience}</p>
+                </div>
+              </div>
+            </div>
 
-              <div className="space-y-3">
+            <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
+              <h2 className="font-semibold text-sm mb-4">連結</h2>
+              <div className="space-y-2">
                 <a
                   href={aboutData.social.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-sm text-muted-foreground hover-elevate rounded-md p-2 -m-2"
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover-elevate rounded-md p-1.5 -mx-1.5"
                   data-testid="link-about-linkedin"
                 >
-                  <SiLinkedin className="w-4 h-4 text-primary" />
+                  <SiLinkedin className="w-4 h-4" />
                   <span>LinkedIn</span>
-                  <ExternalLink className="w-3 h-3 ml-auto" />
+                  <ExternalLink className="w-3 h-3 ml-auto opacity-40" />
                 </a>
-
                 <a
                   href={aboutData.social.blog}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-sm text-muted-foreground hover-elevate rounded-md p-2 -m-2"
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover-elevate rounded-md p-1.5 -mx-1.5"
                   data-testid="link-about-blog"
                 >
-                  <ExternalLink className="w-4 h-4 text-primary" />
-                  <span>Original Blog</span>
-                  <ExternalLink className="w-3 h-3 ml-auto" />
+                  <ExternalLink className="w-4 h-4" />
+                  <span>Notion Blog</span>
+                  <ExternalLink className="w-3 h-3 ml-auto opacity-40" />
                 </a>
               </div>
             </div>
@@ -134,7 +123,7 @@ export default function About() {
             </div>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 }
