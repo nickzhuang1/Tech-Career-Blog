@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useSearch, useLocation } from "wouter";
 import { categories, blogPosts } from "@/lib/blogData";
 import { BlogCard } from "@/components/BlogCard";
@@ -8,6 +8,7 @@ import { Search, LayoutGrid } from "lucide-react";
 
 export default function Posts() {
   usePageTitle("所有文章 | Nick's Blog", "瀏覽所有技術文章與職涯分享。");
+  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const search = useSearch();
   const [, setLocation] = useLocation();

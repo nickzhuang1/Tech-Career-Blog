@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useParams, Link } from "wouter";
 import { blogPosts } from "@/lib/blogData";
 import articleContent from "@/content/articles.json";
@@ -146,6 +147,7 @@ export default function PostDetail() {
     post ? `${post.title} | Nick's Blog` : "文章未找到 | Nick's Blog",
     post?.excerpt
   );
+  useEffect(() => { window.scrollTo(0, 0); }, [id]);
 
   if (!post) {
     return (
