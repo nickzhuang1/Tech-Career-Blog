@@ -1,4 +1,4 @@
-import { blogPosts, categories } from "@/lib/blogData";
+import { blogPosts } from "@/lib/blogData";
 import { BlogCard, HeroBlogCard } from "@/components/BlogCard";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
@@ -11,6 +11,12 @@ export default function Home() {
   const featured = blogPosts[0];
   const recent = blogPosts.slice(1, 7);
   const totalPosts = blogPosts.length;
+
+  const allTags = Array.from(new Set(blogPosts.flatMap((p) => p.tags)));
+  const topTags = [
+    "AI", "Gen AI", "Deep Learning", "Stable Diffusion", "NVIDIA",
+    "K8S", "Docker", "AWS", "DevOps", "LLM", "Open Source", "職涯", "人生探索",
+  ].filter((t) => allTags.includes(t));
 
   return (
     <div className="min-h-screen">
@@ -42,8 +48,8 @@ export default function Home() {
                 <p className="text-[11px] text-muted-foreground">篇文章</p>
               </div>
               <div className="rounded-md border border-border/40 bg-card/50 p-3 text-center gradient-border" data-testid="stat-categories">
-                <p className="text-lg font-bold gradient-text">{categories.length}</p>
-                <p className="text-[11px] text-muted-foreground">個分類</p>
+                <p className="text-lg font-bold gradient-text">{allTags.length}</p>
+                <p className="text-[11px] text-muted-foreground">個標籤</p>
               </div>
               <div className="rounded-md border border-border/40 bg-card/50 p-3 text-center gradient-border" data-testid="stat-experience">
                 <p className="text-lg font-bold gradient-text">10+</p>
@@ -85,13 +91,13 @@ export default function Home() {
                 </div>
               </div>
               <div className="space-y-1.5">
-                <Link href="/posts?filter=ironman-2023">
+                <Link href="/posts?filter=Gen%20AI">
                   <span className="flex items-center justify-between text-xs text-muted-foreground cursor-pointer hover-elevate rounded p-1 -mx-1" data-testid="link-series-2023">
                     <span>2023 鐵人賽 - Gen AI</span>
                     <span className="text-primary font-mono">30</span>
                   </span>
                 </Link>
-                <Link href="/posts?filter=ironman-2019">
+                <Link href="/posts?filter=K8S">
                   <span className="flex items-center justify-between text-xs text-muted-foreground cursor-pointer hover-elevate rounded p-1 -mx-1" data-testid="link-series-2019">
                     <span>2019 鐵人賽 - K8S</span>
                     <span className="text-primary font-mono">30</span>
@@ -131,15 +137,14 @@ export default function Home() {
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {categories.map((cat) => (
-            <Link key={cat.id} href={`/posts?filter=${cat.id}`}>
+          {topTags.map((tag) => (
+            <Link key={tag} href={`/posts?filter=${encodeURIComponent(tag)}`}>
               <Badge
                 variant="secondary"
                 className="cursor-pointer text-sm font-normal py-1.5 px-3.5"
-                data-testid={`badge-category-${cat.id}`}
+                data-testid={`badge-tag-${tag.toLowerCase().replace(/\s+/g, "-")}`}
               >
-                {cat.name}
-                <span className="ml-2 text-primary/60 font-mono text-xs">{cat.count}</span>
+                {tag}
               </Badge>
             </Link>
           ))}

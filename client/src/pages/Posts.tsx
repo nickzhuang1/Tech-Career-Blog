@@ -1,10 +1,29 @@
 import { useState, useMemo, useEffect } from "react";
 import { useSearch, useLocation } from "wouter";
-import { categories, blogPosts } from "@/lib/blogData";
+import { blogPosts } from "@/lib/blogData";
 import { BlogCard } from "@/components/BlogCard";
 import { Badge } from "@/components/ui/badge";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { Search, LayoutGrid } from "lucide-react";
+
+const TAG_ORDER = [
+  "AI", "Gen AI", "Deep Learning", "Stable Diffusion", "LoRA", "AIGC",
+  "NVIDIA", "LLM", "RAG", "Open Source", "Cursor",
+  "K8S", "Docker", "AWS", "EKS", "Helm", "DevOps", "RBAC", "minikube",
+  "職涯", "人生探索", "規劃",
+];
+
+function buildTagList(posts: typeof blogPosts) {
+  const countMap = new Map<string, number>();
+  for (const post of posts) {
+    for (const tag of post.tags) {
+      countMap.set(tag, (countMap.get(tag) ?? 0) + 1);
+    }
+  }
+  const ordered = TAG_ORDER.filter((t) => countMap.has(t));
+  const rest = [...countMap.keys()].filter((t) => !TAG_ORDER.includes(t)).sort();
+  return [...ordered, ...rest].map((tag) => ({ tag, count: countMap.get(tag)! }));
+}
 
 export default function Posts() {
   usePageTitle("所有文章 | Nick's Blog", "瀏覽所有技術文章與職涯分享。");
@@ -16,9 +35,11 @@ export default function Posts() {
   const activeFilter = params.get("filter");
   const [searchQuery, setSearchQuery] = useState("");
 
+  const tagList = useMemo(() => buildTagList(blogPosts), []);
+
   const setActiveFilter = (filter: string | null) => {
     if (filter) {
-      setLocation(`/posts?filter=${filter}`);
+      setLocation(`/posts?filter=${encodeURIComponent(filter)}`);
     } else {
       setLocation("/posts");
     }
@@ -26,7 +47,7 @@ export default function Posts() {
 
   const filteredPosts = useMemo(() => {
     let posts = activeFilter
-      ? blogPosts.filter((p) => p.category === activeFilter)
+      ? blogPosts.filter((p) => p.tags.includes(activeFilter))
       : blogPosts;
 
     if (searchQuery.trim()) {
@@ -85,16 +106,16 @@ export default function Posts() {
             全部
             <span className="ml-1.5 opacity-60 font-mono text-xs">{blogPosts.length}</span>
           </Badge>
-          {categories.map((cat) => (
+          {tagList.map(({ tag, count }) => (
             <Badge
-              key={cat.id}
-              variant={activeFilter === cat.id ? "default" : "secondary"}
+              key={tag}
+              variant={activeFilter === tag ? "default" : "secondary"}
               className="cursor-pointer text-sm font-normal py-1.5 px-3.5"
-              onClick={() => setActiveFilter(activeFilter === cat.id ? null : cat.id)}
-              data-testid={`badge-filter-${cat.id}`}
+              onClick={() => setActiveFilter(activeFilter === tag ? null : tag)}
+              data-testid={`badge-filter-${tag.toLowerCase().replace(/\s+/g, "-")}`}
             >
-              {cat.name}
-              <span className="ml-1.5 opacity-60 font-mono text-xs">{cat.count}</span>
+              {tag}
+              <span className="ml-1.5 opacity-60 font-mono text-xs">{count}</span>
             </Badge>
           ))}
         </div>
@@ -108,7 +129,7 @@ export default function Posts() {
         {filteredPosts.length === 0 && (
           <div className="text-center py-20">
             <p className="text-muted-foreground text-sm">
-              {searchQuery ? `找不到「${searchQuery}」相關的文章。` : "此分類目前沒有文章。"}
+              {searchQuery ? `找不到「${searchQuery}」相關的文章。` : "此標籤目前沒有文章。"}
             </p>
           </div>
         )}
