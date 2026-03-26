@@ -156,7 +156,7 @@ export default function PostDetail() {
   useEffect(() => {
     if (!id) return;
     setContent(undefined);
-    fetch(`/articles/${id}.md`)
+    fetch(`/articles/${id}/index.md`)
       .then(r => {
         if (!r.ok) throw new Error("not found");
         return r.text();
