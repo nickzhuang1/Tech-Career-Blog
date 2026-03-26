@@ -32,13 +32,13 @@ export default function Home() {
             </div>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-5 leading-[1.1]">
-              <span className="gradient-text">AI異想封印</span>
+              <span className="gradient-text">AI 異想封印</span>
               <br />
-              <span className="text-foreground">Nick的職場幻界</span>
+              <span className="text-foreground">Nick 的職場幻界</span>
             </h1>
 
             <p className="text-base sm:text-lg text-muted-foreground max-w-xl mb-10 leading-relaxed">
-              十年軟體開發，從前端到後端、從雲端到 AI。
+              12 年軟體開發，從前端到後端、從雲端到 AI。
               分享技術洞察、架構設計、與職涯成長的深度觀點。
             </p>
 
@@ -52,7 +52,7 @@ export default function Home() {
                 <p className="text-[11px] text-muted-foreground">個標籤</p>
               </div>
               <div className="rounded-md border border-border/40 bg-card/50 p-3 text-center gradient-border" data-testid="stat-experience">
-                <p className="text-lg font-bold gradient-text">10+</p>
+                <p className="text-lg font-bold gradient-text">12+</p>
                 <p className="text-[11px] text-muted-foreground">年經驗</p>
               </div>
             </div>
@@ -62,7 +62,7 @@ export default function Home() {
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         <div className="grid gap-4 lg:grid-cols-5">
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3 h-full">
             <HeroBlogCard post={featured} />
           </div>
 
@@ -77,7 +77,10 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                圖像生成式AI的生存指南：以Stable Diffusion為例
+                圖像生成式 AI 的生存指南：以 Stable Diffusion 為例
+              </p>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                以膠囊網路做印刷電路板影像的瑕疵檢測
               </p>
             </div>
 

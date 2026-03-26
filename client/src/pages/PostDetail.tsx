@@ -1,7 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "wouter";
 import { blogPosts } from "@/lib/blogData";
-import articleContent from "@/content/articles.json";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Calendar, Clock, ExternalLink } from "lucide-react";
@@ -77,6 +76,11 @@ function renderMarkdown(md: string) {
           </code>
         </pre>
       );
+    } else if (line.startsWith("#### ")) {
+      flushList();
+      elements.push(
+        <h4 key={i} className="text-base font-bold mt-6 mb-2" dangerouslySetInnerHTML={{ __html: processInline(line.slice(5)) }} />
+      );
     } else if (line.startsWith("### ")) {
       flushList();
       elements.push(
@@ -141,13 +145,25 @@ function renderMarkdown(md: string) {
 export default function PostDetail() {
   const { id } = useParams<{ id: string }>();
   const post = blogPosts.find((p) => p.id === id);
-  const content = id ? (articleContent as Record<string, string>)[id] : undefined;
+  const [content, setContent] = useState<string | undefined>(undefined);
 
   usePageTitle(
     post ? `${post.title} | Nick's Blog` : "文章未找到 | Nick's Blog",
     post?.excerpt
   );
   useEffect(() => { window.scrollTo(0, 0); }, [id]);
+
+  useEffect(() => {
+    if (!id) return;
+    setContent(undefined);
+    fetch(`/articles/${id}.md`)
+      .then(r => {
+        if (!r.ok) throw new Error("not found");
+        return r.text();
+      })
+      .then(setContent)
+      .catch(() => setContent(undefined));
+  }, [id]);
 
   if (!post) {
     return (

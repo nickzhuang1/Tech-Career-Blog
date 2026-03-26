@@ -21,13 +21,12 @@ function buildTagList(posts: typeof blogPosts) {
     }
   }
   const ordered = TAG_ORDER.filter((t) => countMap.has(t));
-  const rest = [...countMap.keys()].filter((t) => !TAG_ORDER.includes(t)).sort();
+  const rest = Array.from(countMap.keys()).filter((t) => !TAG_ORDER.includes(t)).sort();
   return [...ordered, ...rest].map((tag) => ({ tag, count: countMap.get(tag)! }));
 }
 
 export default function Posts() {
   usePageTitle("所有文章 | Nick's Blog", "瀏覽所有技術文章與職涯分享。");
-  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const search = useSearch();
   const [, setLocation] = useLocation();

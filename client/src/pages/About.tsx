@@ -1,7 +1,22 @@
 import { aboutData } from "@/lib/blogData";
 import { Badge } from "@/components/ui/badge";
-import { User, GraduationCap, BookOpen, Briefcase, ExternalLink } from "lucide-react";
-import { SiLinkedin } from "react-icons/si";
+import {
+  User,
+  GraduationCap,
+  BookOpen,
+  Briefcase,
+  ExternalLink,
+  Award,
+  Mic,
+  ShieldCheck,
+  Mail,
+  Link2,
+  Activity,
+  Heart,
+} from "lucide-react";
+import { FaLinkedin } from "react-icons/fa";
+import { FaFacebook } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
 import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function About() {
@@ -9,15 +24,14 @@ export default function About() {
 
   return (
     <div className="min-h-screen">
+      {/* Hero 區塊 - 不變 */}
       <section className="relative overflow-hidden border-b border-border/30">
         <div className="hero-glow bg-purple-500 -top-40 -right-40" />
-
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <div className="flex items-center gap-2 mb-4">
             <User className="w-4 h-4 text-primary" />
             <span className="font-mono text-xs text-primary tracking-wider uppercase">About</span>
           </div>
-
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-2">
             {aboutData.nameZh}{" "}
             <span className="gradient-text">{aboutData.name}</span>
@@ -29,14 +43,20 @@ export default function About() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         <div className="grid gap-4 lg:grid-cols-3">
+          {/* 左欄 */}
           <div className="lg:col-span-2 space-y-4">
+            {/* 簡介 */}
             <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
-              <h2 className="font-semibold mb-3 text-sm">關於我</h2>
+              <div className="flex items-center gap-2 mb-3">
+                <User className="w-4 h-4 text-primary" />
+                <h2 className="font-semibold text-sm">關於我</h2>
+              </div>
               <p className="text-sm text-muted-foreground leading-relaxed" data-testid="text-bio">
                 {aboutData.bio}
               </p>
             </div>
 
+            {/* 專業領域 */}
             <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
               <div className="flex items-center gap-2 mb-4">
                 <Briefcase className="w-4 h-4 text-primary" />
@@ -44,47 +64,130 @@ export default function About() {
               </div>
               <div className="flex flex-wrap gap-2" data-testid="text-expertise">
                 {aboutData.expertise.map((skill) => (
-                  <Badge key={skill} variant="secondary" className="text-sm font-normal py-1.5 px-3" data-testid={`badge-skill-${skill}`}>
+                  <Badge key={skill} variant="secondary" className="text-sm font-normal py-1.5 px-3">
                     {skill}
                   </Badge>
                 ))}
               </div>
             </div>
 
+            {/* 著作 */}
             <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
               <div className="flex items-center gap-2 mb-4">
                 <BookOpen className="w-4 h-4 text-primary" />
                 <h2 className="font-semibold text-sm">著作出版</h2>
               </div>
-              <div className="rounded-md bg-gradient-to-br from-purple-500/10 via-background to-cyan-400/5 border border-purple-500/20 p-4">
-                <p className="text-sm font-medium mb-1" data-testid="text-book-title">
-                  {aboutData.book.title}
-                </p>
-                <p className="text-xs text-muted-foreground">{aboutData.book.titleEn}</p>
+              <div className="space-y-3">
+                {aboutData.books.map((book, i) => (
+                  <div key={i} className="rounded-md bg-gradient-to-br from-purple-500/10 via-background to-cyan-400/5 border border-purple-500/20 p-4">
+                    <p className="text-sm font-medium mb-1">{book.title}</p>
+                    <p className="text-xs text-muted-foreground">{book.titleEn}</p>
+                  </div>
+                ))}
               </div>
+            </div>
+
+            {/* 認證 */}
+            <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
+              <div className="flex items-center gap-2 mb-4">
+                <ShieldCheck className="w-4 h-4 text-primary" />
+                <h2 className="font-semibold text-sm">認證</h2>
+              </div>
+              <ul className="space-y-2">
+                {aboutData.certifications.map((cert, i) => (
+                  <li key={i} className="text-sm text-muted-foreground flex gap-2">
+                    <span className="text-primary mt-0.5">›</span>
+                    <span>{cert}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* 榮譽 */}
+            <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
+              <div className="flex items-center gap-2 mb-4">
+                <Award className="w-4 h-4 text-primary" />
+                <h2 className="font-semibold text-sm">榮譽</h2>
+              </div>
+              <ul className="space-y-2">
+                {aboutData.honors.map((honor, i) => (
+                  <li key={i} className="text-sm text-muted-foreground flex gap-2">
+                    <span className="text-primary mt-0.5">›</span>
+                    <span>{honor}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* 演講 */}
+            <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
+              <div className="flex items-center gap-2 mb-4">
+                <Mic className="w-4 h-4 text-primary" />
+                <h2 className="font-semibold text-sm">演講</h2>
+              </div>
+              <ul className="space-y-2">
+                {aboutData.talks.map((talk, i) => (
+                  <li key={i} className="text-sm text-muted-foreground flex gap-2">
+                    <span className="text-primary mt-0.5">›</span>
+                    <span>{talk}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
-          <div className="space-y-4">
-            <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
+          {/* 右欄 */}
+          <div className="flex flex-col gap-4">
+            {/* 背景 */}
+            <div className="rounded-md border border-border/40 bg-card p-6 gradient-border overflow-hidden">
+              <img
+                src="/avatar.png"
+                alt="Nick Zhuang"
+                className="float-right ml-4 mb-3 w-32 h-32 rounded-md object-cover object-top border border-border/40"
+              />
               <div className="flex items-center gap-2 mb-4">
                 <GraduationCap className="w-4 h-4 text-primary" />
                 <h2 className="font-semibold text-sm">背景</h2>
               </div>
-              <div className="space-y-3 text-sm">
+              <div className="space-y-4 text-sm">
                 <div>
-                  <p className="text-muted-foreground text-xs mb-0.5">學歷</p>
-                  <p data-testid="text-education">{aboutData.education}</p>
+                  <p className="text-muted-foreground text-xs mb-1">現任</p>
+                  <p>{aboutData.current}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground text-xs mb-0.5">經驗</p>
-                  <p data-testid="text-experience">{aboutData.experience}</p>
+                  <p className="text-muted-foreground text-xs mb-1">經歷</p>
+                  <ul className="space-y-1">
+                    {aboutData.workHistory.map((w, i) => (
+                      <li key={i} className="text-muted-foreground text-xs">{w}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs mb-1">學歷</p>
+                  <ul className="space-y-1">
+                    {aboutData.education.map((e, i) => (
+                      <li key={i} className="text-xs text-muted-foreground">{e}</li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </div>
 
+            {/* 展示圖片 */}
+            <div className="rounded-md border border-border/40 bg-card p-4 gradient-border">
+              <img
+                src="/showcase.jpg"
+                alt="著作、獎項與 NVIDIA 認證"
+                className="w-full rounded-md object-cover"
+              />
+            </div>
+
+            {/* 連結 */}
             <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
-              <h2 className="font-semibold text-sm mb-4">連結</h2>
+              <div className="flex items-center gap-2 mb-4">
+                <Link2 className="w-4 h-4 text-primary" />
+                <h2 className="font-semibold text-sm">連結</h2>
+              </div>
               <div className="space-y-2">
                 <a
                   href={aboutData.social.linkedin}
@@ -93,32 +196,70 @@ export default function About() {
                   className="flex items-center gap-2 text-sm text-muted-foreground hover-elevate rounded-md p-1.5 -mx-1.5"
                   data-testid="link-about-linkedin"
                 >
-                  <SiLinkedin className="w-4 h-4" />
+                  <FaLinkedin className="w-4 h-4" />
                   <span>LinkedIn</span>
                   <ExternalLink className="w-3 h-3 ml-auto opacity-40" />
                 </a>
                 <a
-                  href={aboutData.social.blog}
+                  href={aboutData.social.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-sm text-muted-foreground hover-elevate rounded-md p-1.5 -mx-1.5"
-                  data-testid="link-about-blog"
+                  data-testid="link-about-facebook"
                 >
-                  <ExternalLink className="w-4 h-4" />
-                  <span>Notion Blog</span>
+                  <FaFacebook className="w-4 h-4" />
+                  <span>Facebook</span>
+                  <ExternalLink className="w-3 h-3 ml-auto opacity-40" />
+                </a>
+                <a
+                  href={aboutData.social.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover-elevate rounded-md p-1.5 -mx-1.5"
+                  data-testid="link-about-github"
+                >
+                  <FaGithub className="w-4 h-4" />
+                  <span>GitHub</span>
+                  <ExternalLink className="w-3 h-3 ml-auto opacity-40" />
+                </a>
+                <a
+                  href={aboutData.social.email}
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover-elevate rounded-md p-1.5 -mx-1.5"
+                  data-testid="link-about-email"
+                >
+                  <Mail className="w-4 h-4" />
+                  <span>Email</span>
                   <ExternalLink className="w-3 h-3 ml-auto opacity-40" />
                 </a>
               </div>
             </div>
 
+            {/* 興趣 */}
+            <div className="flex-1 rounded-md border border-border/40 bg-card p-6 gradient-border">
+              <div className="flex items-center gap-2 mb-4">
+                <Heart className="w-4 h-4 text-primary" />
+                <h2 className="font-semibold text-sm">興趣</h2>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {aboutData.interests.map((item) => (
+                  <Badge key={item} variant="secondary" className="text-xs font-normal py-1 px-2.5">
+                    {item}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+
+            {/* Status */}
             <div className="rounded-md border border-primary/20 bg-gradient-to-br from-card to-primary/5 p-5">
               <p className="font-mono text-xs text-primary/70 mb-2">// status</p>
               <p className="text-sm font-medium mb-1">{aboutData.titleZh}</p>
-              <p className="text-xs text-muted-foreground">{aboutData.nameZh}</p>
-              <div className="mt-3 h-px bg-border/50" />
-              <div className="mt-3 flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-xs text-muted-foreground">Active & Building</span>
+              <div className="space-y-2">
+                <p className="text-xs text-muted-foreground">{aboutData.nameZh}</p>
+                <div className="mt-3 h-px bg-border/50" />
+                <div className="mt-3 flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                  <span className="text-xs text-muted-foreground">Active & Building</span>
+                </div>
               </div>
             </div>
           </div>
