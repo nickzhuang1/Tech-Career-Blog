@@ -64,7 +64,7 @@ export function HeroBlogCard({ post }: { post: BlogPost }) {
   return (
     <Link
       href={`/posts/${post.id}`}
-      className="block hover-elevate active-elevate-2 rounded-md"
+      className="block hover-elevate active-elevate-2 rounded-md h-full"
       data-testid={`card-featured-${post.id}`}
     >
       <article className="relative rounded-md p-6 sm:p-8 h-full bg-gradient-to-br from-purple-500/10 via-card to-cyan-400/5 border border-purple-500/20 gradient-border">
