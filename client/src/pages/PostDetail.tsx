@@ -22,7 +22,7 @@ function escapeHtml(text: string): string {
     .replace(/"/g, "&quot;");
 }
 
-function renderMarkdown(md: string) {
+function renderMarkdown(md: string, articleId?: string) {
   const lines = md.split("\n");
   const elements: JSX.Element[] = [];
   let i = 0;
@@ -99,10 +99,15 @@ function renderMarkdown(md: string) {
     } else if (line.startsWith("![")) {
       flushList();
       const imgMatch = line.match(/!\[([^\]]*)\]\(([^\)]+)\)/);
-      if (imgMatch && imgMatch[2].startsWith("http")) {
+      if (imgMatch) {
+        let src = imgMatch[2];
+        // 將相對路徑轉為絕對路徑
+        if (!src.startsWith("http") && articleId) {
+          src = `/articles/${articleId}/${src.replace(/^\.\//, "")}`;
+        }
         elements.push(
           <figure key={i} className="my-6">
-            <img src={imgMatch[2]} alt={imgMatch[1] || ""} className="rounded-md max-w-full" loading="lazy" />
+            <img src={src} alt={imgMatch[1] || ""} className="rounded-md max-w-full" loading="lazy" />
           </figure>
         );
       }
@@ -222,7 +227,7 @@ export default function PostDetail() {
       <article className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-10" data-testid="article-content">
         {content ? (
           <div className="text-sm sm:text-[15px] text-foreground/90">
-            {renderMarkdown(content)}
+            {renderMarkdown(content, id)}
           </div>
         ) : (
           <div className="text-center py-12">
