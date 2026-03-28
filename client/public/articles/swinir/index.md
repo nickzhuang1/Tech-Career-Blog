@@ -1,4 +1,4 @@
-![](https://nick-zhuang.notion.site/image/attachment%3A9d7487e6-9e74-4bbc-894a-29b792e130db%3AAIGC-Titles.025.jpeg?table=block&id=1e9d2b68-7266-80dc-ba6f-c0ac0a3ef44d&spaceId=1d7ab0b0-d83d-492c-9585-f3564a662215&width=2000&userId=&cache=v2)
+![](./images/img_001.jpg)
 
 ## \[Day25\] SwinIR，圖像重建的突破
 
@@ -27,7 +27,7 @@ SwinIR 是基於 Swin Transformer 架構的重建演算法，不同於以往的�
 
 先上架構圖，如下所示。
 
-![](https://nick-zhuang.notion.site/image/attachment%3A2f0a6f93-9c7b-4f3f-9207-1873a8518ce8%3Aimage.png?table=block&id=1e8d2b68-7266-8063-ae5b-e855666878f0&spaceId=1d7ab0b0-d83d-492c-9585-f3564a662215&width=2000&userId=&cache=v2)
+![](./images/img_002.png)
 
 主要分為三個模組，分別是：淺層特徵提取、深度特徵提取、及影像重建的模組。
 

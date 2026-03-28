@@ -1,4 +1,4 @@
-![](https://nick-zhuang.notion.site/image/attachment%3Aeac526fb-186f-4885-8b61-c6408595c6d8%3AAIGC-Titles.022.jpeg?table=block&id=1e9d2b68-7266-80a2-b603-fed6181e6493&spaceId=1d7ab0b0-d83d-492c-9585-f3564a662215&width=2000&userId=&cache=v2)
+![](./images/img_001.jpg)
 
 ## \[Day22\] Stable Diffusion 基礎插件
 
@@ -35,11 +35,11 @@ https://github.com/zanllp/sd-webui-infinite-image-browsing
 
 使用方式
 
-![](https://nick-zhuang.notion.site/image/attachment%3Ad0ed7adc-ccdb-4642-89d6-b9ad4e60a10a%3Aimage.png?table=block&id=1e8d2b68-7266-8042-80d6-d3febfca4b65&spaceId=1d7ab0b0-d83d-492c-9585-f3564a662215&width=2000&userId=&cache=v2)
+![](./images/img_002.png)
 
 這是安裝好後的介面總覽，「Walk模式」是巡訪圖片用的、「快速移動」是會幫你顯示資料夾、「啟動」是 Global 的功能，像是：快速查找圖片、批量下載等等。
 
-![](https://nick-zhuang.notion.site/image/attachment%3A62c4dbe3-769b-4425-9c0f-b1bfd9bce4af%3Aimage.png?table=block&id=1e8d2b68-7266-8048-bd7f-d741f8da8e63&spaceId=1d7ab0b0-d83d-492c-9585-f3564a662215&width=2000&userId=&cache=v2)
+![](./images/img_003.png)
 
 這是使用walk文生圖的功能顯示的畫面，可以看到有縮圖檢視，以及從單張圖去檢視該圖所使用的prompt、解析度、使用的Model、及其他細部設定。
 
@@ -49,7 +49,7 @@ Prompt all in one這個插件是用在提示詞 ( prompt )使用的，它有各�
 
 安裝
 
-![](https://nick-zhuang.notion.site/image/attachment%3Abdf9f375-3a22-4b90-87f7-9f66bc349c7d%3Aimage.png?table=block&id=1e8d2b68-7266-80c8-b32b-f2e21ac2edaa&spaceId=1d7ab0b0-d83d-492c-9585-f3564a662215&width=2000&userId=&cache=v2)
+![](./images/img_004.png)
 
 切換到Extension的分頁，然後在Install from URL貼上
 
@@ -57,13 +57,13 @@ https://github.com/Physton/sd-webui-prompt-all-in-one
 
 ​
 
-![](https://nick-zhuang.notion.site/image/attachment%3A2bcbb8ac-5515-4f1b-a522-b2bed4efd95e%3Aimage.png?table=block&id=1e8d2b68-7266-80bd-99d1-d9f0f3a1c79a&spaceId=1d7ab0b0-d83d-492c-9585-f3564a662215&width=2000&userId=&cache=v2)
+![](./images/img_005.png)
 
 點擊Install，然後切換到 Installed 的分頁，按下 Apply and restart UI。
 
 使用方式
 
-![](https://nick-zhuang.notion.site/image/attachment%3A3e6955a0-a296-41c8-b7b0-e78a256a575a%3Aimage.png?table=block&id=1e8d2b68-7266-806c-813b-c8fe1712221b&spaceId=1d7ab0b0-d83d-492c-9585-f3564a662215&width=2000&userId=&cache=v2)
+![](./images/img_006.png)
 
 可以看到有大類別可以供選擇，像是：人物、服飾、表情動作、畫面、...，非常多XD，小類別在點選定大類別後會出現選項，點擊就能把這些標籤放到介面上，並同步幫你把提示詞放上去。
 
@@ -83,7 +83,7 @@ https://github.com/hanamizuki-ai/stable-diffusion-webui-localization-zh\_Hans
 
 接下來這步驟要注意一下：
 
-![](https://nick-zhuang.notion.site/image/attachment%3A7fbefd99-a997-47b2-a7b7-6febbf756322%3Aimage.png?table=block&id=1e8d2b68-7266-809f-8d4a-e1c3d6f64398&spaceId=1d7ab0b0-d83d-492c-9585-f3564a662215&width=2000&userId=&cache=v2)
+![](./images/img_007.png)
 
 這邊是要在 restart UI 後，切換到 Settings -> User interface -> Localization，將語系選擇 zh-Hans，它預設是簡體中文的，所以如果要用繁體版的話，可以將這個路徑底下的json檔修改即可：
 

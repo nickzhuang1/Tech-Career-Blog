@@ -1,4 +1,4 @@
-![](https://nick-zhuang.notion.site/image/attachment%3Aa310ca57-b191-4669-9521-b8b5cb0bf877%3AAIGC-Titles.029.jpeg?table=block&id=1e9d2b68-7266-80aa-8b5d-c330b468ed4f&spaceId=1d7ab0b0-d83d-492c-9585-f3564a662215&width=2000&userId=&cache=v2)
+![](./images/img_001.jpg)
 
 ## \[Day29\] SD XL：SD的限界突破
 
@@ -33,7 +33,7 @@ Conditioning 相關的優化，這是針對 SD 模型中 Conditioning Mechanisms
 
 先上架構圖，如下圖所示。
 
-![](https://nick-zhuang.notion.site/image/attachment%3A765bc2ad-d810-4fa8-a72e-fe8600ff6baa%3Aimage.png?table=block&id=1e8d2b68-7266-8048-8455-f6ecbea95b15&spaceId=1d7ab0b0-d83d-492c-9585-f3564a662215&width=2000&userId=&cache=v2)
+![](./images/img_002.png)
 
 這裡的方法是以 128x128 大小的圖片作為潛空間 ( Latent Space ) 的輸入，最後輸出 1024x1024 的圖片，主要分為三個部分：Base、Refiner、VAE-Decoder，其中的 Base 和 Refiner 構成了文生圖的模塊，而 VAE-Decoder 為圖生圖的模塊，兩者相連構成了整體文生圖的模型。
 

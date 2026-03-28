@@ -1,4 +1,4 @@
-![](https://nick-zhuang.notion.site/image/attachment%3Ad9923b89-d691-4139-b576-d4d81812fa30%3AAIGC-Titles.014.jpeg?table=block&id=1e9d2b68-7266-8086-a915-f108bb27e29c&spaceId=1d7ab0b0-d83d-492c-9585-f3564a662215&width=2000&userId=&cache=v2)
+![](./images/img_001.jpg)
 
 ## \[Day14\] Stable Diffusion，來吧
 
@@ -21,7 +21,7 @@ Type: AI & Data
 今天我們會介紹 Stable Diffusion 相關的內容，一路鋪陳下來，總算進入了系列文的核心，本日內容包含：什麼是Stable Diffusion、Stable Diffusion的演算法、及Stable Diffusion的特色。
 在開始之前，稍微花點時間回顧下之前講述過的內容，可以對照一下差異。
 
-![](https://nick-zhuang.notion.site/image/attachment%3A71919268-9d74-4cfa-aaf6-d4d608192d9b%3Aimage.png?table=block&id=1e9d2b68-7266-80a8-9b89-f78a01f2ccef&spaceId=1d7ab0b0-d83d-492c-9585-f3564a662215&width=770&userId=&cache=v2)
+![](./images/img_002.png)
 
 我們前面提過了 [GAN](https://nick-zhuang.notion.site/1e9d2b68726680738259c7fa6400c1ec?pvs=25)、 [DDPM](https://nick-zhuang.notion.site/1e9d2b68726680bbaf43eeb616d089df?pvs=25)、 [VAE](https://nick-zhuang.notion.site/1e9d2b6872668072929dd74a75aa6b62?pvs=25)、及 [Flow](https://nick-zhuang.notion.site/1e9d2b68726680bfaa1bd0ad16488cbc?pvs=25) 等模型，可以看到主要以三種維度做區分，其中：GAN 適合生成高品質的影像及能夠快速生成，DDPM 相較於 GAN 來說生成較慢、但模式覆蓋/多樣性較好，至於 VAE 及 Flow 是生成高品質影像較差。
 
@@ -33,7 +33,7 @@ Stable Diffusion 是基於 Diffusion 去改良的模型，主要的概念與 Dif
 
 先上架構圖，如下圖所示。
 
-![](https://nick-zhuang.notion.site/image/attachment%3A7918f18f-dac9-4ce2-89cb-bf50a3a251d4%3Aimage.png?table=block&id=1e9d2b68-7266-80dd-889c-dc059816ad2d&spaceId=1d7ab0b0-d83d-492c-9585-f3564a662215&width=2000&userId=&cache=v2)
+![](./images/img_003.png)
 
 首先，紅色區塊，會有一個訓練好的自編碼器 ( Auto Encoder )，這是一個泛用的壓縮模型，可以用來生成不同的 Diffusion Model，整體的壓縮流程其實經過了兩個階段：第一階段做感知壓縮 ( perceptual compression )，這是將高頻訊息移除並保留細微語意變化 ( semantic variation ) 的部分，第二階段做語意壓縮 ( semantic compression )，為的是要找到感知等價但運算量更少的空間，就是下段綠色區塊要做的事情。
 

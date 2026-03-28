@@ -1,4 +1,4 @@
-![](https://nick-zhuang.notion.site/image/attachment%3A79511e99-b218-46c3-a447-054e136f4436%3AAIGC-Titles.005.jpeg?table=block&id=1e9d2b68-7266-800a-84ed-d182e9d370c0&spaceId=1d7ab0b0-d83d-492c-9585-f3564a662215&width=2000&userId=&cache=v2)
+![](./images/img_001.jpg)
 
 ## \[Day5\] VAE，好久不見
 
@@ -23,7 +23,7 @@ Type: AI & Data
 
 自編碼器（Autoencoder）是一種常見的無監督學習模型，用於學習數據的壓縮表示和特徵提取。
 
-![](https://nick-zhuang.notion.site/image/attachment%3A4eb0cabc-c6c6-4deb-a881-7085e2eb0464%3Aimage.png?table=block&id=1e9d2b68-7266-8004-a357-cfaa02c1f03f&spaceId=1d7ab0b0-d83d-492c-9585-f3564a662215&width=1400&userId=&cache=v2)
+![](./images/img_002.png)
 
 其中的思想最早來自於2006年的一篇論文，這篇是AI大神之一Hinton寫的，它主要是比較了主成份分析法(principal components analysis, PCA)，PCA是一種將數據降低維度的技術，這樣的好處是可以更容易地分析資料、及做好統計分析的優點，自編碼器的優勢在於它受惠於硬體算力的提升，使得它可以實現，經mnist數據集的實驗表示它的效果相較於PCA來說更好，以下是有關自編碼器的簡要介紹：
 
@@ -43,7 +43,7 @@ Type: AI & Data
 
 自編碼器（Autoencoder）在不同的應用場景下，衍生出了多種不同類型的變體。
 
-![](https://nick-zhuang.notion.site/image/attachment%3Ad7d32d01-ac20-44d1-90ba-ff47e96c4970%3Aimage.png?table=block&id=1e9d2b68-7266-80e2-b5ea-d4b8cd4ae8d5&spaceId=1d7ab0b0-d83d-492c-9585-f3564a662215&width=2000&userId=&cache=v2)
+![](./images/img_003.png)
 
 以下是一些常見的自編碼器種類：
 
@@ -75,7 +75,7 @@ Type: AI & Data
 
 變分自編碼器與自編碼器的差別，參考下圖。
 
-![](https://nick-zhuang.notion.site/image/attachment%3Ad8ef8f41-cc8a-4429-b94d-816f9ad19744%3Aimage.png?table=block&id=1e9d2b68-7266-8025-95f9-e77b59e755e6&spaceId=1d7ab0b0-d83d-492c-9585-f3564a662215&width=2000&userId=&cache=v2)
+![](./images/img_004.png)
 
 ### 小結
 
