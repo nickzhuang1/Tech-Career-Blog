@@ -300,12 +300,12 @@ export const aboutData = {
     "地海戰記",
   ],
   timeline: [
-    { year: 2013, items: ["ERP 程式班結訓（12/3）", "福華資訊科技就職（12/8）"], highlights: [1] },
+    { year: 2013, items: ["ERP 程式班結訓（12/3）", "福華資訊科技就職（12/8）"], highlights: [0] },
     { year: 2014, items: ["完善 PCB 製程輔助系統", "開發 PCB 自動化程序"] },
     { year: 2015, items: ["完善 PCB 自動化程序", "開發 Gerber 編輯/量測程序", "模組化 PCB 程序"] },
-    { year: 2016, items: ["開發 PCB IC 載板模組", "考取中央資工所（在職）", "修習中央三門課"], highlights: [1] },
+    { year: 2016, items: ["開發 PCB IC 載板模組", "考取中央資工所", "修習中央三門課"], highlights: [1] },
     { year: 2017, items: ["福華資訊科技離職（4/20）", "聯策科技就職（12/4）", "修習中央五門課"], highlights: [2] },
-    { year: 2018, items: ["開發區塊鏈礦場管理系統", "聯策科技離職（5/31）", "承啟科技就職（6/1）", "希平方英文 200 堂（8-12 月）", "修習中央二門課"], highlights: [0, 2] },
+    { year: 2018, items: ["開發區塊鏈礦場管理系統", "聯策科技離職（5/31）", "承啟科技就職（6/1）", "希平方英文 200 堂（8-12 月）", "修習中央二門課"], highlights: [0] },
     { year: 2019, items: ["開發資源監控系統", "IT 邦鐵人賽：DevOps", "Udemy 課程研習", "NVIDIA 課程研習"], highlights: [1] },
     { year: 2020, items: ["開發 AI 模型訓練平台", "擴充既有軟體團隊", "Udemy 課程研習", "論文研究"], highlights: [0] },
     { year: 2021, items: ["完善 AI 模型訓練平台", "導入 Scrum 增進團隊開發效率", "考取 NVIDIA DLI 講師認證", "協助子公司建立軟體開發團隊"], highlights: [2] },
@@ -313,7 +313,7 @@ export const aboutData = {
     { year: 2023, items: ["承羽智慧就職（1/2）", "進階完善 AI 模型訓練平台", "中央資工所碩士畢業", "開發 AI 雲平台系統", "IT 邦鐵人賽：AI & Data"], highlights: [2] },
     { year: 2024, items: ["完善 AI 雲平台系統", "出書：圖像生成式 AI 的生存指南", "NVIDIA 課程研習", "AIGO 潛力新星盃：品牌商品屬性自動分類及顧客消費預測（特優）"], highlights: [1, 3] },
     { year: 2025, items: ["AI 雲平台系統：重構與新功能", "構建監控硬體系統", "GCP 課程研習", "Google Cloud 生成式 AI 培訓", "取得 NCA-AIIO & NCA-GENL 認證"], highlights: [4] },
-    { year: 2026, items: ["AI 雲平台：新架構設計與開發", "取得 NVIDIA NCP-AII 認證", "英文研習", "學習德文 B1"], highlights: [1], current: true },
+    { year: 2026, items: ["AI 雲平台：新架構設計與開發", "取得 NCP-AII 認證", "英文研習", "學習德文 B1"], highlights: [1], current: true },
   ] as { year: number; items: string[]; highlights?: number[]; current?: boolean }[],
 };
 
