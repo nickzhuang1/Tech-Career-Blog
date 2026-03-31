@@ -14,6 +14,7 @@ const Posts = lazy(() => import("@/pages/Posts"));
 const PostDetail = lazy(() => import("@/pages/PostDetail"));
 const About = lazy(() => import("@/pages/About"));
 const Contact = lazy(() => import("@/pages/Contact"));
+const Timeline = lazy(() => import("@/pages/Timeline"));
 
 function PageFallback() {
   return <div className="flex-1 min-h-[60vh]" />;
@@ -37,6 +38,7 @@ function Router() {
           <Route path="/posts" component={Posts} />
           <Route path="/posts/:id" component={PostDetail} />
           <Route path="/about" component={About} />
+          <Route path="/timeline" component={Timeline} />
           <Route path="/contact" component={Contact} />
           <Route component={NotFound} />
         </Switch>

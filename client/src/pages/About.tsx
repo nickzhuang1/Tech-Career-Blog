@@ -13,7 +13,9 @@ import {
   Link2,
   Activity,
   Heart,
+  History,
 } from "lucide-react";
+import { useLocation } from "wouter";
 import { FaLinkedin } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
@@ -21,6 +23,7 @@ import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function About() {
   usePageTitle("關於我 | Nick's Blog", "AI 與雲端的技術探索之路 — Nick Zhuang 的職涯介紹。");
+  const [, navigate] = useLocation();
 
   return (
     <div className="min-h-screen">
@@ -134,6 +137,7 @@ export default function About() {
                 ))}
               </ul>
             </div>
+
           </div>
 
           {/* 右欄 */}
@@ -162,13 +166,23 @@ export default function About() {
                     ))}
                   </ul>
                 </div>
-                <div>
-                  <p className="text-muted-foreground text-xs mb-1">學歷</p>
-                  <ul className="space-y-1">
-                    {aboutData.education.map((e, i) => (
-                      <li key={i} className="text-xs text-muted-foreground">{e}</li>
-                    ))}
-                  </ul>
+                <div className="flex items-end gap-2">
+                  <div className="flex-1">
+                    <p className="text-muted-foreground text-xs mb-1">學歷</p>
+                    <ul className="space-y-1">
+                      {aboutData.education.map((e, i) => (
+                        <li key={i} className="text-xs text-muted-foreground">{e}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <button
+                    onClick={() => navigate("/timeline")}
+                    title="查看職涯大事記"
+                    className="flex-shrink-0 flex items-center gap-1 text-[10px] font-mono text-primary/70 hover:text-primary border border-primary/20 hover:border-primary/50 rounded-md px-2 py-1 transition-colors"
+                  >
+                    <History className="w-3 h-3" />
+                    大事記
+                  </button>
                 </div>
               </div>
             </div>
