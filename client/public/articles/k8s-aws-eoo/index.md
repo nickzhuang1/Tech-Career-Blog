@@ -1,13 +1,13 @@
 ![](./images/img_001.png)
 
-## \[Day19\] k8s上雲端之路：AWS之蓄勢待發：EOO
+# [Day19] k8s上雲端之路：AWS之蓄勢待發：EOO
 
 Author: Nick Zhuang
 Type: kubernetes
 
 ## 前言
 
-今天我們要延續之前的內容，在上雲端之前，先介紹一下CCM，所謂的CCM是Cloud Controller Manager，在雲端服務上它是基於k8s集群上的一個管理器，EOO元件介紹AWS就好比QOO有種果汁真好喝，是一些在AWS的基本元件，如：EC2、EBS、ELB、EFS、EKS、ENI、ECR，接著是EKS和KOPS的比較，說明為何要用EKS。最後是一些使用AWS的前置準備，要先設置下。
+今天我們要延續之前的內容，在上雲端之前，先介紹一下CCM，所謂的CCM是Cloud Controller Manager，在雲端服務上它是基於k8s集群上的一個管理器，EOO元件介紹AWS~~就好比QOO有種果汁真好喝~~，是一些在AWS的基本元件，如：EC2、EBS、ELB、EFS、EKS、ENI、ECR，接著是EKS和KOPS的比較，說明為何要用EKS。最後是一些使用AWS的前置準備，要先設置下。
 
 ## CCM
 
@@ -19,7 +19,7 @@ Type: kubernetes
 
 ![](./images/img_002.png)
 
-這張圖我們之前有看過，就是這篇： [Master與Slave的不同](https://www.notion.so/k8s-Node-Master-Slave-1d2f16636b924a8fa2f7959f171e129a)，有提過相同的圖片，這是沒有上雲的情況
+這張圖我們之前有看過，就是這篇： [Master與Slave的不同](https://nickzhuang.com/posts/k8s-node-master)，有提過相同的圖片，這是沒有上雲的情況
 
 接著我們再看一張
 
@@ -29,34 +29,56 @@ Type: kubernetes
 
 這個是有上雲的情況，可以發現到：
 
-對於單節點那些部分的連接全部轉換到kube-apiserver上
-
-增加了cloud-controller manager，並協調kube-controller manager及連接kube-apiserver
+- 對於單節點那些部分的連接全部轉換到kube-apiserver上
+- 增加了cloud-controller manager，並協調kube-controller manager及連接kube-apiserver
 
 CCM 打破了k8s控制器管理器（KCM）的一些功能，並將其作為一個單獨的進程運行。具體來說，它打破了KCM中依賴於雲的控制器。
 
 CCM可以設置ClusterRole以達成授權，這部分與介紹RBAC時類似
 
+```yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
-metadata:name: cloud-controller-manager
-rules:-apiGroups:-""resources:- nodes
-verbs:-'\*'-apiGroups:-""resources:- nodes/status
-verbs:- patch
--apiGroups:-""resources:- services
-verbs:- list
- - patch
- - update
- - watch
--apiGroups:-""resources:- serviceaccounts
-verbs:- create
--apiGroups:-""resources:- persistentvolumes
-verbs:- get
- - list
- - update
- - watch
-
-​
+metadata:
+    name: cloud-controller-manager
+rules:
+- apiGroups:
+    - ""
+    resources:
+    - nodes
+    verbs:
+    - '*'
+- apiGroups:
+    - ""
+    resources:
+    - nodes/status
+    verbs:
+    - patch
+- apiGroups:
+    - ""
+    resources:
+    - services
+    verbs:
+    - list
+    - patch
+    - update
+    - watch
+- apiGroups:
+    - ""
+    resources:
+    - serviceaccounts
+    verbs:
+    - create
+- apiGroups:
+    - ""
+    resources:
+    - persistentvolumes
+    verbs:
+    - get
+    - list
+    - update
+    - watch
+```
 
 這部分等到上雲的時候，我們會再測試。
 
@@ -64,41 +86,41 @@ verbs:- get
 
 筆者後續的介紹都以AWS為主，如果要找其他的，請參考： [雲端服務商](https://kubernetes.io/docs/concepts/cluster-administration/cloud-providers/)
 
-### EC2、EBS、ELB、EFS、EKS、ENI、ECR
+## EC2、EBS、ELB、EFS、EKS、ENI、ECR
 
 這些元件是我們在用EKS架設k8s群集的時候會用到了，大致介紹，設置的時候會再提。
 
-### EC2
+## EC2
 
 Elastic Compute Cloud（EC2） ，是由 [亞馬遜公司](https://zh.wikipedia.org/wiki/%E4%BA%9E%E9%A6%AC%E9%81%9C%E5%85%AC%E5%8F%B8) 提供的 [Web服務](https://zh.wikipedia.org/wiki/Web%E6%9C%8D%E5%8B%99)，是一個讓使用者可以租用 [雲端](https://zh.wikipedia.org/wiki/%E9%9B%B2%E7%AB%AF%E9%81%8B%E7%AE%97) 電腦運行所需應用的系統。EC2藉由提供Web服務的方式讓使用者可以彈性地運行自己的機器映像檔，使用者將可以在這個 [虛擬機器](https://zh.wikipedia.org/wiki/%E8%99%9B%E6%93%AC%E6%A9%9F%E5%99%A8) 上運行任何自己想要的軟體或應用程式，也可以隨時建立、執行、終止自己的虛擬伺服器，使用多少時間算多少錢，也因此這個系統是「彈性」使用的。EC2讓使用者可以控制執行虛擬伺服器的主機地理位置，這可以改善讓延遲還有備援性例如，為了讓系統維護時間最短，用戶可以在每個時區都運行自己的虛擬伺服器。
 
-### EBS
+## EBS
 
 Elastic Block Store (EBS) 是易於使用的高效能區塊儲存服務，專為與Elastic Compute Cloud (EC2) 搭配使用而設計，能以任何規模同時用於輸送量和交易密集型工作負載。各種工作負載 (如關聯式和非關聯式資料庫、企業應用程式、容器化的應用程式、大數據分析引擎、檔案系統和媒體工作流程) 廣泛部署在 EBS 上。
 
-### ELB
+## ELB
 
 Elastic Load Balancing 可在多個目標 (例如 EC2 執行個體、容器、IP 地址和 Lambda 函數) 之間自動分配傳入的應用程式流量。它可以在單一可用區域或跨多個可用區域處理應用程式流量的各種負載。Elastic Load Balancing 提供三種負載平衡器，它們都具有下列特性：高可用性、自動擴展，以及讓應用程式具備容錯功能的強大安全防護。
 
-### EFS
+## EFS
 
 Elastic File System (EFS) 提供簡單、可擴展、全受管的彈性 NFS 檔案儲存，可與 AWS 雲端服務和內部部署資源搭配使用。其建置是為了要隨需擴展至數 PB，且不會中斷應用程式，可隨著新增和移除檔案自動擴展和縮減，無須佈建和管理容量來適應增長。
 
 EFS 提供兩種儲存類別：標準儲存類別和 [不常存取儲存類別](https://aws.amazon.com/tw/efs/features/infrequent-access/) (EFS IA)。EFS IA 針對每天未存取的檔案提供成本優化的性價比。
 
-### EKS
+## EKS
 
 Elastic Kubernetes Service (EKS) 可使用 [AWS 上的 Kubernetes](https://aws.amazon.com/tw/kubernetes/) 輕鬆部署、管理和擴展容器化應用程式。
 
 EKS可在多個 AWS 可用區域為執行 Kubernetes 管理基礎設施，以避免發生單一故障點問題。 EKS 已取得 Kubernetes 一致性授權，可讓使用合作夥伴和 Kubernetes 社群的現有工具和外掛程式。在任何標準 Kubernetes 環境執行的應用程式都能完全相容，而且可以輕鬆遷移到 EKS。
 
-### ENI
+## ENI
 
 Elastic Network Interface（ENI），彈性網路界面是代表虛擬網路卡之 VPC 中的邏輯聯網元件。
 
 可在帳戶中建立並設定網路界面，然後將它們連接到VPC 中的執行個體。
 
-### ECR
+## ECR
 
 Elastic Container Registry (ECR) 是一個全受管的 Docker 容器登錄檔，可讓開發人員輕鬆存放、管理以及部署 Docker 容器映像。ECR 已與 Elastic Container Service (ECS) 整合，以簡化從開發到生產的工作流程。
 
@@ -106,12 +128,11 @@ Elastic Container Registry (ECR) 是一個全受管的 Docker 容器登錄檔，
 
 看完了上面的介紹，我們大致可以知道，EKS是在AWS上部署k8s可以用的工具，不過他只能用在AWS上，Kops同樣也是部署k8s的工具，不過它是開源的，可以適用於不同的雲環境，雖然它的泛用性比較高，但是相較於EKS有些不足的地方，Kops出來很久了，發展算是很完整，有相當程度的穩定性，也因此可以依賴。EKS是比較新的東西，大概出來1年多左右而已，我們來看張比較表
 
-|     |     |     |
-| --- | --- | --- |
-| 項目 | EKS | Kops |
-| 集群設置 | 較差 | 較好 |
-| 集群管理 | 較好 | 較差 |
-| 安全性 | 較好 | 較差 |
+|項目      |EKS   |Kops  |
+|---------|------|------|
+|集群設置   |較差  |較好   |
+|集群管理   |較好  |較差   |
+|安全性     |較好  |較差   |
 
 所以來個結論，Kops在設置上有更多可以操作的空間，但是也相對複雜，整體來說，EKS可能比較適合軟件開發人員，而Kops比較適合真正的系統管理者。
 
@@ -123,7 +144,7 @@ Elastic Container Registry (ECR) 是一個全受管的 Docker 容器登錄檔，
 
 ![](./images/img_004.png)
 
-### 新增AWS Account的User
+## 新增AWS Account的User
 
 進去之後，應該有如下類似畫面，選擇IAM的Service
 
@@ -169,7 +190,7 @@ Group name隨意取，筆者是用eksGroup，但要注意的是，一定要有�
 
 OK，使用者eks建立完成！
 
-### 新增IAM Role
+## 新增IAM Role
 
 接著我們切換到Roles
 
@@ -193,7 +214,7 @@ OK，使用者eks建立完成！
 
 OK，IAM Role建立完成！
 
-### 在EC2新增Key Value的Pair
+## 在EC2新增Key Value的Pair
 
 回到Management Service的介面，選擇EC2
 
@@ -225,21 +246,12 @@ OK，IAM Role建立完成！
 
 ## 參考資料
 
-[CCM](https://kubernetes.io/zh/docs/concepts/architecture/cloud-controller/)
-
-[AWS EC2](https://zh.wikipedia.org/zh-tw/Amazon_EC2)
-
-[AWS ELB](https://aws.amazon.com/tw/elasticloadbalancing/)
-
-[AWS EBS](https://aws.amazon.com/tw/ebs/)
-
-[AWS EFS](https://aws.amazon.com/tw/efs/?nc2=h_m1)
-
-[AWS EKS](https://aws.amazon.com/tw/eks/)
-
-[AWS ENI](https://docs.aws.amazon.com/zh_tw/AWSEC2/latest/UserGuide/using-eni.html)
-
-[AWS ECR](https://aws.amazon.com/tw/ecr/)
-
-[EKS與Kops的比較](https://www.bluematador.com/blog/kubernetes-on-aws-eks-vs-kops)
-
+- [CCM](https://kubernetes.io/zh/docs/concepts/architecture/cloud-controller/)
+- [AWS EC2](https://zh.wikipedia.org/zh-tw/Amazon_EC2)
+- [AWS ELB](https://aws.amazon.com/tw/elasticloadbalancing/)
+- [AWS EBS](https://aws.amazon.com/tw/ebs/)
+- [AWS EFS](https://aws.amazon.com/tw/efs/?nc2=h_m1)
+- [AWS EKS](https://aws.amazon.com/tw/eks/)
+- [AWS ENI](https://docs.aws.amazon.com/zh_tw/AWSEC2/latest/UserGuide/using-eni.html)
+- [AWS ECR](https://aws.amazon.com/tw/ecr/)
+- [EKS與Kops的比較](https://www.bluematador.com/blog/kubernetes-on-aws-eks-vs-kops)

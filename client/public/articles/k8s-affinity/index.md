@@ -1,6 +1,6 @@
 ![](./images/img_001.png)
 
-## \[Day13\] k8s進階篇（四）：Affinity and Anti-Affinity、Taints and Tolerations
+# [Day13] k8s進階篇（四）：Affinity and Anti-Affinity、Taints and Tolerations
 
 Author: Nick Zhuang
 Type: kubernetes
@@ -13,7 +13,7 @@ Type: kubernetes
 
 Affinity就是親和性，這個部分分為Node Affinity和Pod Affinity，下面給幾個例子：
 
-### Node Selector
+## Node Selector
 
 還記得前面提過的Label嗎？我們其實可以透過設置nodeSelector來達成Node Affinity的需求
 
@@ -21,90 +21,97 @@ Affinity就是親和性，這個部分分為Node Affinity和Pod Affinity，下�
 
 新增一個具有nodeSelector的Pod
 
+```yaml
 $vim pod-nodeSelector.yaml
 apiVersion: v1
 kind: Pod
-metadata:name: nodehelloworld.example.com
-labels:app: helloworld
-spec:containers:-name: k8s-demo
-image: 105552010/k8s-demo
-ports:-name: nodejs-port
-containerPort:3000nodeSelector:disk: ssd
-
-​
+metadata:
+    name: nodehelloworld.example.com
+    labels:
+    app: helloworld
+spec:
+    containers:
+    - name: k8s-demo
+    image: 105552010/k8s-demo
+    ports:
+    - name: nodejs-port
+        containerPort: 3000
+    nodeSelector:
+    disk: ssd
+```
 
 檢查集群的Node狀態，包含Labels
 
+```bash
 $kubectl get no --show-labels
-NAME STATUS ROLES AGE VERSION LABELS
-minikube Ready master 46h v1.16.0 beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=minikube,kubernetes.io/os=linux,node-role.kubernetes.io/master=
-
-​
+NAME       STATUS   ROLES    AGE   VERSION   LABELS
+minikube   Ready    master   46h   v1.16.0   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=minikube,kubernetes.io/os=linux,node-role.kubernetes.io/master=
+```
 
 我們來新增這個Pod
 
+```bash
 $kubectl create -f pod-nodeSelector.yaml
 pod/nodehelloworld.example.com created
-
-​
+```
 
 現在因為Node沒有設置disk=ssd這個Label，就會長這樣（Pod會一直Pending
 
+```bash
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-nodehelloworld.example.com 0/1 Pending 0 4s
-
-​
+NAME                         READY   STATUS    RESTARTS   AGE
+nodehelloworld.example.com   0/1     Pending   0          4s
+```
 
 在describe中的Event可以發現原因：不滿足nodeSelector的條件
 
+```bash
 $kubectl describe po
 Events:
-Type Reason Age From Message
-\-\-\-\- \-\-\-\-\-\- \-\-\-\- \-\-\-\- -------
-Warning FailedScheduling <unknown> default-scheduler 0/1 nodes are available: 1 node(s) didn't match node selector.
-
-​
+    Type     Reason            Age        From               Message
+    ----     ------            ----       ----               -------
+    Warning  FailedScheduling  <unknown>  default-scheduler  0/1 nodes are available: 1 node(s) didn't match node selector.
+```
 
 這時我們新增一個disk=ssd的Label並檢查
 
+```bash
 $kubectl label nodes minikube disk=ssd
 node/minikube labeled
 $kubectl get no --show-labels
-NAME STATUS ROLES AGE VERSION LABELS
-minikube Ready master 46h v1.16.0 beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,disk=ssd,kubernetes.io/arch=amd64,kubernetes.io/hostname=minikube,kubernetes.io/os=linux,node-role.kubernetes.io/master=
-
-​
+NAME       STATUS   ROLES    AGE   VERSION   LABELS
+minikube   Ready    master   46h   v1.16.0   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,disk=ssd,kubernetes.io/arch=amd64,kubernetes.io/hostname=minikube,kubernetes.io/os=linux,node-role.kubernetes.io/master=
+```
 
 可以發現是有新增disk=ssd這個Label！
 
 我們再來檢查下Pod的狀態
 
+```bash
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-nodehelloworld.example.com 1/1 Running 0 6m53s
-
-​
+NAME                         READY   STATUS    RESTARTS   AGE
+nodehelloworld.example.com   1/1     Running   0          6m53s
+```
 
 有開始跑了，如果再度檢查describe的訊息中的Event會發現：
 
+```bash
 Successfully assigned default/nodehelloworld.example.com to minikube
-
-​
+```
 
 附帶一提，如果Node要解除Label的話，可以這樣
 
+```bash
 $kubectl label nodes minikube disk-
 node/minikube labeled
 $kubectl get no --show-labels
-NAME STATUS ROLES AGE VERSION LABELS
-minikube Ready master 2d6h v1.16.0 beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=minikube,kubernetes.io/os=linux,node-role.kubernetes.io/master=
-
-​
+NAME       STATUS   ROLES    AGE    VERSION   LABELS
+minikube   Ready    master   2d6h   v1.16.0   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=minikube,kubernetes.io/os=linux,node-role.kubernetes.io/master=
+```
 
 OK，接著我們看下個部分，Node Affinity
 
-### Node Affinity
+## Node Affinity
 
 這個部分我們就要把前一段的Node Selector抽換掉，把它改成Node Affinity，Node Affinity和Node Selector不同的是，它會有更多細緻的操作，你可以把Node Selector看成是簡易版的Node Affinity，k8s最早只有Node Selector，Affinity是後面的版本才加進來的。
 
@@ -112,55 +119,62 @@ nodeAffinity有兩種策略：preferredDuringSchedulingIgnoredDuringExecution和
 
 新增一個Node Affinity的Pod
 
+```yaml
 $vim pod-nodeAffinity.yaml
 apiVersion: v1
 kind: Pod
-metadata:name: nodehelloworld.example.com
-labels:app: helloworld
-spec:containers:-name: k8s-demo
-image: 105552010/k8s-demo
-ports:-name: nodejs-port
-containerPort:3000affinity:nodeAffinity:requiredDuringSchedulingIgnoredDuringExecution:nodeSelectorTerms:-matchExpressions:-key: kubernetes.io/hostname
-operator: NotIn
-values:- 192.168.0.125
- - 192.168.0.247
-preferredDuringSchedulingIgnoredDuringExecution:-weight:1preference:matchExpressions:-key: disk
-operator: In
-values:- ssd
-
-​
+metadata:
+    name: nodehelloworld.example.com
+    labels:
+    app: helloworld
+spec:
+    containers:
+    - name: k8s-demo
+    image: 105552010/k8s-demo
+    ports:
+    - name: nodejs-port
+        containerPort: 3000
+    affinity:
+    nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+            operator: NotIn
+            values:
+            - 192.168.0.125
+            - 192.168.0.247
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+        preference:
+            matchExpressions:
+            - key: disk
+            operator: In
+            values:
+            - ssd
+```
 
 可以看到在affinity的區塊，有設置了nodeAffinity，其中requiredDuringSchedulingIgnoredDuringExecution代表了硬需求，注意到這裡寫的nodeSelectorTerms，在這個區塊底下，如果沒有寫matchExpressions的話，那麼在它底下所列出的條件，只要滿足其中一項就可以了，但在這個例子有寫matchExpressions，所以在matchExpressions底下所列的條件全都要滿足才會調度，關於matchExpressions的key有些系統本身自帶的可以選擇自行套用，可以參考下：
 
-build-in node label
+|build-in node label                      |
+|-----------------------------------------|
+|kubernetes.io/hostname                   |
+|failure-domain.beta.kubernetes.io/zone   |
+|failure-domain.beta.kubernetes.io/region |
+|beta.kubernetes.io/instance-type         |
+|beta.kubernetes.io/os                    |
+|beta.kubernetes.io/arch                  |
 
-[kubernetes.io/hostname](http://kubernetes.io/hostname)
-
-[failure-domain.beta.kubernetes.io/zone](http://failure-domain.beta.kubernetes.io/zone)
-
-[failure-domain.beta.kubernetes.io/region](http://failure-domain.beta.kubernetes.io/region)
-
-[beta.kubernetes.io/instance-type](http://beta.kubernetes.io/instance-type)
-
-[beta.kubernetes.io/os](http://beta.kubernetes.io/os)
-
-[beta.kubernetes.io/arch](http://beta.kubernetes.io/arch)
-
-這邊是檢查主機名稱： [kubernetes.io/hostname](http://kubernetes.io/hostname)
+這邊是檢查主機名稱：kubernetes.io/hostname
 
 接著我們看到了operator，這個是操作符，一般會有這幾種：
 
-In：Label 的值在某個列表中
-
-NotIn：Label 的值不在某個列表中
-
-Gt：Label 的值大於某個值
-
-Lt：Label 的值小於某個值
-
-Exists：某個Label 存在
-
-DoesNotExist：某個Label 不存在
+- In：Label 的值在某個列表中
+- NotIn：Label 的值不在某個列表中
+- Gt：Label 的值大於某個值
+- Lt：Label 的值小於某個值
+- Exists：某個Label 存在
+- DoesNotExist：某個Label 不存在
 
 這裡是用NotIn，也就是說，required那邊整體的邏輯是：強制規定不把Pod部署到192.168.0.125和192.168.0.247這兩台電腦上。
 
@@ -168,50 +182,69 @@ DoesNotExist：某個Label 不存在
 
 我們來測試下：
 
+```bash
 $kubectl apply -f pod-nodeAffinity.yaml
 pod/nodehelloworld.example.com created
-
-​
+```
 
 檢查Pod狀態
 
+```bash
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-nodehelloworld.example.com 0/1 ContainerCreating 0 4s
+NAME                         READY   STATUS              RESTARTS   AGE
+nodehelloworld.example.com   0/1     ContainerCreating   0          4s
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-nodehelloworld.example.com 1/1 Running 0 8s
-
-​
+NAME                         READY   STATUS    RESTARTS   AGE
+nodehelloworld.example.com   1/1     Running   0          8s
+```
 
 OK，看起來沒啥問題。
 
 介紹完Node Affinity的內容後，我們來看下Pod Affinity的部分
 
-### Pod Affinity
+## Pod Affinity
 
 和nodeAffinity類似，podAffinity也有requiredDuringSchedulingIgnoredDuringExecution和preferredDuringSchedulingIgnoredDuringExecution兩種調度策略，唯一不同的是如果要使用互斥性，我們需要使用podAntiAffinity字段。
 
 這邊我們新增一個YAML
 
+```yaml
 $vim pod-podAffinity.yaml
 apiVersion: v1
 kind: Pod
-metadata:name: nodehelloworld.example.com
-labels:app: helloworld
-spec:containers:-name: k8s-demo
-image: 105552010/k8s-demo
-ports:-name: nodejs-port
-containerPort:3000affinity:podAffinity:requiredDuringSchedulingIgnoredDuringExecution:-labelSelector:matchExpressions:-key: app
-operator: In
-values:- helloworld
-topologyKey: kubernetes.io/hostname
-podAntiAffinity:preferredDuringSchedulingIgnoredDuringExecution:-weight:1podAffinityTerm:labelSelector:matchExpressions:-key: app
-operator: In
-values:- node-affinity-pod
-topologyKey: kubernetes.io/hostname
-
-​
+metadata:
+    name: nodehelloworld.example.com
+    labels:
+    app: helloworld
+spec:
+    containers:
+    - name: k8s-demo
+    image: 105552010/k8s-demo
+    ports:
+    - name: nodejs-port
+        containerPort: 3000
+    affinity:
+    podAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: app
+            operator: In
+            values:
+            - helloworld
+        topologyKey: kubernetes.io/hostname
+    podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+        podAffinityTerm:
+            labelSelector:
+            matchExpressions:
+            - key: app
+                operator: In
+                values:
+                - node-affinity-pod
+            topologyKey: kubernetes.io/hostname
+```
 
 相關參數說明請參考Node Affinity講解的部分，這裡不再贅述。
 
@@ -219,21 +252,21 @@ topologyKey: kubernetes.io/hostname
 
 我們來新增這個Pod試試
 
-$kubectl create -f pod-podAffinify.yaml
+```bash
+$kubectl create -f pod-podAffinity.yaml
 pod/nodehelloworld.example.com created
-
-​
+```
 
 檢查Pod的狀態
 
+```bash
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-nodehelloworld.example.com 0/1 ContainerCreating 0 4s
+NAME                         READY   STATUS              RESTARTS   AGE
+nodehelloworld.example.com   0/1     ContainerCreating   0          4s
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-nodehelloworld.example.com 1/1 Running 0 6s
-
-​
+NAME                         READY   STATUS    RESTARTS   AGE
+nodehelloworld.example.com   1/1     Running   0          6s
+```
 
 看起來運行正常，補充說明下：
 
@@ -243,12 +276,11 @@ P.S. namespace的觀念，後面管理篇會介紹
 
 最後我們整理一下比較表
 
-|     |     |     |     |     |
-| --- | --- | --- | --- | --- |
-| 調度策略 | 匹配標籤 | 操作符 | 拓撲域支持 | 調度目標 |
-| nodeAffinity | Node | In, NotIn, Exists, DoesNotExist, Gt, Lt | 否 | 指定主機 |
-| podAffinity | Pod | In, NotIn, Exists, DoesNotExist | 是 | Pod與指定Pod同一拓撲域 |
-| podAnitAffinity | Pod | In, NotIn, Exists, DoesNotExist | 是 | Pod與指定Pid同一拓撲域 |
+|調度策略         |匹配標籤 |操作符                                   |拓撲域支持   |調度目標              |
+|----------------|-------|----------------------------------------|----------- |--------------------|
+|nodeAffinity    |Node   |In, NotIn, Exists, DoesNotExist, Gt, Lt |否          |指定主機              |
+|podAffinity     |Pod    |In, NotIn, Exists, DoesNotExist         |是          |Pod與指定Pod同一拓撲域 |
+|podAntiAffinity |Pod    |In, NotIn, Exists, DoesNotExist         |是          |Pod與指定Pod同一拓撲域 |
 
 好的，所有Affinity的部分到這邊結束。
 
@@ -258,148 +290,188 @@ P.S. namespace的觀念，後面管理篇會介紹
 
 我們來看幾個例子：
 
-### 示例一：強制踢出
+## 示例一：強制踢出
 
 先標記一個Node，當然因為我們現在是單節點群集，所以只能標記minikube這個節點
 
+```bash
 $kubectl taint nodes minikube app=helloworld:NoExecute
 node/minikube tainted
-
-​
+```
 
 Taint的策略有三種：
 
-NoSchedule
-
-：POD 不會被調度到標記為taints 節點。
-
-PreferNoSchedule
-
-：NoSchedule 的軟策略版本。
-
-NoExecute
-
-：該選項意味著一旦Taint 生效，如該節點內正在運行的POD 沒有對應Tolerate 設置，會直接被逐出。
+1. `NoSchedule`：POD 不會被調度到標記為taints 節點。
+2. `PreferNoSchedule`：NoSchedule 的軟策略版本。
+3. `NoExecute`：該選項意味著一旦Taint 生效，如該節點內正在運行的POD 沒有對應Tolerate 設置，會直接被逐出。
 
 檢查設置的Taint
 
-$kubectl describe nodes\|grep -i taint
+```bash
+$kubectl describe nodes|grep -i taint
 Taints: app=helloworld:NoExecute
-
-​
+```
 
 新增一個Pod的YAML
 
+```yaml
 $vim pod-podAffinity-taint.yaml
 apiVersion: v1
 kind: Pod
-metadata:name: nodehelloworld.example.com
-labels:app: helloworld
-spec:containers:-name: k8s-demo
-image: 105552010/k8s-demo
-ports:-name: nodejs-port
-containerPort:3000affinity:podAffinity:requiredDuringSchedulingIgnoredDuringExecution:-labelSelector:matchExpressions:-key: app
-operator: In
-values:- helloworld
-topologyKey: kubernetes.io/hostname
-podAntiAffinity:preferredDuringSchedulingIgnoredDuringExecution:-weight:1podAffinityTerm:labelSelector:matchExpressions:-key: app
-operator: In
-values:- node-affinity-pod
-topologyKey: kubernetes.io/hostname
-tolerations:-key:"app"operator:"Equal"value:"helloworld"effect:"NoExecute"tolerationSeconds:60
-
-​
+metadata:
+    name: nodehelloworld.example.com
+    labels:
+    app: helloworld
+spec:
+    containers:
+    - name: k8s-demo
+    image: 105552010/k8s-demo
+    ports:
+    - name: nodejs-port
+        containerPort: 3000
+    affinity:
+    podAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: app
+            operator: In
+            values:
+            - helloworld
+        topologyKey: kubernetes.io/hostname
+    podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+        podAffinityTerm:
+            labelSelector:
+            matchExpressions:
+            - key: app
+                operator: In
+                values:
+                - node-affinity-pod
+            topologyKey: kubernetes.io/hostname
+    tolerations:
+    - key: "app"
+    operator: "Equal"
+    value: "helloworld"
+    effect: "NoExecute"
+    tolerationSeconds: 60
+```
 
 跑一個Pod Affinity的Pod，當Taint生效的時候，Pod就會被強制關閉，這邊有設定緩衝時間60秒。就像拍電影一樣：驚天動地60秒
 
+```bash
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-nodehelloworld.example.com 1/1 Terminating 0 50m
+NAME                         READY   STATUS        RESTARTS   AGE
+nodehelloworld.example.com   1/1     Terminating   0          50m
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-nodehelloworld.example.com 0/1 Terminating 0 51m
+NAME                         READY   STATUS        RESTARTS   AGE
+nodehelloworld.example.com   0/1     Terminating   0          51m
 $kubectl get po
 No resources found.
-
-​
+```
 
 當不需要標記的時候，我們可以把Taint拿掉
 
+```bash
 $kubectl taint nodes minikube app-
 node/minikube untainted
+```
 
-​
-
-### 示例二：限制排程
+## 示例二：限制排程
 
 按照剛所說的Taint策略，我們再試試另一種：NoSchedule
 
+```bash
 $kubectl taint nodes minikube app=helloworld:NoSchedule
 node/minikube tainted
-
-​
+```
 
 接著我們修改下剛剛pod-podAffinity-taint.yaml的內容
 
+```yaml
 $vim pod-podAffinity-taint.yaml
 apiVersion: v1
 kind: Pod
-metadata:name: nodehelloworld.example.com
-labels:app: helloworld
-spec:containers:-name: k8s-demo
-image: 105552010/k8s-demo
-ports:-name: nodejs-port
-containerPort:3000affinity:podAffinity:requiredDuringSchedulingIgnoredDuringExecution:-labelSelector:matchExpressions:-key: app
-operator: In
-values:- helloworld
-topologyKey: kubernetes.io/hostname
-podAntiAffinity:preferredDuringSchedulingIgnoredDuringExecution:-weight:1podAffinityTerm:labelSelector:matchExpressions:-key: app
-operator: In
-values:- node-affinity-pod
-topologyKey: kubernetes.io/hostname
-tolerations:-key:"app"operator:"Equal"value:"helloworld"effect:"NoSchedule"
-
-​
+metadata:
+    name: nodehelloworld.example.com
+    labels:
+    app: helloworld
+spec:
+    containers:
+    - name: k8s-demo
+    image: 105552010/k8s-demo
+    ports:
+    - name: nodejs-port
+        containerPort: 3000
+    affinity:
+    podAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: app
+            operator: In
+            values:
+            - helloworld
+        topologyKey: kubernetes.io/hostname
+    podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+        podAffinityTerm:
+            labelSelector:
+            matchExpressions:
+            - key: app
+                operator: In
+                values:
+                - node-affinity-pod
+            topologyKey: kubernetes.io/hostname
+    tolerations:
+    - key: "app"
+    operator: "Equal"
+    value: "helloworld"
+    effect: "NoSchedule"
+```
 
 啟動這個Pod
 
-$kubectl create -f pod-podAffinify-taint.yaml
+```bash
+$kubectl create -f pod-podAffinity-taint.yaml
 pod/nodehelloworld.example.com created
-
-​
+```
 
 檢查Pod的狀態，發現是Pending
 
+```bash
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-nodehelloworld.example.com 0/1 Pending 0 4s
-
-​
+NAME                         READY   STATUS    RESTARTS   AGE
+nodehelloworld.example.com   0/1     Pending   0          4s
+```
 
 這是因為沒有Node有app=helloworld這個Taint，我們把這個Taint加到minikube的Node上
 
+```bash
 $kubectl taint node minikube app=helloworld:NoSchedule
 node/minikube tainted
-
-​
+```
 
 檢查Node的Taint
 
-$kubectl describe no minikube\|grep -i taint
-Taints: app=helloworld:NoSchedule
+```bash
+$kubectl describe no minikube|grep -i taint
+Taints:             app=helloworld:NoSchedule
+```
 
-​
 
 再次確認Pod的狀態
 
+```bash
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-nodehelloworld.example.com 0/1 ContainerCreating 0 4s
+NAME                         READY   STATUS              RESTARTS   AGE
+nodehelloworld.example.com   0/1     ContainerCreating   0          4s
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-nodehelloworld.example.com 1/1 Running 0 6s
-
-​
+NAME                         READY   STATUS    RESTARTS   AGE
+nodehelloworld.example.com   1/1     Running   0          6s
+```
 
 有開起來了！測試成功～
 
@@ -409,7 +481,5 @@ nodehelloworld.example.com 1/1 Running 0 6s
 
 ## 參考連結
 
-[Taint與Toleration](https://kubernetes.io/zh/docs/concepts/configuration/taint-and-toleration/)
-
-[Assign Pod to Node](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity)
-
+- [Taint與Toleration](https://kubernetes.io/zh/docs/concepts/configuration/taint-and-toleration/)
+- [Assign Pod to Node](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity)

@@ -1,6 +1,6 @@
 ![](./images/img_001.png)
 
-## \[Day29\] k8s集群篇：HA、Federation
+# [Day29] k8s集群篇：HA、Federation
 
 Author: Nick Zhuang
 Type: kubernetes
@@ -25,301 +25,342 @@ HA（High Availability），是指高可用性，它可以用在主節點的備�
 
 Federation（聯邦）自開始出現後一直都是讓人很感興趣的議題，不過因為v1的版本架構設計瑕疵，目前已經被棄用，現在是直接用v2版，比較符合現有的k8s架構需求，底下我們操作下，看看怎麼使用，也比較下minikube與EKS這兩個不同的環境使用上有何不同。
 
-### Minikube的安裝與使用
+## Minikube的安裝與使用
 
 下載Kubefed主程式，從 [這裡](https://github.com/kubernetes-sigs/kubefed/releases/) 下載
 
-#### 設置主程式
+## 設置主程式
 
-$tar -zxvf kubefedctl-\*.tgz
+```bash
+$tar -zxvf kubefedctl-*.tgz
 $chmod u+x kubefedctl
-$sudomv kubefedctl /usr/local/bin/ \# make sure the location is in the PATH
-
-​
+$sudo mv kubefedctl /usr/local/bin/ # make sure the location is in the PATH
+```
 
 注意到這個只有支援linxu和OSX，筆者是用Mac
 
 接著我們新增兩個minikube的群集（要開啟RBAC
 
+```bash
 $minikube start -p cluster1 --kubernetes-version v1.13.4 --extra-config=apiserver.Authorization.Mode=RBAC
 $minikube start -p cluster2 --kubernetes-version v1.13.4 --extra-config=apiserver.Authorization.Mode=RBAC
-
-​
+```
 
 檢查一下
 
+```bash
 $kubectl get all
-NAME TYPE CLUSTER-IP EXTERNAL-IP PORT(S) AGE
-service/kubernetes ClusterIP 10.96.0.1 <none>443/TCP 4m6s
-
-​
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   4m6s
+```
 
 如果要切換群集的話
 
+```bash
 $kubectl config use-context cluster1
-Switched to context "cluster1".$kubectl config use-context cluster2
-Switched to context "cluster2".$kubectl config current-context
+Switched to context "cluster1".
+$kubectl config use-context cluster2
+Switched to context "cluster2".
+$kubectl config current-context
 cluster2
-
-​
+```
 
 設置Helm
 
-$helm repo add kubefed-charts <https://raw.githubusercontent.com/kubernetes-sigs/kubefed/master/charts>$helm repo list
-NAME URL
-stable <https://kubernetes-charts.storage.googleapis.com>local<http://127.0.0.1:8879/charts>
-istio.io <https://storage.googleapis.com/istio-release/releases/1.3.1/charts/>
-kubefed-charts <https://raw.githubusercontent.com/kubernetes-sigs/kubefed/master/charts>
-
-​
+```bash
+$helm repo add kubefed-charts https://raw.githubusercontent.com/kubernetes-sigs/kubefed/master/charts
+$helm repo list
+NAME            URL
+stable          https://kubernetes-charts.storage.googleapis.com
+local           http://127.0.0.1:8879/charts
+istio.io        https://storage.googleapis.com/istio-release/releases/1.3.1/charts/
+kubefed-charts  https://raw.githubusercontent.com/kubernetes-sigs/kubefed/master/charts
+```
 
 檢查對應版本
 
+```bash
 $helm search kubefed
-NAME CHART VERSION APP VERSION DESCRIPTION
-kubefed-charts/kubefed 0.1.0-rc6 KubeFed helm chart
-kubefed-charts/federation-v2 0.0.10 Kubernetes Federation V2 helm chart
-
-​
+NAME                            CHART VERSION   APP VERSION     DESCRIPTION
+kubefed-charts/kubefed          0.1.0-rc6                       KubeFed helm chart
+kubefed-charts/federation-v2    0.0.10                          Kubernetes Federation V2 helm chart
+```
 
 RBAC設置
 
+```yaml
 $vim rbac.yaml
 apiVersion: v1
 kind: ServiceAccount
-metadata:name: tiller
-namespace: kube-system
-\-\-\-apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+    name: tiller
+    namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
-metadata:name: tiller
-roleRef:apiGroup: rbac.authorization.k8s.io
-kind: ClusterRole
-name: cluster-admin
-subjects:-kind: ServiceAccount
-name: tiller
-namespace: kube-system
-
-​
+metadata:
+    name: tiller
+roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: cluster-admin
+subjects:
+    - kind: ServiceAccount
+    name: tiller
+    namespace: kube-system
+```
 
 套用設定
 
+```bash
 $kubectl apply -f rbac.yaml
 role.rbac.authorization.k8s.io/tiller created
-
-​
+```
 
 Helm初始化
 
+```bash
 $helm init --service-account tiller
-
-​
+```
 
 透過Helm安裝
 
-$helminstall kubefed-charts/kubefed --name kubefed --version=0.1.0-rc6 --namespace kube-system
-
-​
+```bash
+$helm install kubefed-charts/kubefed --name kubefed --version=0.1.0-rc6 --namespace kube-system
+```
 
 接著我們把這兩個集群加到Federation中
 
-$kubefedctljoin cluster1 --cluster-context cluster1 \\
- --host-cluster-context cluster1 --v=2$kubefedctljoin cluster2 --cluster-context cluster2 \\
- --host-cluster-context cluster1 --v=2
-
-​
+```bash
+$kubefedctl join cluster1 --cluster-context cluster1 \
+    --host-cluster-context cluster1 --v=2
+$kubefedctl join cluster2 --cluster-context cluster2 \
+    --host-cluster-context cluster1 --v=2
+```
 
 檢查federation狀態
 
+```bash
 $kubectl -n kube-federation-system get kubefedclusters
-NAME READY AGE
-cluster1 True 1m
-cluster2 True 1m
-
-​
+NAME       READY   AGE
+cluster1   True    1m
+cluster2   True    1m
+```
 
 新增一個Namespace，測試用
 
+```bash
 $kubectl create namespace test
 namespace/test created
-
-​
+```
 
 新增一個Federation的Namespace
 
+```bash
 $vim fed-namespace.yaml
 apiVersion: types.kubefed.io/v1beta1
 kind: FederatedNamespace
-metadata:name: test
-namespace: test
-spec:placement:clusters:-name: cluster1
- -name: cluster2
-
-​
+metadata:
+    name: test
+    namespace: test
+spec:
+    placement:
+    clusters:
+    - name: cluster1
+    - name: cluster2
+```
 
 調度它
 
+```bash
 $kubectl apply -f fed-namespace.yaml
 federatednamespace.types.kubefed.io/test created
-
-​
+```
 
 部署Deployment
 
+```bash
 $vim fed-deployment.yaml
 apiVersion: types.kubefed.io/v1beta1
 kind: FederatedDeployment
-metadata:name: test
-namespace: test
-spec:template:metadata:labels:app: nginx
-spec:replicas:3selector:matchLabels:app: nginx
-template:metadata:labels:app: nginx
-spec:containers:-image: nginx
-name: nginx
-placement:clusters:-name: cluster2
- -name: cluster1
-overrides:-clusterName: cluster2
-clusterOverrides:-path:"/spec/replicas"value:5-path:"/spec/template/spec/containers/0/image"value:"nginx:1.17.0-alpine"-path:"/metadata/annotations"op:"add"value:foo: bar
-
-​
+metadata:
+    name: test
+    namespace: test
+spec:
+    template:
+    metadata:
+        labels:
+        app: nginx
+    spec:
+        replicas: 3
+        selector:
+        matchLabels:
+            app: nginx
+        template:
+        metadata:
+            labels:
+            app: nginx
+        spec:
+            containers:
+            - image: nginx
+            name: nginx
+    placement:
+    clusters:
+    - name: cluster2
+    - name: cluster1
+    overrides:
+    - clusterName: cluster2
+    clusterOverrides:
+    - path: "/spec/replicas"
+        value: 5
+    - path: "/spec/template/spec/containers/0/image"
+        value: "nginx:1.17.0-alpine"
+    - path: "/metadata/annotations"
+        op: "add"
+        value:
+        foo: bar
+```
 
 我們可以在設定裡面繼承既有的Deployment設定，或是覆寫它，如同replicas中的設置
 
 調度它
 
+```bash
 $kubectl apply -f fed-deployment.yaml
 federateddeployment.types.kubefed.io/test created
-
-​
+```
 
 驗證結果
 
+```bash
 $kubectl --context cluster1 -n test get deployments
-NAME READY UP-TO-DATE AVAILABLE AGE
-test3/3 33 3m
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+test   3/3     3            3           3m
 $kubectl --context cluster2 -n test get deployments
-NAME READY UP-TO-DATE AVAILABLE AGE
-test5/5 55 3m5s
-
-​
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+test   5/5     5            5           3m5s
+```
 
 恢復原狀
 
+```bash
 $kubectl delete ns/test
 namespace "test" deleted
 $kubectl --context cluster2 -n test get deployments
 No resources found.
-
-​
+```
 
 看起來沒啥問題，我們接續看EKS的部分
 
-### EKS的安裝與使用
+## EKS的安裝與使用
 
 首先，因為EKS預設是開啟RBAC的，所以我們不需要在這塊再調整參數，以及，因為EKS有使用的特定K8s版本，目前是使用1.13.8，固定的，同樣的也不需要去修改
 
 我們套用前方的設置YAML直接操作，我們直接裝目前最新的、因為是Ubuntu，OS要改成linux
 
+```bash
 VERSION=0.1.0-rc6
 OS=linux
 ARCH=amd64
-$curl -LO <https://github.com/kubernetes-sigs/kubefed/releases/download/v${VERSION}/kubefedctl-${VERSION}-${OS}-${ARCH}.tgz>$tar -zxvf kubefedctl-\*.tgz
+$curl -LO <https://github.com/kubernetes-sigs/kubefed/releases/download/v${VERSION}/kubefedctl-${VERSION}-${OS}-${ARCH}.tgz>$tar -zxvf kubefedctl-*.tgz
 $chmod u+x kubefedctl
-$sudomv kubefedctl /usr/local/bin/ \# make sure the location is in the PATH
+$sudo mv kubefedctl /usr/local/bin/ # make sure the location is in the PATH
+```
 
-​
 
 接著用eksctl新增兩個群集
 
+```bash
 $eksctl create cluster --name=cluster1 --region=ap-southeast-1
 $eksctl create cluster --name=cluster2 --region=ap-southeast-1
-
-​
+```
 
 切換群集
 
+```bash
 $kubectl config use-context cluster1
 Switched to context "cluster1".$kubectl config use-context cluster2
 Switched to context "cluster2".$kubectl config current-context
 cluster2
-
-​
+```
 
 套用RBAC
 
+```bash
 $kubectl apply -f rbac.yaml
 role.rbac.authorization.k8s.io/tiller created
-
-​
+```
 
 Helm初始化
 
+```bash
 $helm init --service-account tiller
-
-​
+```
 
 透過Helm安裝
 
-$helminstall kubefed-charts/kubefed --name kubefed --version=0.1.0-rc6 --namespace kube-system
-
-​
+```bash
+$helm install kubefed-charts/kubefed --name kubefed --version=0.1.0-rc6 --namespace kube-system
+```
 
 將這兩個集群加到Federation
 
-$kubefedctljoin cluster1 --cluster-context cluster1 \\
- --host-cluster-context cluster1 --v=2$kubefedctljoin cluster2 --cluster-context cluster2 \\
- --host-cluster-context cluster1 --v=2
-
-​
+```bash
+$kubefedctl join cluster1 --cluster-context cluster1 \
+    --host-cluster-context cluster1 --v=2
+$kubefedctl join cluster2 --cluster-context cluster2 \
+    --host-cluster-context cluster1 --v=2
+```
 
 檢查federation狀態
 
+```bash
 $kubectl -n kube-federation-system get kubefedclusters
-NAME READY AGE
-cluster1 True 1m10s
-cluster2 True 1m10s
-
-​
+NAME       READY   AGE
+cluster1   True    1m10s
+cluster2   True    1m10s
+```
 
 新增一個Namespace，測試用
 
+```bash
 $kubectl create namespace test
 namespace/test created
-
-​
+```
 
 調度Federation的Namespace
 
+```bash
 $kubectl apply -f fed-namespace.yaml
 federatednamespace.types.kubefed.io/test created
-
-​
+```
 
 調度Federation的Deployment
 
+```bash
 $kubectl apply -f fed-deployment.yaml
 federateddeployment.types.kubefed.io/test created
-
-​
+```
 
 驗證結果
 
+```bash
 $kubectl --context cluster1 -n test get deployments
-NAME READY UP-TO-DATE AVAILABLE AGE
-test3/3 33 5m
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+test   3/3     3            3           5m
 $kubectl --context cluster2 -n test get deployments
-NAME READY UP-TO-DATE AVAILABLE AGE
-test5/5 55 5m20s
-
-​
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+test   5/5     5            5           5m20s
+```
 
 恢復原狀
 
+```bash
 $kubectl delete ns/test
 namespace "test" deleted
 $kubectl --context cluster2 -n test get deployments
 No resources found.
-
-​
+```
 
 OK，測試結束了！
 
@@ -333,21 +374,12 @@ OK，測試結束了！
 
 ## 參考連結
 
-[用kubeadm實作HA](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/)
-
-[主節點設置HA](https://kubernetes.io/docs/tasks/administer-cluster/highly-available-master/)
-
-[HA的Ubuntu實作](https://www.kubeclusters.com/docs/How-to-Deploy-a-Highly-Available-kubernetes-Cluster-with-Kubeadm-on-Ubuntu16)
-
-[EKS與Federation](https://www.nickaws.net/aws/elixir/2019/09/02/Federation-and-EKS.html)
-
-[EKS介紹](https://kkc.github.io/2018/10/04/EKS-notes/)
-
-[kubefed的Ingress](https://github.com/kubernetes-sigs/kubefed/blob/master/docs/ingress-service-dns-with-coredns.md)
-
-[kubefed的Helm](https://github.com/kubernetes-sigs/kubefed/blob/master/charts/kubefed/README.md)
-
-[kubefed的安裝](https://github.com/kubernetes-sigs/kubefed/blob/master/docs/installation.md)
-
-[kubefed的使用](https://github.com/kubernetes-sigs/kubefed/blob/master/docs/userguide.md)
-
+- [用kubeadm實作HA](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/)
+- [主節點設置HA](https://kubernetes.io/docs/tasks/administer-cluster/highly-available-master/)
+- [HA的Ubuntu實作](https://www.kubeclusters.com/docs/How-to-Deploy-a-Highly-Available-kubernetes-Cluster-with-Kubeadm-on-Ubuntu16)
+- [EKS與Federation](https://www.nickaws.net/aws/elixir/2019/09/02/Federation-and-EKS.html)
+- [EKS介紹](https://kkc.github.io/2018/10/04/EKS-notes/)
+- [kubefed的Ingress](https://github.com/kubernetes-sigs/kubefed/blob/master/docs/ingress-service-dns-with-coredns.md)
+- [kubefed的Helm](https://github.com/kubernetes-sigs/kubefed/blob/master/charts/kubefed/README.md)
+- [kubefed的安裝](https://github.com/kubernetes-sigs/kubefed/blob/master/docs/installation.md)
+- [kubefed的使用](https://github.com/kubernetes-sigs/kubefed/blob/master/docs/userguide.md)

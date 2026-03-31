@@ -1,47 +1,37 @@
 ![](./images/img_001.jpg)
 
-## \[Day27\] SD訓練Checkpoint
+# [Day27] SD訓練Checkpoint
 
 Author: Nick Zhuang
 Type: AI & Data
 
-### 提要
+## 提要
 
-[前言](https://www.notion.so/Title-1e8d2b68726680a0b848c037848481b0#%E5%89%8D%E8%A8%80)
+- [前言](#前言)
+- [訓練方法介紹](#訓練方法介紹)
+- [訓練Checkpoint](#訓練Checkpoint)
 
-[訓練方法介紹](https://www.notion.so/Title-1e8d2b68726680a0b848c037848481b0#%E8%A8%93%E7%B7%B4%E6%96%B9%E6%B3%95%E4%BB%8B%E7%B4%B9)
-
-[訓練Checkpoint](https://www.notion.so/Title-1e8d2b68726680a0b848c037848481b0#%E8%A8%93%E7%B7%B4checkpoint)
-
-### 前言
+## 前言
 
 今天我們介紹SD訓練Checkpoint相關的內容，本日內容包含：訓練方法介紹、及訓練Checkpoint。
 
-### 訓練方法介紹
+## 訓練方法介紹
 
 基本上，目前實測上常見的方法都可以在 Hugging Face 上面找到，不過它提供的都是下指令的方式，比較適合專業玩家，全部連結如下所示。
 
-[Unconditional Training](https://huggingface.co/docs/diffusers/training/unconditional_training)
+* [Unconditional Training](https://huggingface.co/docs/diffusers/training/unconditional_training)
+* [Text-to-Image Training](https://huggingface.co/docs/diffusers/training/text2image)
+* [Text Inversion](https://huggingface.co/docs/diffusers/training/text_inversion)
+* [Dreambooth](https://huggingface.co/docs/diffusers/training/dreambooth)
+* [LoRA Support](https://huggingface.co/docs/diffusers/training/lora)
+* [ControlNet](https://huggingface.co/docs/diffusers/training/controlnet)
+* [InstructPix2Pix](https://huggingface.co/docs/diffusers/training/instructpix2pix)
+* [Custom Diffusion](https://huggingface.co/docs/diffusers/training/custom_diffusion)
+* [T2I-Adapters](https://huggingface.co/docs/diffusers/training/t2i_adapters)
 
-[Text-to-Image Training](https://huggingface.co/docs/diffusers/training/text2image)
+Unconditional Training 及 Text-to-Image Training，可以理解為圖生圖及文生圖的模型，Textual Inversion 就是詞嵌入 ( word embedding ) ，是關於模型的微調的技術，我們在 [「Day17」](https://nickzhuang.com/posts/embedding) 有探討過相關的內容，DreamBooth 的內容在 [「Day18」](https://nickzhuang.com/posts/dreambooth) 有討論過，LoRA 的內容則是 [「Day19」](https://nickzhuang.com/posts/lora-theory)，ControlNet及 T2I-Adaptor 是 [「Day24」](https://nickzhuang.com/posts/controlnet)，InstructPix2Pix 由於前面沒介紹到，這邊補充一下，這個方法是一種不需要微調模型的一種在擴散階段編輯圖像的一種方法，我們可以將其理解為在生圖階段動態去調整內容，所以不同與前面介紹過的詞嵌入或微調的方法，具體作法是透過一個大型語言模型；例如，GPT-3，加上文字到圖像的模型，以這兩者組合的圖像編輯預訓練數據集進行訓練，就能訓練出具備語言和圖像互補知識的條件擴散模型，可以比較下 CLIP 的內容 [「Day12」](https://nickzhuang.com/posts/clip)，CLIP 的內容也與 Custom Diffusion 是相關的，歡迎大家回去複習。
 
-[Text Inversion](https://huggingface.co/docs/diffusers/training/text_inversion)
-
-[Dreambooth](https://huggingface.co/docs/diffusers/training/dreambooth)
-
-[LoRA Support](https://huggingface.co/docs/diffusers/training/lora)
-
-[ControlNet](https://huggingface.co/docs/diffusers/training/controlnet)
-
-[InstructPix2Pix](https://huggingface.co/docs/diffusers/training/instructpix2pix)
-
-[Custom Diffusion](https://huggingface.co/docs/diffusers/training/custom_diffusion)
-
-[T2I-Adapters](https://huggingface.co/docs/diffusers/training/t2i_adapters)
-
-Unconditional Training 及 Text-to-Image Training，可以理解為圖生圖及文生圖的模型，Textual Inversion 就是詞嵌入 ( word embedding ) ，是關於模型的微調的技術，我們在 [「Day17」](https://nick-zhuang.notion.site/1e8d2b687266807fb94afb8f922ee7d7?pvs=25) 有探討過相關的內容，DreamBooth 的內容在 [「Day18」](https://nick-zhuang.notion.site/1e8d2b68726680ec974dfc9cbe016d01?pvs=25) 有討論過，LoRA 的內容則是 [「Day19」](https://nick-zhuang.notion.site/1e8d2b6872668020b5c8fb97c7276be4?pvs=25)，ControlNet及 T2I-Adaptor 是 [「Day24」](https://nick-zhuang.notion.site/1e8d2b687266806ba36bf7451f04dc77?pvs=25)，InstructPix2Pix 由於前面沒介紹到，這邊補充一下，這個方法是一種不需要微調模型的一種在擴散階段編輯圖像的一種方法，我們可以將其理解為在生圖階段動態去調整內容，所以不同與前面介紹過的詞嵌入或微調的方法，具體作法是透過一個大型語言模型；例如，GPT-3，加上文字到圖像的模型，以這兩者組合的圖像編輯預訓練數據集進行訓練，就能訓練出具備語言和圖像互補知識的條件擴散模型，可以比較下 CLIP 的內容 [「Day12」](https://nick-zhuang.notion.site/1e9d2b68726680b5912ad1470c2e992e?pvs=25)，CLIP 的內容也與 Custom Diffusion 是相關的，歡迎大家回去複習。
-
-### 訓練Checkpoint
+## 訓練Checkpoint
 
 以下介紹一種訓練 Checkpoint 的方式，我們將細部講解 DreamBooth 插件操作的內容。
 
@@ -73,18 +63,15 @@ Half Model 可以減少模型大小，表現也不會差很多，可以試試看
 
 到這裡就是訓練階段了，以GTX 4090訓練約15分鐘內可以完成，就微調模型來說還蠻快的，完成後只要到文生圖介面，載入你訓練的 Checkpoint ，並輸入關鍵字 nickxxxawesome，就會出現我的照片。
 
-介紹到這就結束了，若有問題可以到 DreamBooth 的 Github 找尋解答，或是開 issue 諮詢作者，另一種訓練 Checkpoint 的方式可以參考 kohya\_ss 的方式。
+介紹到這就結束了，若有問題可以到 DreamBooth 的 Github 找尋解答，或是開 issue 諮詢作者，另一種訓練 Checkpoint 的方式可以參考 kohya_ss 的方式。
 
-### 小結
+## 小結
 
 今天我們介紹了關於SD訓練Checkpoint的內容；例如，訓練方法介紹、及訓練Checkpoint，明天會介紹訓練 LoRA 的方法，明天見！
 
-### 參考連結
+## 參考連結
 
-[Hugging Face Training](https://huggingface.co/docs/diffusers/training)
-
-[InstructPix2Pix: Learning to Follow Image Editing Instructions](https://arxiv.org/pdf/2211.09800.pdf)
-
-[How to train DreamBooth](https://www.youtube.com/watch?v=tuSlUqmlZuc)
-
-[kohya: 訓練模型神器](https://github.com/bmaltais/kohya_ss?ref=blog.hinablue.me)
+- [Hugging Face Training](https://huggingface.co/docs/diffusers/training)
+- [InstructPix2Pix: Learning to Follow Image Editing Instructions](https://arxiv.org/pdf/2211.09800.pdf)
+- [How to train DreamBooth](https://www.youtube.com/watch?v=tuSlUqmlZuc)
+- [kohya: 訓練模型神器](https://github.com/bmaltais/kohya_ss?ref=blog.hinablue.me)

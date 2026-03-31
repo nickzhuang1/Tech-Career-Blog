@@ -2,13 +2,13 @@
 
 這次的參會重點整理及心得分享：
 
-1\. 開源模型發展趨勢
+1. 開源模型發展趨勢
 
-2\. 小模型不是一無是處
+2. 小模型不是一無是處
 
-3\. 聯發創新基地的新模型
+3. 聯發創新基地的新模型
 
-4\. 開源模型使用起手式
+4. 開源模型使用起手式
 
 ▋開源模型發展趨勢（Credit by 黃瀚萱）
 
@@ -26,7 +26,7 @@ Context Window加大
 
 很多模型會宣稱他們的Context Window是多少，不過實際測試可能會有落差，可以使用NVIDIA提供的RULER工具：
 
-[https://lnkd.in/gdWBQPWB](https://lnkd.in/gdWBQPWB)
+- [https://lnkd.in/gdWBQPWB](https://lnkd.in/gdWBQPWB)
 
 ▋小模型不是一無是處（Credit by 許大山）
 
@@ -46,13 +46,13 @@ Open Router 就像一個 「AI API 聚合器」，讓你透過一個統一的 AP
 
 如果你的公司或是團體有在Release模型的話，可以考慮放模型上去給別人使用，至少有兩個好處：
 
-1\. 賺奶粉錢
+1. 賺奶粉錢
 
-2\. 增加曝光
+2. 增加曝光
 
 參考連結：
 
-[https://openrouter.ai/](https://openrouter.ai/)
+- [https://openrouter.ai/](https://openrouter.ai/)
 
 Summary是指說「總結」相關的功能，小模型也很適合用來幫忙整理資料。我其實有點懷疑ChatGPT之前的版本，前面劈哩啪啦講了一堆，最後的「總之」、「總的來說」後面的那些文字，是不是透過Call Function請小模型整理的？（也有可能不是，回答的pattern是可以對齊的，但目前GPT5的外網搜尋功能無懸念應該就是Call Function）
 
@@ -66,13 +66,13 @@ Summary是指說「總結」相關的功能，小模型也很適合用來幫忙�
 
 有開放在Huggingface上，可以自行下載來用：
 
-[https://lnkd.in/gGXrfYqm](https://lnkd.in/gGXrfYqm)
+- [https://lnkd.in/gGXrfYqm](https://lnkd.in/gGXrfYqm)
 
 ▋開源模型使用起手式（Credit by 孫曉恩）
 
 示範了一個有趣的案例，透過RTX 4090工作站，用LM Studio部署Llama-Breeze2-8B-Instruct的模型，透過n8n定義工作流，把流程串起來，流程如下：
 
-語音輸入 -\> Breeze ASR語音辨識轉文字 -> 輸入給Breeze2綜整訊息 -> 摘要後的訊息透過BreezeVoice播放
+語音輸入 -> Breeze ASR語音辨識轉文字 -> 輸入給Breeze2綜整訊息 -> 摘要後的訊息透過BreezeVoice播放
 
 另外還介紹了台灣的開源模型，除了MediaTek Research之外，還有TAIDE、MiuLab（也許該加上Twinkle AI？）
 
@@ -80,11 +80,11 @@ Summary是指說「總結」相關的功能，小模型也很適合用來幫忙�
 
 A Guide to Parameter-Efficient Fine-Tuning，
 
-[https://lnkd.in/g9RdN6Jg](https://lnkd.in/g9RdN6Jg)
+- [https://lnkd.in/g9RdN6Jg](https://lnkd.in/g9RdN6Jg)
 
 我蠻高興有人分享這個，這內容在我書裡也有介紹過：
 
-[https://reurl.cc/KeMXdp](https://reurl.cc/KeMXdp)
+- [https://reurl.cc/KeMXdp](https://reurl.cc/KeMXdp)
 
 PEFT 的方法可以主要分為三個範疇，分別是: 添加法 (additive methods)、 選擇法 (selective methods)、 基於重參數化的方法(Reparameterizations-based methods)。
 
@@ -98,17 +98,16 @@ PEFT 的方法可以主要分為三個範疇，分別是: 添加法 (additive me
 
 台灣人工智慧學校（AIA）近期更新：
 
-1\. 協同數發部發佈了「AI產業人才認定指引」：
+1. 協同數發部發佈了「AI產業人才認定指引」：
 
-[https://lnkd.in/gsK4Ecbd](https://lnkd.in/gsK4Ecbd)
+- [https://lnkd.in/gsK4Ecbd](https://lnkd.in/gsK4Ecbd)
 
-2\. 既上次工程級AI素養，推出了管理級AI素養認證：
+2. 既上次工程級AI素養，推出了管理級AI素養認證：
 
-[https://lnkd.in/gTPjMjh4](https://lnkd.in/gTPjMjh4)
+- [https://lnkd.in/gTPjMjh4](https://lnkd.in/gTPjMjh4)
 
 下個月9/9-9/10就是2025 AIA年會了，介紹傳送門：
 
-[https://reurl.cc/VW2XyR](https://reurl.cc/VW2XyR)
+- [https://reurl.cc/VW2XyR](https://reurl.cc/VW2XyR)
 
 歡迎一同來現場交流互動！
-

@@ -8,11 +8,16 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
-import Posts from "@/pages/Posts";
-import PostDetail from "@/pages/PostDetail";
-import About from "@/pages/About";
-import Contact from "@/pages/Contact";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
+
+const Posts = lazy(() => import("@/pages/Posts"));
+const PostDetail = lazy(() => import("@/pages/PostDetail"));
+const About = lazy(() => import("@/pages/About"));
+const Contact = lazy(() => import("@/pages/Contact"));
+
+function PageFallback() {
+  return <div className="flex-1 min-h-[60vh]" />;
+}
 
 function ScrollToTop() {
   const [location] = useLocation();
@@ -26,14 +31,16 @@ function Router() {
   return (
     <>
       <ScrollToTop />
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/posts" component={Posts} />
-        <Route path="/posts/:id" component={PostDetail} />
-        <Route path="/about" component={About} />
-        <Route path="/contact" component={Contact} />
-        <Route component={NotFound} />
-      </Switch>
+      <Suspense fallback={<PageFallback />}>
+        <Switch>
+          <Route path="/" component={Home} />
+          <Route path="/posts" component={Posts} />
+          <Route path="/posts/:id" component={PostDetail} />
+          <Route path="/about" component={About} />
+          <Route path="/contact" component={Contact} />
+          <Route component={NotFound} />
+        </Switch>
+      </Suspense>
     </>
   );
 }

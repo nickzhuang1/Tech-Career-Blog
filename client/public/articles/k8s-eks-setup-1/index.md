@@ -1,6 +1,6 @@
 ![](./images/img_001.png)
 
-## \[Day20\] k8s實務篇（一）：EKS架設k8s（上）
+# [Day20] k8s實務篇（一）：EKS架設k8s（上）
 
 Author: Nick Zhuang
 Type: kubernetes
@@ -13,7 +13,7 @@ Type: kubernetes
 
 下篇的部分：kubectl的安裝與設置、登入EC2的工作節點（Tomorrow）
 
-@重要提醒：使用EKS不是免費的，除非你有綁定信用卡的額外預算，不然最好是速速部署測試，一小時約6塊TWD，沒用的時候記得關掉！不然就準備噴錢囉
+@重要提醒：使用EKS不是免費的，除非你有綁定信用卡的額外預算，不然最好是速速部署測試，一小時約6塊TWD，沒用的時候記得關掉！~~不然就準備噴錢囉~~
 
 ## AWS的基礎設置
 
@@ -27,79 +27,158 @@ Type: kubernetes
 
 接著我們導入一個VPC的template，詳細可參考 [文檔](https://docs.aws.amazon.com/en_us/codebuild/latest/userguide/cloudformation-vpc-template.html)
 
-\-\-\-AWSTemplateFormatVersion:'2010-09-09'Description:'AWS EKS'Parameters:VpcBlock:Type: String
-Default: 192.168.0.0/16
-Description: CIDR range for VPC
-
-Subnet01Block:Type: String
-Default: 192.168.64.0/18
-Description: CIDR for first subnet within VPC
-
-Subnet02Block:Type: String
-Default: 192.168.128.0/18
-Description: CIDR for second subnet within VPC
-
-Subnet03Block:Type: String
-Default: 192.168.192.0/18
-Description: CIDR for third subnet within VPC
-
-Resources:VPC:Type: AWS::EC2::VPC
-Properties:CidrBlock:!Ref VpcBlock
-EnableDnsSupport:trueEnableDnsHostnames:trueTags:-Key: Name
-Value:!Sub'${AWS::StackName}-VPC'InternetGateway:Type:"AWS::EC2::InternetGateway"VPCGatewayAttachment:Type:"AWS::EC2::VPCGatewayAttachment"Properties:InternetGatewayId:!Ref InternetGateway
-VpcId:!Ref VPC
-
-RouteTable:Type: AWS::EC2::RouteTable
-Properties:VpcId:!Ref VPC
-Tags:-Key: Name
-Value: Public Subnets
- -Key: Network
-Value: Public
-
-Route:DependsOn: VPCGatewayAttachment
-Type: AWS::EC2::Route
-Properties:RouteTableId:!Ref RouteTable
-DestinationCidrBlock: 0.0.0.0/0
-GatewayId:!Ref InternetGateway
-
-Subnet01:Type: AWS::EC2::Subnet
-Properties:AvailabilityZone:Fn::Select:-'0'-Fn::GetAZs:Ref: AWS::Region
-CidrBlock:Ref: Subnet01Block
-VpcId:Ref: VPC
-Tags:-Key: Name
-Value:!Sub"${AWS::StackName}-Subnet1"Subnet02:Type: AWS::EC2::Subnet
-Properties:AvailabilityZone:Fn::Select:-'1'-Fn::GetAZs:Ref: AWS::Region
-CidrBlock:Ref: Subnet02Block
-VpcId:Ref: VPC
-Tags:-Key: Name
-Value:!Sub"${AWS::StackName}-Subnet2"Subnet03:Type: AWS::EC2::Subnet
-
-Properties:AvailabilityZone:Fn::Select:-'2'-Fn::GetAZs:Ref: AWS::Region
-CidrBlock:Ref: Subnet03Block
-VpcId:Ref: VPC
-Tags:-Key: Name
-Value:!Sub"${AWS::StackName}-Subnet3"Subnet01RouteTableAssociation:Type: AWS::EC2::SubnetRouteTableAssociation
-Properties:SubnetId:!Ref Subnet01
-RouteTableId:!Ref RouteTable
-
-Subnet02RouteTableAssociation:Type: AWS::EC2::SubnetRouteTableAssociation
-Properties:SubnetId:!Ref Subnet02
-RouteTableId:!Ref RouteTable
-
-Subnet03RouteTableAssociation:Type: AWS::EC2::SubnetRouteTableAssociation
-Properties:SubnetId:!Ref Subnet03
-RouteTableId:!Ref RouteTable
-
-ControlPlaneSecurityGroup:Type: AWS::EC2::SecurityGroup
-Properties:GroupDescription: Cluster communication with worker nodes
-VpcId:!Ref VPC
-
-Outputs:SubnetIds:Description: your subnets
-Value:!Join\[",",\[!Ref Subnet01,!Ref Subnet02,!Ref Subnet03 \]\]SecurityGroups:Description: SecGroup for communication betw controlplane and workernodes
-Value:!Join\[",",\[!Ref ControlPlaneSecurityGroup \]\]VpcId:Description: The VPC Id
-Value:!Ref VPC
-
-​
+```bash
+---
+    AWSTemplateFormatVersion: '2010-09-09'
+    Description: 'AWS EKS'
+    
+    Parameters:
+    
+      VpcBlock:
+        Type: String
+        Default: 192.168.0.0/16
+        Description: CIDR range for VPC
+    
+      Subnet01Block:
+        Type: String
+        Default: 192.168.64.0/18
+        Description: CIDR for first subnet within VPC
+    
+      Subnet02Block:
+        Type: String
+        Default: 192.168.128.0/18
+        Description: CIDR for second subnet within VPC
+    
+      Subnet03Block:
+        Type: String
+        Default: 192.168.192.0/18
+        Description: CIDR for third subnet within VPC
+    
+    Resources:
+      VPC:
+        Type: AWS::EC2::VPC
+        Properties:
+          CidrBlock:  !Ref VpcBlock
+          EnableDnsSupport: true
+          EnableDnsHostnames: true
+          Tags:
+          - Key: Name
+            Value: !Sub '${AWS::StackName}-VPC'
+    
+      InternetGateway:
+        Type: "AWS::EC2::InternetGateway"
+    
+      VPCGatewayAttachment:
+        Type: "AWS::EC2::VPCGatewayAttachment"
+        Properties:
+          InternetGatewayId: !Ref InternetGateway
+          VpcId: !Ref VPC
+    
+      RouteTable:
+        Type: AWS::EC2::RouteTable
+        Properties:
+          VpcId: !Ref VPC
+          Tags:
+          - Key: Name
+            Value: Public Subnets
+          - Key: Network
+            Value: Public
+    
+      Route:
+        DependsOn: VPCGatewayAttachment
+        Type: AWS::EC2::Route
+        Properties:
+          RouteTableId: !Ref RouteTable
+          DestinationCidrBlock: 0.0.0.0/0
+          GatewayId: !Ref InternetGateway
+    
+      Subnet01:
+        Type: AWS::EC2::Subnet
+        Properties:
+          AvailabilityZone:
+            Fn::Select:
+            - '0'
+            - Fn::GetAZs:
+                Ref: AWS::Region
+          CidrBlock:
+            Ref: Subnet01Block
+          VpcId:
+            Ref: VPC
+          Tags:
+          - Key: Name
+            Value: !Sub "${AWS::StackName}-Subnet1"
+    
+      Subnet02:
+        Type: AWS::EC2::Subnet
+        Properties:
+          AvailabilityZone:
+            Fn::Select:
+            - '1'
+            - Fn::GetAZs:
+                Ref: AWS::Region
+          CidrBlock:
+            Ref: Subnet02Block
+          VpcId:
+            Ref: VPC
+          Tags:
+          - Key: Name
+            Value: !Sub "${AWS::StackName}-Subnet2"
+    
+      Subnet03:
+        Type: AWS::EC2::Subnet
+    
+        Properties:
+          AvailabilityZone:
+            Fn::Select:
+            - '2'
+            - Fn::GetAZs:
+                Ref: AWS::Region
+          CidrBlock:
+            Ref: Subnet03Block
+          VpcId:
+            Ref: VPC
+          Tags:
+          - Key: Name
+            Value: !Sub "${AWS::StackName}-Subnet3"
+    
+      Subnet01RouteTableAssociation:
+        Type: AWS::EC2::SubnetRouteTableAssociation
+        Properties:
+          SubnetId: !Ref Subnet01
+          RouteTableId: !Ref RouteTable
+    
+      Subnet02RouteTableAssociation:
+        Type: AWS::EC2::SubnetRouteTableAssociation
+        Properties:
+          SubnetId: !Ref Subnet02
+          RouteTableId: !Ref RouteTable
+    
+      Subnet03RouteTableAssociation:
+        Type: AWS::EC2::SubnetRouteTableAssociation
+        Properties:
+          SubnetId: !Ref Subnet03
+          RouteTableId: !Ref RouteTable
+    
+      ControlPlaneSecurityGroup:
+        Type: AWS::EC2::SecurityGroup
+        Properties:
+          GroupDescription: Cluster communication with worker nodes
+          VpcId: !Ref VPC
+    
+    Outputs:
+    
+      SubnetIds:
+        Description: your subnets
+        Value: !Join [ ",", [ !Ref Subnet01, !Ref Subnet02, !Ref Subnet03 ] ]
+    
+      SecurityGroups:
+        Description: SecGroup for communication betw controlplane and workernodes
+        Value: !Join [ ",", [ !Ref ControlPlaneSecurityGroup ] ]
+    
+      VpcId:
+        Description: The VPC Id
+        Value: !Ref VPC
+```
 
 接著應顯示如下，可以檢視Design去看它的設計拓墣架構，這裡筆者直接下一步
 
@@ -115,7 +194,7 @@ Value:!Ref VPC
 
 ![](./images/img_006.png)
 
-會稍微花一點時間，要等它一下，喝口茶，休息一下。（睡個覺再來
+會稍微花一點時間，要等它一下，喝口茶，休息一下。~~（睡個覺再來~~
 
 好了應該要有類似訊息
 
@@ -171,9 +250,6 @@ OK，到這邊關於創建k8s的控制介面的部分就結束囉！
 
 ## 參考資料
 
-[AWS EKS Cluster](https://docs.aws.amazon.com/en_us/eks/latest/userguide/clusters.html)
-
-[AWS VPC](https://aws.amazon.com/tw/vpc/faqs/)
-
-[AWS Cloud Formation](https://docs.aws.amazon.com/en_us/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-direct.html)
-
+- [AWS EKS Cluster](https://docs.aws.amazon.com/en_us/eks/latest/userguide/clusters.html)
+- [AWS VPC](https://aws.amazon.com/tw/vpc/faqs/)
+- [AWS Cloud Formation](https://docs.aws.amazon.com/en_us/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-direct.html)

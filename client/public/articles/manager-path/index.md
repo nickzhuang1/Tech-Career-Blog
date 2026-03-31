@@ -12,7 +12,6 @@
 
 以我自己本身為例，先是做了3年的Python軟體工程師，後面逐步往上晉升，先升到資深工程師，5年後升到Tech Lead，帶5人的小團隊，跑敏捷開發，目前在AI新創擔任技術長(CTO)一職，回想起來這本書真的幫助蠻大的，推薦給你～
 
-我的故事： [https://www.notion.so/1ccd2b68726681b3aec9ff112d6234db?pvs=4](https://www.notion.so/1ccd2b68726681b3aec9ff112d6234db?pvs=4)
+我的故事： [https://nickzhuang.com/posts/about-ai-cloud](https://nickzhuang.com/posts/about-ai-cloud)
 
 購書連結： [https://www.books.com.tw/products/0010890612](https://www.books.com.tw/products/0010890612)
-

@@ -1,6 +1,6 @@
 ![](./images/img_001.png)
 
-## \[Day12\] k8s進階篇（三）：StatefulSet、DaemonSet
+# [Day12] k8s進階篇（三）：StatefulSet、DaemonSet
 
 Author: Nick Zhuang
 Type: kubernetes
@@ -15,10 +15,10 @@ Type: kubernetes
 
 有的，使用對應元件的spec去查找：
 
-$kubectl explain deployment.spec \|grep -i version
+```bash
+$kubectl explain deployment.spec |grep -i version
 VERSION: apps/v1
-
-​
+```
 
 所以我們知道，在現在的這個環境，Deployment的YAML中的apiVersion要設為apps/v1
 
@@ -42,166 +42,181 @@ Stateful是指有狀態的、Stateless是指無狀態，也就是說當應用（
 
 我們來看個例子：
 
+```yaml
 $vim pod-statefulSet.yaml
 apiVersion: apps/v1
 kind: StatefulSet
-metadata:name: helloworld-statefulset
-spec:selector:matchLabels:app: helloworld
-serviceName:"helloworld"replicas:3template:metadata:labels:app: helloworld
-spec:containers:-name: k8s-demo
-image: 105552010/k8s-demo:v1
-ports:-containerPort:3000
-
-​
+metadata:
+    name: helloworld-statefulset
+spec:
+    selector:
+    matchLabels:
+        app: helloworld
+    serviceName: "helloworld"
+    replicas: 3
+    template:
+    metadata:
+        labels:
+        app: helloworld
+    spec:
+        containers:
+        - name: k8s-demo
+        image: 105552010/k8s-demo:v1
+        ports:
+        - containerPort: 3000
+```
 
 接著我們建立一個StatefulSet
 
+```bash
 $kubectl create -f pod-statefulSet.yaml
 statefulset.apps/helloworld-statefulset created
-
-​
+```
 
 檢查詳細狀態
 
+```bash
 $kubectl get statefulsets.apps
-NAME READY AGE
-helloworld-statefulset 3/3 4m44s
+NAME                     READY   AGE
+helloworld-statefulset   3/3     4m44s
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-helloworld-statefulset-0 1/1 Running 0 7m14s
-helloworld-statefulset-1 1/1 Running 0 7m54s
-helloworld-statefulset-2 1/1 Running 0 8m44s
-
-​
+NAME                       READY   STATUS    RESTARTS   AGE
+helloworld-statefulset-0   1/1     Running   0          7m14s
+helloworld-statefulset-1   1/1     Running   0          7m54s
+helloworld-statefulset-2   1/1     Running   0          8m44s
+```
 
 可以注意到Pod有編號！在更新的時候，它會按照順序更新
 
 我們來測試幾個操作：
 
-### Scaling（拓展）
+## Scaling（拓展）
 
 Scale up，擴充增加副本
 
+```bash
 $kubectl scale statefulset --replicas 5 helloworld-statefulset
 statefulset.apps/helloworld-statefulset scaled
-
-​
+```
 
 可以注意到Pod從3個變5個了
 
+```bash
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-helloworld-statefulset-0 1/1 Running 0 25m
-helloworld-statefulset-1 1/1 Running 0 25m
-helloworld-statefulset-2 1/1 Running 0 25m
-helloworld-statefulset-3 1/1 Running 0 5s
-helloworld-statefulset-4 1/1 Running 0 3s
-
-​
+NAME                       READY   STATUS    RESTARTS   AGE
+helloworld-statefulset-0   1/1     Running   0          25m
+helloworld-statefulset-1   1/1     Running   0          25m
+helloworld-statefulset-2   1/1     Running   0          25m
+helloworld-statefulset-3   1/1     Running   0          5s
+helloworld-statefulset-4   1/1     Running   0          3s
+```
 
 Scale down，縮小減少副本
 
+```bash
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-helloworld-statefulset-0 1/1 Running 0 38m
-helloworld-statefulset-1 1/1 Running 0 38m
-helloworld-statefulset-2 1/1 Running 0 38m
+NAME                       READY   STATUS    RESTARTS   AGE
+helloworld-statefulset-0   1/1     Running   0          38m
+helloworld-statefulset-1   1/1     Running   0          38m
+helloworld-statefulset-2   1/1     Running   0          38m
+```
 
-​
-
-### Update（更新，升版）
+## Update（更新，升版）
 
 更新pod所用的image版本（將v1更新至v2
 
+```bash
 $kubectlset image statefulset/helloworld-statefulset k8s-demo=105552010/k8s-demo:v2
 statefulset.apps/helloworld-statefulset image updated
-
-​
+```
 
 檢查Pod，它會依序更新
 
+```bash
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-helloworld-statefulset-0 1/1 Running 0 43m
-helloworld-statefulset-1 1/1 Running 0 43m
-helloworld-statefulset-2 1/1 Terminating 0 43m
+NAME                       READY   STATUS        RESTARTS   AGE
+helloworld-statefulset-0   1/1     Running       0          43m
+helloworld-statefulset-1   1/1     Running       0          43m
+helloworld-statefulset-2   1/1     Terminating   0          43m
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-helloworld-statefulset-0 1/1 Running 0 44m
-helloworld-statefulset-1 1/1 Terminating 0 44m
-helloworld-statefulset-2 1/1 Running 0 26s
+NAME                       READY   STATUS        RESTARTS   AGE
+helloworld-statefulset-0   1/1     Running       0          44m
+helloworld-statefulset-1   1/1     Terminating   0          44m
+helloworld-statefulset-2   1/1     Running       0          26s
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-helloworld-statefulset-0 1/1 Terminating 0 44m
-helloworld-statefulset-1 1/1 Running 0 5s
-helloworld-statefulset-2 1/1 Running 0 55s
+NAME                       READY   STATUS        RESTARTS   AGE
+helloworld-statefulset-0   1/1     Terminating   0          44m
+helloworld-statefulset-1   1/1     Running       0          5s
+helloworld-statefulset-2   1/1     Running       0          55s
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-helloworld-statefulset-0 1/1 Running 0 64s
-helloworld-statefulset-1 1/1 Running 0 104s
-helloworld-statefulset-2 1/1 Running 0 2m34s
-
-​
+NAME                       READY   STATUS    RESTARTS   AGE
+helloworld-statefulset-0   1/1     Running   0          64s
+helloworld-statefulset-1   1/1     Running   0          104s
+helloworld-statefulset-2   1/1     Running   0          2m34s
+```
 
 可以比較一下之前Deployment的操作，值得一提的是，StatefulSet並不支援Pause和Resume的操作喔
 
+```bash
 $kubectl rollout pause statefulsets.apps helloworld-statefulset
 error: statefulsets.apps "helloworld-statefulset" pausing is not supported
 $kubectl rollout resume statefulsets.apps helloworld-statefulset
 error: statefulsets.apps "helloworld-statefulset" resuming is not supported
-
-​
+```
 
 檢查rollout的狀態
 
+```bash
 $kubectl rollout status statefulset helloworld-statefulset
 partitioned roll out complete: 3 new pods have been updated...
+```
 
-​
-
-### Rollback（倒回，降版）
+## Rollback（倒回，降版）
 
 將現有版本回朔到上一個版本。再度使用倒回，返回瑪莎多拉
 
+```bash
 $kubectl rollout undo statefulsets.apps helloworld-statefulset
 statefulset.apps/helloworld-statefulset rolled back
-
-​
+```
 
 好了應該長這樣
 
+```bash
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-helloworld-statefulset-0 1/1 Running 0 5m15s
-helloworld-statefulset-1 1/1 Running 0 5m48s
-helloworld-statefulset-2 1/1 Running 0 6m22s
-
-​
+NAME                       READY   STATUS    RESTARTS   AGE
+helloworld-statefulset-0   1/1     Running   0          5m15s
+helloworld-statefulset-1   1/1     Running   0          5m48s
+helloworld-statefulset-2   1/1     Running   0          6m22s
+```
 
 檢查rollout狀態
 
+```bash
 $kubectl rollout status statefulset helloworld-statefulset
 partitioned roll out complete: 3 new pods have been updated...
-
-​
+```
 
 檢查rolling記錄
 
+```bash
 $kubectl rollout history statefulset helloworld-statefulset
 statefulset.apps/helloworld-statefulset
 REVISION
-0023
-
-​
+0
+0
+2
+3
+```
 
 以上為StatefulSet相關操作的流程，可以比較下與Deployment有什麼差別喔！
 
 測試完畢後，我們就可以：
 
+```bash
 $kubectl delete -f pod-statefulSet.yaml
 statefulset.apps "helloworld-statefulset" deleted
-
-​
+```
 
 OK，測試完成！
 
@@ -214,145 +229,158 @@ DaemonSet能確保部份或所有node運行Pod的副本持續運行。
 
 我們看個例子：
 
+```bash
 $vim pod-daemonSet.yaml
 apiVersion: apps/v1
 kind: DaemonSet
-metadata:name: helloworld-daemonset
-labels:app: helloworld
-spec:selector:matchLabels:app: helloworld
-template:metadata:labels:app: helloworld
-spec:containers:-name: k8s-demo
-image: 105552010/k8s-demo:v1
-ports:-containerPort:3000
-
-​
+metadata:
+    name: helloworld-daemonset
+    labels:
+    app: helloworld
+spec:
+    selector:
+    matchLabels:
+        app: helloworld
+    template:
+    metadata:
+        labels:
+        app: helloworld
+    spec:
+        containers:
+        - name: k8s-demo
+        image: 105552010/k8s-demo:v1
+        ports:
+        - containerPort: 3000
+```
 
 接著新增一個DaemonSet
 
+```bash
 $kubectl create -f pod-daemonSet.yaml
 daemonset.apps/helloworld-daemonset created
-
-​
+```
 
 檢查Pod狀態
 
+```bash
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-helloworld-daemonset-2j8j9 1/1 Running 0 11m
-
-​
+NAME                         READY   STATUS    RESTARTS   AGE
+helloworld-daemonset-2j8j9   1/1     Running   0          11m
+```
 
 既然它保證持續運行，那我們來把這個Pod砍掉試試，嘿嘿～
 
+```bash
 $kubectl delete po helloworld-daemonset-2j8j9
 pod "helloworld-daemonset-2j8j9" deleted
-
-​
+```
 
 再次檢查Pod狀態
 
+```bash
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-helloworld-daemonset-4bhxj 1/1 Running 0 22s
-
-​
+NAME                         READY   STATUS    RESTARTS   AGE
+helloworld-daemonset-4bhxj   1/1     Running   0          22s
+```
 
 顯然藉由DaemonSet，Pod就獲得了無限再生的技能。Pod表示：你殺了一個我，還有千千萬萬個我
 
 我們來測試幾個操作：
 
-### Update（更新，升版）
+## Update（更新，升版）
 
 更新pod所用的image版本（將v1更新至v2
 
-$kubectlset image daemonset/helloworld-daemonset k8s-demo=105552010/k8s-demo:v2
+```bash
+$kubectl set image daemonset/helloworld-daemonset k8s-demo=105552010/k8s-demo:v2
 daemonset.apps/helloworld-daemonset image updated
-
-​
+```
 
 檢查Pod狀態
 
+```bash
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-helloworld-daemonset-4bhxj 1/1 Terminating 0 7m28s
+NAME                         READY   STATUS        RESTARTS   AGE
+helloworld-daemonset-4bhxj   1/1     Terminating   0          7m28s
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-helloworld-daemonset-54dvd 1/1 ContainerCreating 0 11s
+NAME                         READY   STATUS              RESTARTS   AGE
+helloworld-daemonset-54dvd   1/1     ContainerCreating   0          11s
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-helloworld-daemonset-54dvd 1/1 Running 0 46s
-
-​
+NAME                         READY   STATUS    RESTARTS   AGE
+helloworld-daemonset-54dvd   1/1     Running   0          46s
+```
 
 與StatefulSet相同，不支援Pause和Resume
 
+```bash
 $kubectl rollout pause daemonsets.apps helloworld-daemonset
 error: daemonsets.apps "helloworld-daemonset" pausing is not supported
 $kubectl rollout resume daemonsets.apps helloworld-daemonset
 error: daemonsets.apps "helloworld-daemonset" resuming is not supported
-
-​
+```
 
 檢查rollout狀態
 
+```bash
 $kubectl rollout status daemonset helloworld-daemonset
 daemon set"helloworld-daemonset" successfully rolled out
-
-​
+```
 
 檢查rollout記錄
 
+```bash
 $kubectl rollout history daemonset helloworld-daemonset
 daemonset.apps/helloworld-daemonset
-REVISION CHANGE-CAUSE
-1<none>2<none>
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+```
 
-​
+## Rollback（倒回，降版）
 
-### Rollback（倒回，降版）
+將現有版本回朔到上一個版本。~~第三度使用倒回，返回瑪莎多拉，你是多想回家XD？~~
 
-將現有版本回朔到上一個版本。第三度使用倒回，返回瑪莎多拉，你是多想回家XD？
-
+```bash
 $kubectl rollout undo daemonset helloworld-daemonset
 daemonset.apps/helloworld-daemonset rolled back
-
-​
+```
 
 檢查Pod狀態
 
+```bash
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-helloworld-daemonset-54dvd 1/1 Terminating 0 8m39s
+NAME                         READY   STATUS        RESTARTS   AGE
+helloworld-daemonset-54dvd   1/1     Terminating   0          8m39s
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-helloworld-daemonset-dq2qq 1/1 Running 0 3s
-
-​
+NAME                         READY   STATUS    RESTARTS   AGE
+helloworld-daemonset-dq2qq   1/1     Running   0          3s
+```
 
 檢查rolling狀態
 
+```bash
 $kubectl rollout status daemonset helloworld-daemonset
 daemon set"helloworld-daemonset" successfully rolled out
-
-​
+```
 
 檢查rolling記錄
 
+```bash
 $kubectl rollout history daemonset helloworld-daemonset
 daemonset.apps/helloworld-daemonset
-REVISION CHANGE-CAUSE
-2<none>3<none>
-
-​
+REVISION  CHANGE-CAUSE
+2         <none>
+3         <none>
+```
 
 以上為DaemonSet相關操作的流程，也可以比較下與Deployment有什麼差別喔！
 
 測試完畢後，我們也可以：
 
+```bash
 $kubectl delete -f pod-daemonSet.yaml
 daemonset.apps "helloworld-daemonset" deleted
-
-​
+```
 
 好的！測試結束了！！
 
@@ -362,7 +390,5 @@ daemonset.apps "helloworld-daemonset" deleted
 
 ## 參考資料
 
-[StatefulSet簡介](https://kubernetes.io/zh/docs/tutorials/stateful-application/basic-stateful-set/)
-
-[DaemonSet簡介](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)
-
+- [StatefulSet簡介](https://kubernetes.io/zh/docs/tutorials/stateful-application/basic-stateful-set/)
+- [DaemonSet簡介](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)

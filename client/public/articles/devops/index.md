@@ -1,6 +1,6 @@
 ![](./images/img_001.png)
 
-## \[Day7\] 想想我們為何而來：一個完整DevOps開發流程的十二個要素
+# [Day7] 想想我們為何而來：一個完整DevOps開發流程的十二個要素
 
 Author: Nick Zhuang
 Type: DevOps
@@ -11,33 +11,22 @@ Type: DevOps
 
 ## 十二要素
 
-[CodeBase](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25)
-
-[Dependencies](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25)
-
-[Config](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25)
-
-[Backing services](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25)
-
-[Build, release, run](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25)
-
-[Processes](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25)
-
-[Port binding](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25)
-
-[Concurrency](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25)
-
-[Disposability](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25)
-
-[Dev/prod parity](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25)
-
-[Logs](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25)
-
-[Admin processes](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25)
+- [CodeBase](https://nickzhuang.com/posts/devops)
+- [Dependencies](https://nickzhuang.com/posts/devops)
+- [Config](https://nickzhuang.com/posts/devops)
+- [Backing services](https://nickzhuang.com/posts/devops)
+- [Build, release, run](https://nickzhuang.com/posts/devops)
+- [Processes](https://nickzhuang.com/posts/devops)
+- [Port binding](https://nickzhuang.com/posts/devops)
+- [Concurrency](https://nickzhuang.com/posts/devops)
+- [Disposability](https://nickzhuang.com/posts/devops)
+- [Dev/prod parity](https://nickzhuang.com/posts/devops)
+- [Logs](https://nickzhuang.com/posts/devops)
+- [Admin processes](https://nickzhuang.com/posts/devops)
 
 ## CodeBase
 
-#### 一份基準代碼（Codebase），多份部署（deploy）
+## 一份基準代碼（Codebase），多份部署（deploy）
 
 這個部分是指基準代碼，一般我們在做開發的時候，當有代碼要做版本管控的時候，我們可能會用到像是 [Git](https://git-scm.com/)、 [Mercurial](https://www.mercurial-scm.org/)、 [Subversion](http://subversion.apache.org/) 等等的工具，我們也會在本地端架設repository（簡稱repo），也就是代碼數據庫的副本。
 
@@ -49,11 +38,11 @@ Type: DevOps
 
 如果對應多個基準代碼（Codebase），那他就不能算是一個應用（app），而是一個分布式系統
 
-多個應用（app）不應共享一份基準代碼，必須將共享代碼拆分並以 [依賴](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25) 去管理
+多個應用（app）不應共享一份基準代碼，必須將共享代碼拆分並以 [依賴](https://nickzhuang.com/posts/devops) 去管理
 
 ## Dependencies
 
-#### 明確的宣告並隔離依賴（dependency）
+## 明確的宣告並隔離依賴（dependency）
 
 這個部分是指在開發環境的設置中，定義一個相依性的套件集合，這個套件集合是用來幫助開發用的，套件集合裡面定義了彼此之間的關係。
 
@@ -77,7 +66,7 @@ Debug流程
 
 ## Config
 
-#### 在環境中存儲配置
+## 在環境中存儲配置
 
 這個部分是說關於環境中設置的問題，不是指一般程序使用的設定檔，這種設置是環境變量上的，像是我們在linux下env指令得到的類似結果，他會推薦使用這種方式是因為這樣可以針對不同的使用情境切換不同的變數值，而不會受到設定檔的限制，設定檔的限制會有：
 
@@ -91,11 +80,11 @@ Debug流程
 
 ## Backing services
 
-#### 把後端服務( backing services )當作附加資源
+## 把後端服務( backing services )當作附加資源
 
 後端服務是指程序運行所需要的通過網絡調用的各種服務，如數據庫（MySQL），消息/隊列系統（RabbitMQ），SMTP郵件發送服務（Postfix），以及緩存系統（Memcached）。
 
-在這樣的原則下，應用（app）不會對不同地方提供的服務而有所區別，一般來說，任意的 [部署](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25)，都應該可以在不進行任何代碼改動的情況下，將本地MySQL數據庫換成第三方服務。
+在這樣的原則下，應用（app）不會對不同地方提供的服務而有所區別，一般來說，任意的 [部署](https://nickzhuang.com/posts/devops)，都應該可以在不進行任何代碼改動的情況下，將本地MySQL數據庫換成第三方服務。
 
 我們來看張圖：
 
@@ -107,19 +96,19 @@ Debug流程
 
 ## Build, release, run
 
-#### 嚴格分離建置和運行步驟
+## 嚴格分離建置和運行步驟
 
-[基準代碼](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25) 轉化為一份部署(非開發環境)需要經過以下三個階段：
+[基準代碼](https://nickzhuang.com/posts/devops) 轉化為一份部署(非開發環境)需要經過以下三個階段：
 
-建置：與 [依賴](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25) 相關，是將代碼轉成執行檔的過程
+建置：與 [依賴](https://nickzhuang.com/posts/devops) 相關，是將代碼轉成執行檔的過程
 
 開發人員可以增加些建置流程，方便Debug，節省開發成本
 
-發布：與 [配置](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25) 相關，結合當前建置與部署的結構，可在實際環境運行
+發布：與 [配置](https://nickzhuang.com/posts/devops) 相關，結合當前建置與部署的結構，可在實際環境運行
 
 建立release以及rollback的機制，並控制版本號
 
-運行：與 [進程](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25) 相關，針對發佈的版本，在實際環境啟動運行一系列的應用（app）
+運行：與 [進程](https://nickzhuang.com/posts/devops) 相關，針對發佈的版本，在實際環境啟動運行一系列的應用（app）
 
 盡量不要在運行階段改code，這樣會混淆到建置的步驟
 
@@ -127,15 +116,15 @@ Debug流程
 
 ## Processes
 
-#### 以一個或多個無狀態進程運行應用
+## 以一個或多個無狀態進程運行應用
 
 在運行環境中，應用程序通常是以一個或多個進程運行的。
 
-這些進程必須是沒有狀態的且彼此之間並沒有共享資源。任何需要持久化的數據都要存儲在 [後端服務](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25) 內，比如數據庫。
+這些進程必須是沒有狀態的且彼此之間並沒有共享資源。任何需要持久化的數據都要存儲在 [後端服務](https://nickzhuang.com/posts/devops) 內，比如數據庫。
 
 ## Port binding
 
-#### 通過端口綁定( Port binding )來提供服務
+## 通過端口綁定( Port binding )來提供服務
 
 互聯網應用有時會運行於服務器的容器之中。
 
@@ -143,7 +132,7 @@ Debug流程
 
 ## Concurrency
 
-#### 通過進程模型進行擴展
+## 通過進程模型進行擴展
 
 任何計算機程序，一旦啟動，就會生成一個或多個進程。
 
@@ -163,15 +152,15 @@ Debug流程
 
 ## Disposability
 
-#### 藉由快速啟動和終止來最大化應用的健壯性
+## 藉由快速啟動和終止來最大化應用的健壯性
 
 應用的進程應該要是\*易處理（disposable）的，意思是說它們可以瞬間開啟或停止，並追求最小的啟動時間。
 
-理想狀態下，進程從敲下命令到真正啟動並等待請求的時間應該只需很短的時間。更少的啟動時間提供了更敏捷的 [發布](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25) 以及擴展過程，此外還增加了健壯性，因為進程管理器可以在授權情形下容易的將進程搬到新的物理機器上。
+理想狀態下，進程從敲下命令到真正啟動並等待請求的時間應該只需很短的時間。更少的啟動時間提供了更敏捷的 [發布](https://nickzhuang.com/posts/devops) 以及擴展過程，此外還增加了健壯性，因為進程管理器可以在授權情形下容易的將進程搬到新的物理機器上。
 
 ## Dev/prod parity
 
-#### 盡可能的保持開發，預發布，線上環境相同
+## 盡可能的保持開發，預發布，線上環境相同
 
 應用若要做到 [持續部署](http://avc.com/2011/02/continuous-deployment/) 就必須縮小本地與線上差異。
 如下所述：
@@ -197,7 +186,7 @@ Debug流程
 
 ## Logs
 
-#### 把日誌當作事件串流
+## 把日誌當作事件串流
 
 日誌使得應用程序運行的動作變得透明。在基於服務器的環境中，日誌通常被寫在硬盤的一個文件裡，但這只是一種輸出格式。
 
@@ -213,9 +202,9 @@ Debug流程
 
 ## Admin processes
 
-#### 後台管理任務當作一次性進程運行
+## 後台管理任務當作一次性進程運行
 
-[進程構成](https://nick-zhuang.notion.site/1e9d2b68726680f59fe8d5f37bc29e50?pvs=25)（process formation）是指用來處理應用的常規業務（比如處理web請求）的一組進程。與此不同，開發人員經常希望執行一些管理或維護應用的一次性任務，例如：
+[進程構成](https://nickzhuang.com/posts/devops)（process formation）是指用來處理應用的常規業務（比如處理web請求）的一組進程。與此不同，開發人員經常希望執行一些管理或維護應用的一次性任務，例如：
 
 運行數據移植。
 
@@ -239,29 +228,29 @@ Auto（敏捷化）：Disposability、Logs
 
 Sync（同步化）：Dev/prod parity
 
-### Unify（單位化）
+## Unify（單位化）
 
 這個部分是指定義所謂應用中的最小單位，定義了最小的單位以後就能夠方面我們去拆分其中的結構
 
 所以可以看到，這邊我就把CodeBase（基準代碼）、Processes（進程）視為一類，因為就某些方面來說，他們確實構成了整個應用（app），也影響了建置、部署等等階段的結構。
 
-### Specify（區隔化）
+## Specify（區隔化）
 
 這個部分是指盡可能地將結構做拆分，能夠隔離的、切開來看的就盡量區分，盡量不要有重疊的部分，這主要是強化元件中的獨立性，這樣在分開開發或是除錯上都會有幫助，有幾個元件：Dependencies（依賴）、Config（配置）、Backing services（後端服務）、Build, release, run（建置, 發布, 運行）
 
-### Conform（協調化）
+## Conform（協調化）
 
 這個部分是指元件組合上的協調度，如何有效的組合元件又不會出問題，而且是當這樣的組合是有必要性的時候，我們可以看到這些組合是為了增加應用上的拓展性，如：Port binding（端口綁定）、Concurrency（並發）、Admin processes（管理進程）
 
-### Auto（敏捷化）
+## Auto（敏捷化）
 
 這個部分是指在單個元件上，它是否能做到自動啟動一些機制，以達到幫助維運的需求，像是自動紀錄、自動快速開啟與結束，如：Disposability（易處理）、Logs（日誌）
 
-### Sync（同步化）
+## Sync（同步化）
 
 這個部分是指不同環境上的轉移、等價等等，這裡的Dev/prod parity（開發環境與線上環境等價）就是滿足這樣的需求設計的，或許將來會有新的性質會新增到這個項目當中
 
-### 總結
+## 總結
 
 看完了這5個面向，讀者是不是對於這個12要素更了解些呢？其實一言以貫之，我們可以看到，這些要素的相關性及連結，是利用以下邏輯去思考的：
 
@@ -279,5 +268,4 @@ Sync（同步化）：Dev/prod parity
 
 ## 參考資料
 
-[構成應用（app）的12個要素：12-factors](https://12factor.net/)
-
+- [構成應用（app）的12個要素：12-factors](https://12factor.net/)

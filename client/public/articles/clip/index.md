@@ -1,35 +1,32 @@
 ![](./images/img_001.jpg)
 
-## \[Day12\] CLIP，文字圖像你都會？
+# [Day12] CLIP，文字圖像你都會？
 
 Author: Nick Zhuang
 Type: AI & Data
 
-### 提要
+## 提要
 
-[前言](https://www.notion.so/1e9d2b68726680b5912ad1470c2e992e#%E5%89%8D%E8%A8%80)
+- [前言](#前言)
+- [什麼是CLIP](#什麼是CLIP)
+- [CLIP的演算法](#CLIP的演算法)
+- [CLIP的特色](#CLIP的特色)
 
-[什麼是CLIP](https://www.notion.so/1e9d2b68726680b5912ad1470c2e992e#%E4%BB%80%E9%BA%BC%E6%98%AFclip)
-
-[CLIP的演算法](https://www.notion.so/1e9d2b68726680b5912ad1470c2e992e#clip%E6%BC%94%E7%AE%97%E6%B3%95)
-
-[CLIP的特色](https://www.notion.so/1e9d2b68726680b5912ad1470c2e992e#clip%E7%9A%84%E7%89%B9%E8%89%B2)
-
-### 前言
+## 前言
 
 今天我們介紹 CLIP 相關的內容，CLIP是一個影像的分類器，它的概念來自於前期的 conVIRT 優化，conVIRT 是一個關於醫療影像的對比式學習研究，本日內容包含：什麼是CLIP、CLIP的演算法、及CLIP的特色。
 
-### 什麼是CLIP
+## 什麼是CLIP
 
 基本上就是一個影像的分類器，只是它可以自動將其分類，並透過文字prompt方式呈現標記，另外，它也是 zero shot 的分類器，zero shot的概念最早來自於對比學習 ( contrastive learning )，這個方法是基於機器學習 ( machine learning, ML ) 底下的非監督式學習 ( unsupervised learning ) 的分支，參考下圖。
 
 ![](./images/img_002.png)
 
-> 最新版 AI 火災逃生圖
+> ~~最新版 AI 火災逃生圖~~
 
 可以看到就是說對比學習是自監督式學習 ( self-supervised learning ) 的一種方法，那為何我們會需要用到這個？原因是因為在實際場景底下，有時候我們沒法拿到足夠多的樣本讓我們去以監督式學習的方法訓練模型，像是一些腫瘤、不常出現的表面瑕疵等等的這些影像，在這樣的情況底下我們就可以利用 few shot learning 的方法去解決，其中 one shot learning 算是 few shot learning 的一個特例，這裡面的核心概念就是用少量樣本去歸納出新的類別，換句話說，就是讓模型有自行推理的能力，zero shot learning 也是類似的概念，即使你沒有新類別的影像，也可以透過歸納既有影像的方式去推算出新的影像應該歸在哪個類別，不過，這樣的方法也不是沒有缺點的，如果新的樣本與原始樣本的所有種類都差距很大，模型的表現就會非常差，這對比到我們人類學習東西也是一樣，一個新的、完全沒看過、完全與既有認知有極大差異的事物，就很難從既有認知去理解是一樣的道理。
 
-### CLIP的演算法
+## CLIP的演算法
 
 詳細的 CLIP 演算法，可以參考下圖。
 
@@ -37,7 +34,7 @@ Type: AI & Data
 
 可以看到這邊兩個輸入，一個是 image classifier，一個是 text classifier，他這邊是有設計了對應的 text image pair 作為輸入，構建一個對比式學習的預訓練模型 ( pre-trained model )，矩陣對角線上的元素，以向量內積數值應為最大，因為是對應的key pair，再來是構建數據集的分類器，作為標籤文字使用，其中一個重要的概念是prompt，他讓最後 predict 出來的文字可以是動態的，能夠依照 zero shot learning 出的類別分類套用到最後輸出的文字。
 
-### CLIP的特色
+## CLIP的特色
 
 主要介紹三個部分，分別是：整體、Linear probe比較、及人類比較，我們可以先從整體著手來看，參考下圖。
 
@@ -75,16 +72,13 @@ Type: AI & Data
 
 結果顯示這樣的學習方式與人類還是有所不同，原因是在 zero shot 到 few shot 的變化上，人類有顯著提升，像我們多看影像及對應標記幾次，將能有助於理解這個東西，但在 CLIP 上卻不是這麼回事，可以看到 zero shot 還比 few shot 來說更有健壯性 ( robustness )。
 
-### 小結
+## 小結
 
 今天我們介紹了關於 CLIP 的內容；例如，什麼是CLIP、CLIP的演算法、及CLIP的特色，明天會介紹AI影像生成的工具，明天見！
 
-### 參考連結
+## 參考連結
 
-[Learning Transferable Visual Models From Natural Language Supervision](https://arxiv.org/pdf/2103.00020v1.pdf)
-
-[CLIP: Connecting text and images](https://openai.com/research/clip)
-
-[Contrastive Learning of Medical Visual Representations from Paired Images and Text](https://arxiv.org/abs/2010.00747)
-
-[Boost foundation model results with linear probing and fine-tuning](https://snorkel.ai/boost-foundation-model-results-with-linear-probing-fine-tuning/)
+- [Learning Transferable Visual Models From Natural Language Supervision](https://arxiv.org/pdf/2103.00020v1.pdf)
+- [CLIP: Connecting text and images](https://openai.com/research/clip)
+- [Contrastive Learning of Medical Visual Representations from Paired Images and Text](https://arxiv.org/abs/2010.00747)
+- [Boost foundation model results with linear probing and fine-tuning](https://snorkel.ai/boost-foundation-model-results-with-linear-probing-fine-tuning/)

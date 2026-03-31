@@ -1,88 +1,99 @@
 ![](./images/img_001.jpg)
 
-## \[Day23\] Stable Diffusion 進階插件
+# [Day22] Stable Diffusion 基礎插件
 
 Author: Nick Zhuang
 Type: AI & Data
 
-### 提要
+## 提要
 
-[前言](https://www.notion.so/Title-1e8d2b68726680d9999df6f6079b4ff4#%E5%89%8D%E8%A8%80)
+- [前言](#前言)
+- [Image Browsing](#Image Browsing)
+- [Prompt all in one](#Prompt all in one)
+- [Translation](#Translation)
 
-[ControlNet](https://www.notion.so/Title-1e8d2b68726680d9999df6f6079b4ff4#controlnet)
+## 前言
 
-[After Detailer](https://www.notion.so/Title-1e8d2b68726680d9999df6f6079b4ff4#after-detailer)
+今天我們介紹 Stable Diffusion 插件相關的內容，本日會先介紹三個，內容包含：Image Browsing、Prompt all in one、及Translation。
 
-[Civitai Browser Plus](https://www.notion.so/Title-1e8d2b68726680d9999df6f6079b4ff4#civitai-browser-plus)
+## Image Browsing
 
-### 前言
+Image Browsing是瀏覽圖片用的，它會幫忙把生成的圖片整理起來，可以縮圖預覽、快速查找、及以巡訪的方式檢視，會羅列一些圖片生成時用的prompt、及其他一些小細節，要批量下載圖片也是可以的，非常方便，以下介紹安裝及使用方式。
 
-今天我們介紹 SD 進階插件相關的內容，本日內容包含：ControlNet、After Detailer、及 Civitai Browser Plus。
+- 安裝
 
-### ControlNet
+切換到Extension的分頁，然後在Install from URL貼上
 
-這個插件是控制邊緣、手勢、姿勢用的插件，我們可以透過其中的設定去調整生成人物的姿態。這個插件可以從 Extension 直接裝，不過其中用到的 model 要另外下載，主插件 URL 如下：
+```bash
+https://github.com/zanllp/sd-webui-infinite-image-browsing
+```
 
-https://github.com/Mikubill/sd-webui-controlnet.git
+點擊Install，然後切換到 Installed 的分頁，按下 Apply and restart UI。
 
-​
-
-至於 model 要到 HuggingFace 下載：
-
-https://huggingface.co/lllyasviel/ControlNet-v1-1
-
-​
-
-只要pth的檔案就夠了，不過因為檔案很多，這裡提供一個比較方便的方法，一次下載全部。
-首先要安裝git lfs套件，然後在clone。
-
-sudoapt-getinstall git-lfs
-git lfs clone <https://huggingface.co/lllyasviel/ControlNet-v1-1>
-
-​
-
-這樣就全部下載下來了，然後要放到/Stable Diffusion/novelai-webui-aki-v3/extensions/sd-webui-controlnet/models的資料夾底下。
-完成後重啟 UI 就能看到操作介面，如下圖。
+- 使用方式
 
 ![](./images/img_002.png)
 
-### After Detailer
-
-這是一款增加繪圖細節的插件，也可以透過 URL 去安裝，安裝好後可以在生圖的介面上操作。
+這是安裝好後的介面總覽，「Walk模式」是巡訪圖片用的、「快速移動」是會幫你顯示資料夾、「啟動」是 Global 的功能，像是：快速查找圖片、批量下載等等。
 
 ![](./images/img_003.png)
 
-它也可以輸入自己想加入的 prompt，其他參數先用預設就可以，有需要再自行調整。
+這是使用walk文生圖的功能顯示的畫面，可以看到有縮圖檢視，以及從單張圖去檢視該圖所使用的prompt、解析度、使用的Model、及其他細部設定。
 
-### Civitai Browser Plus
+## Prompt all in one
 
-這個插件可以在 Extension 分頁中的 Download 的下載列表中找到，可以透過介面直接安裝，然後重新載入 UI 即可，非常方便，要看 civitai 的內容就不用刻意切換到網頁上，可以專注在 SD 的操作介面上。
+Prompt all in one這個插件是用在提示詞 ( prompt )使用的，它有各種維度的提示可以直接點選，選了後就自動幫你把對應字填到 prompt 的框內，無論是 Positive 或是 Negative 都可以。
+
+- 安裝
 
 ![](./images/img_004.png)
 
-最後我們結合這三個插件來一次操作：
+切換到Extension的分頁，然後在Install from URL貼上
 
-先從civitai下載二次元的模型：anythingV5Inpainting\_v10-inpainting。
-
-切換至圖生圖，到 ControlNet 那操作。
+```bash
+https://github.com/Physton/sd-webui-prompt-all-in-one
+```
 
 ![](./images/img_005.png)
 
-按照上圖操作，即可描繪邊緣，這邊筆者要測試邊緣重繪的功能。
+點擊Install，然後切換到 Installed 的分頁，按下 Apply and restart UI。
 
-所有設定完成，就按生圖。
+使用方式
 
 ![](./images/img_006.png)
 
-原圖在左，新圖在右，多了一股朦朧美，可能模糊條太多了囧。
+可以看到有大類別可以供選擇，像是：人物、服飾、表情動作、畫面、...，非常多XD，小類別在點選定大類別後會出現選項，點擊就能把這些標籤放到介面上，並同步幫你把提示詞放上去。
 
-### 小結
+## Translation
 
-今天我們介紹了關於 SD 進階插件的內容；例如，ControlNet、After Detailer、及Civitai Browser Plus，明天會介紹 ControlNet 的原理，明天見！
+最後一個就是翻譯的插件啦！一開始用的時候專有名詞非常多，很容易看到頭昏眼花，為了避免語言障礙影響到我們的使用，因此有好的翻譯插件非常重要。
 
-### 參考連結
+- 安裝
 
-[ControlNet手把手教學](https://www.uisdc.com/controlnet-v1-1)
+切換到Extension的分頁，然後在Install from URL貼上
 
-[SD實用進階插件](https://www.uisdc.com/stable-diffusion-webui-3)
+```bash
+https://github.com/hanamizuki-ai/stable-diffusion-webui-localization-zh_Hans
+```
 
+點擊Install，然後切換到 Installed 的分頁，按下 Apply and restart UI。
+
+接下來這步驟要注意一下：
+
+![](./images/img_007.png)
+
+這邊是要在 restart UI 後，切換到 Settings -> User interface -> Localization，將語系選擇 zh-Hans，它預設是簡體中文的，所以如果要用繁體版的話，可以將這個路徑底下的json檔修改即可：
+
+```bash
+/stable-diffusion-webui/extensions/stable-diffusion-webui-localization-zh_Hans/localizations
+```
+
+## 小結
+
+今天我們介紹了關於 Stable Diffusion 基礎插件的內容；例如，Image Browsing、Prompt all in one、及Translation，明天會介紹 Stable Diffusion 進階插件的內容，明天見！
+
+## 參考連結
+
+- [Image Browsing](https://juejin.cn/post/7256651192986026044)
+- [Prompt all in one](https://www.uisdc.com/prompt-all-in-one)
+- [Stable Diffusion 基礎插件](https://www.uisdc.com/stable-diffusion-webui-2)

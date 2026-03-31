@@ -1,26 +1,23 @@
 ![](./images/img_001.jpg)
 
-## \[Day3\] AIGC的特色與應用
+# [Day3] AIGC的特色與應用
 
 Author: Nick Zhuang
 Type: AI & Data
 
-### 提要
+## 提要
 
-[前言](https://www.notion.so/AIGC-1e9d2b68726680d5895dcf748570a1bb#%E5%89%8D%E8%A8%80)
+- [前言](#前言)
+- [AIGC的特色](#AIGC的特色)
+- [AIGC的應用](#AIGC的應用)
+- [AIGC的生態系](#AIGC的生態系)
 
-[AIGC的特色](https://www.notion.so/AIGC-1e9d2b68726680d5895dcf748570a1bb#aigc%E7%9A%84%E7%89%B9%E8%89%B2)
-
-[AIGC的應用](https://www.notion.so/AIGC-1e9d2b68726680d5895dcf748570a1bb#aigc%E7%9A%84%E6%87%89%E7%94%A8)
-
-[AIGC的生態系](https://www.notion.so/AIGC-1e9d2b68726680d5895dcf748570a1bb#aigc%E7%9A%84%E7%94%9F%E6%85%8B%E7%B3%BB)
-
-### 前言
+## 前言
 
 今天我們會從 AIGC ( AI Generated Content ) 的定義去延伸，思考關於特色及應用的議題，原則上因為 AIGC 承襲了 LLM ( Large Language Model ) 的架構，因此我們可以從此處去著手探討相關的內容。
 這邊先提到特色及應用，是為了能讓我們先知道了解這些東西能做什麼，也幫助後面學習的時候可以針對自己想了解的部分進一步加強，這是構建學習地圖的一部份策略。
 
-### AIGC的特色
+## AIGC的特色
 
 AIGC 的特色，來看看 ChatGPT 怎麼說：
 
@@ -40,7 +37,7 @@ AI Generated Content（AI生成內容）確實是一個重要的概念，以下�
 
 總之，AI生成內容是一項革命性的技術，具有自動生成、大規模生產、個性化定制等特點，將對內容創作、傳播和多個領域帶來深遠的影響。
 
-​
+
 
 小結一下，它主要的意思基本上就是：
 
@@ -70,7 +67,7 @@ AIGC 的特色，可以歸納為六類；例如，自動生成、規模化、個
 
 OK，到這邊我們已經大致瞭解了關於 AIGC 的優劣勢，下一節要看的是應用環節。
 
-### AIGC的應用
+## AIGC的應用
 
 AIGC 的應用目前主要可以分為五個領域，分別是：聊天機器人、藝術、音樂、程式碼、及教育，演算法相關的研究有，但是數量很少，如下圖所示。
 
@@ -90,7 +87,7 @@ AIGC 的應用目前主要可以分為五個領域，分別是：聊天機器人
 
 理解 AIGC 的整體應用後，我們接續探討生態系的環節。
 
-### AIGC的生態系
+## AIGC的生態系
 
 這裡直接上圖，描述了2023年初的狀況，市場地圖裡面涵蓋了幾個類別，分別是：研究、文本、圖像、影片、音頻、程式碼、遊戲、及生物科技等等。
 
@@ -106,17 +103,13 @@ GitHub Copilot以前有用過，不過後來幾乎都靠ChatGPT，就比較少�
 
 總結來說，可以看到非常多的應用項目，應用的範圍與場域都蠻廣的。每個種類水池都頗深，所以是歡迎大家一起下水玩耍（？
 
-### 小結
+## 小結
 
 本日我們從 AIGC 的特色出發，進而去探討 AIGC 的應用，並以生態系的整體介紹作為總結，明天我們會討論關於 AIGC 的演進，明天見！
 
-### 參考連結
+## 參考連結
 
-[AI-Generated Content (AIGC): A Survey](https://arxiv.org/pdf/2304.06632.pdf)
-
-[A Comprehensive Survey of AI-Generated Content (AIGC):A History of Generative AI from GAN to ChatGPT](https://arxiv.org/pdf/2303.04226.pdf)
-
-[MetaGPT的介紹與使用](https://github.com/geekan/MetaGPT)
-
-[AIGC的市場現況](https://www.leoniscap.com/posts/chinas-generative-ai-landscape)
-
+- [AI-Generated Content (AIGC): A Survey](https://arxiv.org/pdf/2304.06632.pdf)
+- [A Comprehensive Survey of AI-Generated Content (AIGC):A History of Generative AI from GAN to ChatGPT](https://arxiv.org/pdf/2303.04226.pdf)
+- [MetaGPT的介紹與使用](https://github.com/geekan/MetaGPT)
+- [AIGC的市場現況](https://www.leoniscap.com/posts/chinas-generative-ai-landscape)

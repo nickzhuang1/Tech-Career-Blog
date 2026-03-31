@@ -1,6 +1,6 @@
 ![](./images/img_001.png)
 
-## \[Day28\] k8s應用篇（二）：EBS和EFS的使用
+# [Day28] k8s應用篇（二）：EBS和EFS的使用
 
 Author: Nick Zhuang
 Type: kubernetes
@@ -13,9 +13,9 @@ Type: kubernetes
 
 複習傳送門：
 
-[\[Day16\] k8s之PV小整合：Pod、Deployment、Service、Job與PersistentVolume](https://nick-zhuang.notion.site/1f0d2b68726680f1b69eda34aa091f98?pvs=25)
+[\[Day16\]k8s之PV小整合：Pod、Deployment、Service、Job與PersistentVolume](https://nickzhuang.com/posts/k8s-pv-pod)
 
-[\[Day19\] k8s上雲端之路：AWS之蓄勢待發：EOO](https://nick-zhuang.notion.site/1f0d2b68726680ac80b5fcb63700f600?pvs=25)
+[\[Day19\]k8s上雲端之路：AWS之蓄勢待發：EOO](https://nickzhuang.com/posts/k8s-aws-eoo)
 
 ## EBS
 
@@ -25,165 +25,159 @@ Elastic Block Store (EBS) 是易於使用的高效能區塊儲存服務，專為
 
 這邊示範如何透過設置EBS達到實作Wordpress結合MySQL的效果。
 
-### 1\. 新增虛擬集群（Namespace）
+### 1. 新增虛擬集群（Namespace）
 
 檢查既有的Namespace
 
+```bash
 $kubectl get namespaces
-NAME STATUS AGE
-default Active 17m
-kube-public Active 17m
-kube-system Active 17m
-
-​
+NAME          STATUS   AGE
+default       Active   17m
+kube-public   Active   17m
+kube-system   Active   17m
+```
 
 新增一個Namespace
 
+```bash
 $kubectl create namespace ns-eks
 namespace/ns-eks created
-
-​
+```
 
 檢查既有的Namespace
 
+```bash
 $kubectl get namespaces
-NAME STATUS AGE
-default Active 18m
-kube-public Active 18m
-kube-system Active 18m
-ns-eks Active 13s
-
-​
+NAME          STATUS   AGE
+default       Active   18m
+kube-public   Active   18m
+kube-system   Active   18m
+ns-eks        Active   13s
+```
 
 針對該Namespace，也就是ns-eks，可以發現他有Secret，它這裡有token供Dashboard使用
 
+```bash
 $kubectl get secret -n ns-eks
-NAME TYPE DATA AGE
-default-token-vkv4l kubernetes.io/service-account-token 3 3m17s
+NAME                  TYPE                                  DATA   AGE
+default-token-vkv4l   kubernetes.io/service-account-token   3      3m17s
+```
 
-​
-
-### 2\. 新增實體卷（physical volume）
+### 2. 新增實體卷（physical volume）
 
 檢查StorageClass
 
+```bash
 $kubectl get storageclasses --all-namespaces
-NAME PROVISIONER AGE
-gp2 (default) kubernetes.io/aws-ebs 26m
-
-​
+NAME            PROVISIONER             AGE
+gp2 (default)   kubernetes.io/aws-ebs   26m
+```
 
 發現到有gp2，而且這個位置是在我們新增的Namespace上：ns-eks
 
+```bash
 $kubectl get storageclasses -n ns-eks
-NAME PROVISIONER AGE
-gp2 (default) kubernetes.io/aws-ebs 28m
-
-​
+NAME            PROVISIONER             AGE
+gp2 (default)   kubernetes.io/aws-ebs   28m
+```
 
 如果你發現沒有，可以參考下面新增
 
+```yaml
 $vim gp2-storage-class.yaml
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-name: gp2
+    name: gp2
 provisioner: kubernetes.io/aws-ebs
 parameters:
-type: gp2
+    type: gp2
 reclaimPolicy: Retain
 mountOptions:
-\- debug
-
-​
+    - debug
+```
 
 這邊講解一下參數使用：
 
-kind
+`kind`：元件的種類，如：Pod、Deployment等等
 
-：元件的種類，如：Pod、Deployment等等
+`apiVersion`：支援的API版本
 
-apiVersion
+`metadata`：這個元件的附加資訊，像是名稱、標籤等等
 
-：支援的API版本
+`provisioner`：存儲類的供應者，這裡是AWS
 
-metadata
+`parameters`：一些其他參數，這裡有定義種類是gp2
 
-：這個元件的附加資訊，像是名稱、標籤等等
+`reclaimPolicy`：指定的回收策略，預設是Delete，也就是當StorageClass掰掰的時候，它會將存儲卷刪掉，Retain則相反，會保留存儲卷
 
-provisioner
-
-：存儲類的供應者，這裡是AWS
-
-parameters
-
-：一些其他參數，這裡有定義種類是gp2
-
-reclaimPolicy
-
-：指定的回收策略，預設是Delete，也就是當StorageClass掰掰的時候，它會將存儲卷刪掉，Retain則相反，會保留存儲卷
-
-mountOptions
-
-：掛載選項，對應被掛載的地方應要支援不然會失敗
+`mountOptions`：掛載選項，對應被掛載的地方應要支援不然會失敗
 
 如果k8s是1.10版：
 
-套用gp2設置
-
+- 套用gp2設置
+```bash
 $kubectl apply -f gp2-storage-class.yaml -n ns-eks
 storageclass.storage.k8s.io "gp2" created
-
-​
-
-將gps設為default
-
+```
+- 將gps設為default
+```bash
 $kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}' -n=ns-eks
-
-​
-
+```
 不是的話就都不用做，應該剛開始就如同筆者畫面所顯示的
 
+```bash
 $kubectl get storageclasses -n ns-eks
-NAME PROVISIONER AGE
-gp2 (default) kubernetes.io/aws-ebs 28m
-
-​
-
+NAME            PROVISIONER             AGE
+gp2 (default)   kubernetes.io/aws-ebs   28m
+```
 新增PersistentVolumeClaim
 
+```yaml
 $vim pvcs.yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
-metadata:name: mysql-pv-claim
-labels:app: wordpress
-spec:accessModes:- ReadWriteOnce
-resources:requests:storage: 20Gi
-\-\-\-apiVersion: v1
+metadata:
+    name: mysql-pv-claim
+    labels:
+    app: wordpress
+spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+    requests:
+        storage: 20Gi
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
-metadata:name: wp-pv-claim
-labels:app: wordpress
-spec:accessModes:- ReadWriteOnce
-resources:requests:storage: 20Gi
-
-​
+metadata:
+    name: wp-pv-claim
+    labels:
+    app: wordpress
+spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+    requests:
+        storage: 20Gi
+```
 
 接著apply它
 
+```bash
 $kubectl apply -f pvcs.yaml -n ns-eks
 persistentvolumeclaim/mysql-pv-claim created
 persistentvolumeclaim/wp-pv-claim created
-
-​
+```
 
 檢查PVC狀態
 
+```bash
 $kubectl get pvc -n ns-eks
-NAME STATUS VOLUME CAPACITY ACCESS MODES STORAGECLASS AGE
-mysql-pv-claim Bound pvc-6cc434b5-ecee-11e9-a674-0a822e4a246e 20Gi RWO gp2 39s
-wp-pv-claim Bound pvc-6cf53941-ecee-11e9-a674-0a822e4a246e 20Gi RWO gp2 39s
-
-​
+NAME             STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+mysql-pv-claim   Bound    pvc-6cc434b5-ecee-11e9-a674-0a822e4a246e   20Gi       RWO            gp2            39s
+wp-pv-claim      Bound    pvc-6cf53941-ecee-11e9-a674-0a822e4a246e   20Gi       RWO            gp2            39s
+```
 
 注意到他們都已經Bound了，也就是已綁定的狀態，可以用囉！
 
@@ -193,75 +187,99 @@ wp-pv-claim Bound pvc-6cf53941-ecee-11e9-a674-0a822e4a246e 20Gi RWO gp2 39s
 
 有的！
 
-### 3\. 部署MySQL後端
+### 3. 部署MySQL後端
 
 新增一個Secret
 
+```bash
 $kubectl create secret generic mysql-pass --from-literal=password=eks-mysql-pw --namespace=ns-eks
 secret/mysql-pass created
-
-​
+```
 
 檢查Secret狀態
 
+```bash
 $kubectl get secret -n ns-eks
 NAME TYPE DATA AGE
 default-token-vkv4l kubernetes.io/service-account-token 3 67m
 mysql-pass Opaque 1 66s
-
-​
+```
 
 我們先新增一個YAML文件，部署MySQLl用的
 
+```yaml
 $vim deploy-mysql.yaml
 apiVersion: v1
 kind: Service
-metadata:name: wordpress-mysql
-labels:app: wordpress
-spec:ports:-port:3306selector:app: wordpress
-tier: mysql
-clusterIP: None
-\-\-\-apiVersion: apps/v1 \# for versions before 1.9.0 use apps/v1beta2kind: Deployment
-metadata:name: wordpress-mysql
-labels:app: wordpress
-spec:selector:matchLabels:app: wordpress
-tier: mysql
-strategy:type: Recreate
-template:metadata:labels:app: wordpress
-tier: mysql
-spec:containers:-image: mysql:5.6name: mysql
-env:-name: MYSQL\_ROOT\_PASSWORD
-valueFrom:secretKeyRef:name: mysql-pass
-key: password
-ports:-containerPort:3306name: mysql
-volumeMounts:-name: mysql-persistent-storage
-mountPath: /var/lib/mysql
-volumes:-name: mysql-persistent-storage
-persistentVolumeClaim:claimName: mysql-pv-claim
-
-​
+metadata:
+    name: wordpress-mysql
+    labels:
+    app: wordpress
+spec:
+    ports:
+    - port: 3306
+    selector:
+    app: wordpress
+    tier: mysql
+    clusterIP: None
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+    name: wordpress-mysql
+    labels:
+    app: wordpress
+spec:
+    selector:
+    matchLabels:
+        app: wordpress
+        tier: mysql
+    strategy:
+    type: Recreate
+    template:
+    metadata:
+        labels:
+        app: wordpress
+        tier: mysql
+    spec:
+        containers:
+        - image: mysql:5.6
+        name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+            secretKeyRef:
+                name: mysql-pass
+                key: password
+        ports:
+        - containerPort: 3306
+            name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+            mountPath: /var/lib/mysql
+        volumes:
+        - name: mysql-persistent-storage
+        persistentVolumeClaim:
+            claimName: mysql-pv-claim
+```
 
 接著apply它
 
+```bash
 $kubectl create -f deploy-mysql.yaml -n ns-eks
 service/wordpress-mysql created
 deployment.apps/wordpress-mysql created
-
-​
+```
 
 檢查Pod狀態
 
+```bash
 $kubectl get po -n ns-eks -o wide
-NAME READY STATUS RESTARTS AGE IP NODE NOMINATED NODE READINESS GATES
-wordpress-mysql-7d4fc77fdc-hfms5 1/1 Running 0 104s 192.168.15.32 ip-192-168-0-191.ap-southeast-1.compute.internal <none><none>
+NAME                               READY   STATUS    RESTARTS   AGE    IP              NODE                                               NOMINATED NODE   READINESS GATES
+wordpress-mysql-7d4fc77fdc-hfms5   1/1     Running   0          104s   192.168.15.32   ip-192-168-0-191.ap-southeast-1.compute.internal   <none>           <none>
+```
 
-​
-
-可以注意到這個Pod是跑在
-
-ip-192-168-0-191.ap-southeast-1.compute.internal
-
-這個節點上的
+可以注意到這個Pod是跑在`ip-192-168-0-191.ap-southeast-1.compute.internal`這個節點上的
 
 我們從AWS上對照看看
 
@@ -269,57 +287,84 @@ ip-192-168-0-191.ap-southeast-1.compute.internal
 
 可以發現到狀態已經從available變成in-use
 
-### 4\. 部署Wordpress
+### 4. 部署Wordpress
 
 新增wordpress的Deployment
 
+```yaml
 $vim deploy-wordpress-by-deployment.yaml
 apiVersion: v1
 kind: Service
-metadata:name: wordpress
-labels:app: wordpress
-spec:ports:-port:80selector:app: wordpress
-tier: frontend
-type: LoadBalancer
-\-\-\-apiVersion: apps/v1 \# for versions before 1.9.0 use apps/v1beta2kind: Deployment
-metadata:name: wordpress
-labels:app: wordpress
-spec:selector:matchLabels:app: wordpress
-tier: frontend
-strategy:type: Recreate
-template:metadata:labels:app: wordpress
-tier: frontend
-spec:containers:-image: wordpress:4.8-apache
-name: wordpress
-env:-name: WORDPRESS\_DB\_HOST
-value: wordpress-mysql
- -name: WORDPRESS\_DB\_PASSWORD
-valueFrom:secretKeyRef:name: mysql-pass
-key: password
-ports:-containerPort:80name: wordpress
-volumeMounts:-name: wordpress-persistent-storage
-mountPath: /var/www/html
-volumes:-name: wordpress-persistent-storage
-persistentVolumeClaim:claimName: wp-pv-claim
-
-​
+metadata:
+    name: wordpress
+    labels:
+    app: wordpress
+spec:
+    ports:
+    - port: 80
+    selector:
+    app: wordpress
+    tier: frontend
+    type: LoadBalancer
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+    name: wordpress
+    labels:
+    app: wordpress
+spec:
+    selector:
+    matchLabels:
+        app: wordpress
+        tier: frontend
+    strategy:
+    type: Recreate
+    template:
+    metadata:
+        labels:
+        app: wordpress
+        tier: frontend
+    spec:
+        containers:
+        - image: wordpress:4.8-apache
+        name: wordpress
+        env:
+        - name: WORDPRESS_DB_HOST
+            value: wordpress-mysql
+        - name: WORDPRESS_DB_PASSWORD
+            valueFrom:
+            secretKeyRef:
+                name: mysql-pass
+                key: password
+        ports:
+        - containerPort: 80
+            name: wordpress
+        volumeMounts:
+        - name: wordpress-persistent-storage
+            mountPath: /var/www/html
+        volumes:
+        - name: wordpress-persistent-storage
+        persistentVolumeClaim:
+            claimName: wp-pv-claim
+```
 
 接著Create
 
+```bash
 $kubectl create -f deploy-wordpress-by-deployment.yaml -n ns-eks
 service/wordpress created
 deployment.apps/wordpress created
-
-​
+```
 
 檢查Pod狀態
 
+```bash
 $kubectl get po -n ns-eks -o wide
-NAME READY STATUS RESTARTS AGE IP NODE NOMINATED NODE READINESS GATES
-wordpress-dccb8668f-fs97z 1/1 Running 0 49s 192.168.51.242 ip-192-168-36-189.ap-southeast-1.compute.internal <none><none>
-wordpress-mysql-7d4fc77fdc-hfms5 1/1 Running 0 16m 192.168.15.32 ip-192-168-0-191.ap-southeast-1.compute.internal <none><none>
-
-​
+NAME                               READY   STATUS    RESTARTS   AGE   IP               NODE                                                NOMINATED NODE   READINESS GATES
+wordpress-dccb8668f-fs97z          1/1     Running   0          49s   192.168.51.242   ip-192-168-36-189.ap-southeast-1.compute.internal   <none>           <none>
+wordpress-mysql-7d4fc77fdc-hfms5   1/1     Running   0          16m   192.168.15.32    ip-192-168-0-191.ap-southeast-1.compute.internal    <none>           <none>
+```
 
 這時候我們在切到AWS上去看下
 
@@ -329,12 +374,12 @@ wordpress-mysql-7d4fc77fdc-hfms5 1/1 Running 0 16m 192.168.15.32 ip-192-168-0-19
 
 檢查Service狀態
 
+```bash
 $kubectl get svc -n ns-eks
-NAME TYPE CLUSTER-IP EXTERNAL-IP PORT(S) AGE
-wordpress LoadBalancer 10.100.215.253 aa6309614ecf211e98b110624e7825ce-1654920643.ap-southeast-1.elb.amazonaws.com 80:32086/TCP 7m34s
-wordpress-mysql ClusterIP None <none>3306/TCP 23m
-
-​
+NAME              TYPE           CLUSTER-IP       EXTERNAL-IP                                                                    PORT(S)        AGE
+wordpress         LoadBalancer   10.100.215.253   aa6309614ecf211e98b110624e7825ce-1654920643.ap-southeast-1.elb.amazonaws.com   80:32086/TCP   7m34s
+wordpress-mysql   ClusterIP      None             <none>                                                                         3306/TCP       23m
+```
 
 接著我們透過EXTERNAL-IP去access它
 
@@ -348,18 +393,18 @@ wordpress-mysql ClusterIP None <none>3306/TCP 23m
 
 ![](./images/img_007.png)
 
-### 5\. 清除
+### 5. 清除
 
 輸入以下指令刪除
 
+```bash
 $kubectl delete -f deploy-wordpress-by-deployment.yaml -n ns-eks
-service"wordpress" deleted
+service "wordpress" deleted
 deployment.apps "wordpress" deleted
 $kubectl delete -f deploy-mysql.yaml -n ns-eks
-service"wordpress-mysql" deleted
+service "wordpress-mysql" deleted
 deployment.apps "wordpress-mysql" deleted
-
-​
+```
 
 刪除EBS
 
@@ -367,18 +412,18 @@ deployment.apps "wordpress-mysql" deleted
 
 刪除PVC
 
+```bash
 $kubectl delete -f pvcs.yaml -n ns-eks
 persistentvolumeclaim "mysql-pv-claim" deleted
 persistentvolumeclaim "wp-pv-claim" deleted
-
-​
+```
 
 刪除MySQL的Secret
 
+```bash
 $kubectl delete secret mysql-pass -n ns-eks
 secret "mysql-pass" deleted
-
-​
+```
 
 ## EFS
 
@@ -392,7 +437,7 @@ Elastic Network Interface（ENI）：彈性網路界面是代表虛擬網路卡�
 
 可在帳戶中建立並設定網路界面，然後將它們連接到VPC 中的執行個體。
 
-### 1\. 建立EFS
+### 1. 建立EFS
 
 我們先到AWS介面操作，切換到EFS
 
@@ -414,21 +459,21 @@ VPC和Security groups要選eks相關的，好了下一步
 
 OK，有建立與EFS的連接
 
-### 2\. 建立Namespace及準備存儲
+### 2. 建立Namespace及準備存儲
 
 新增Namespace並確認
 
+```bash
 $kubectl create namespace ns-eks-efs
 namespace/ns-eks-efs created
 $kubectl get namespace
-NAME STATUS AGE
-default Active 179m
-kube-public Active 179m
-kube-system Active 179m
-ns-eks Active 161m
-ns-eks-efs Active 51s
-
-​
+NAME          STATUS   AGE
+default       Active   179m
+kube-public   Active   179m
+kube-system   Active   179m
+ns-eks        Active   161m
+ns-eks-efs    Active   51s
+```
 
 建立efs-provisioner
 
@@ -436,115 +481,150 @@ efs-id和server的地方依照建立的EFS修改
 
 ![](./images/img_013.png)
 
+```yaml
 $vim create-efs-provisioner.yaml
 kind: Deployment
 apiVersion: extensions/v1beta1
-metadata:name: efs-provisioner
-spec:replicas:1strategy:type: Recreate
-template:metadata:labels:app: efs-provisioner
-spec:containers:-name: efs-provisioner
-image: quay.io/external\_storage/efs-provisioner:v0.1.0
-env:-name: FILE\_SYSTEM\_ID
-value: fs-d8c8b999
- -name: AWS\_REGION
-value: ap-southeast-1-name: PROVISIONER\_NAME
-value: eks-course/aws-efs
-volumeMounts:-name: pv-volume
-mountPath: /persistentvolumes
-volumes:-name: pv-volume
-nfs:server: fs-d8c8b999.efs.ap-southeast-1.amazonaws.com
-path: /
-
-​
+metadata:
+    name: efs-provisioner
+spec:
+    replicas: 1
+    strategy:
+    type: Recreate
+    template:
+    metadata:
+        labels:
+        app: efs-provisioner
+    spec:
+        containers:
+        - name: efs-provisioner
+            image: quay.io/external_storage/efs-provisioner:v0.1.0
+            env:
+            - name: FILE_SYSTEM_ID
+                value: fs-d8c8b999
+            - name: AWS_REGION
+                value: ap-southeast-1
+            - name: PROVISIONER_NAME
+                value: eks-course/aws-efs
+            volumeMounts:
+            - name: pv-volume
+                mountPath: /persistentvolumes
+        volumes:
+        - name: pv-volume
+            nfs:
+            server: fs-d8c8b999.efs.ap-southeast-1.amazonaws.com
+            path: /
+```
 
 好了apply它
 
+```bash
 $kubectl apply -f create-efs-provisioner.yaml -n ns-eks-efs
 deployment.extensions/efs-provisioner created
-
-​
+```
 
 新增RBAC
 
+```yaml
 $vim create-rbac.yaml
-\-\-\-apiVersion: rbac.authorization.k8s.io/v1beta1
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
-metadata:name: nfs-provisioner-role-binding
-subjects:-kind: ServiceAccount
-name: default
-namespace: ns-eks-course-efs
-roleRef:kind: ClusterRole
-name: cluster-admin
-apiGroup: rbac.authorization.k8s.io
-
-​
+metadata:
+    name: nfs-provisioner-role-binding
+subjects:
+    - kind: ServiceAccount
+    name: default
+    namespace: ns-eks-course-efs
+roleRef:
+    kind: ClusterRole
+    name: cluster-admin
+    apiGroup: rbac.authorization.k8s.io
+```
 
 好了apply
 
+```bash
 $kubectl apply -f create-rbac.yaml -n ns-eks-efs
 clusterrolebinding.rbac.authorization.k8s.io/nfs-provisioner-role-binding created
-
-​
+```
 
 建立存儲
 
+```yaml
 $vim create-storage.yaml
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
-metadata:name: aws-efs
+metadata:
+    name: aws-efs
 provisioner: eks-course/aws-efs
-\-\-\-kind: PersistentVolumeClaim
+---
+kind: PersistentVolumeClaim
 apiVersion: v1
-metadata:name: efs-wordpress
-annotations:volume.beta.kubernetes.io/storage-class:"aws-efs"spec:accessModes:- ReadWriteMany
-resources:requests:storage: 10Gi
-\-\-\-kind: PersistentVolumeClaim
+metadata:
+    name: efs-wordpress
+    annotations:
+    volume.beta.kubernetes.io/storage-class: "aws-efs"
+spec:
+    accessModes:
+    - ReadWriteMany
+    resources:
+    requests:
+        storage: 10Gi
+---
+kind: PersistentVolumeClaim
 apiVersion: v1
-metadata:name: efs-mysql
-annotations:volume.beta.kubernetes.io/storage-class:"aws-efs"spec:accessModes:- ReadWriteMany
-resources:requests:storage: 10Gi
-
-​
+metadata:
+    name: efs-mysql
+    annotations:
+    volume.beta.kubernetes.io/storage-class: "aws-efs"
+spec:
+    accessModes:
+    - ReadWriteMany
+    resources:
+    requests:
+        storage: 10Gi
+```
 
 好了apply它
 
+```bash
 $kubectl apply -f create-storage.yaml -n ns-eks-efs
 storageclass.storage.k8s.io/aws-efs created
 persistentvolumeclaim/efs-wordpress created
 persistentvolumeclaim/efs-mysql created
-
-​
+```
 
 接下來的這兩步與前面的EBS類似
 
-### 3\. 部署MySQL後端
+### 3. 部署MySQL後端
 
 新增一個Secret
 
+```bash
 $kubectl create secret generic mysql-pass --from-literal=password=eks-mysql-pw --namespace=ns-eks-efs
 secret/mysql-pass created
-
-​
+```
 
 接著apply
 
+```bash
 $kubectl create -f deploy-mysql.yaml -n ns-eks-efs
 service/wordpress-mysql created
 deployment.apps/wordpress-mysql created
-
-​
+```
 
 我們同樣也可以檢查他的狀態，無論是從命令行或是AWS
 
-### 4\. 部署Wordpress
+### 4. 部署Wordpress
 
 Create Wordpress的Deployment
 
+```bash
 $kubectl create -f deploy-wordpress-by-deployment.yaml -n ns-eks
 service/wordpress created
 deployment.apps/wordpress created
-
-​
+```
 
 我們同樣也可以檢查集群及AWS狀態
 
@@ -560,7 +640,5 @@ deployment.apps/wordpress created
 
 ## 參考連結
 
-[EKS與EFS的PV使用](https://dzone.com/articles/using-ebs-and-efs-as-persistent-volume-in-kubernet)
-
-[EFS與EBS比較](https://medium.com/faun/aws-eks-volumes-architecture-in-a-statefull-app-in-multiple-azs-6ca1b05f80eb)
-
+- [EKS與EFS的PV使用](https://dzone.com/articles/using-ebs-and-efs-as-persistent-volume-in-kubernet)
+- [EFS與EBS比較](https://medium.com/faun/aws-eks-volumes-architecture-in-a-statefull-app-in-multiple-azs-6ca1b05f80eb)

@@ -59,7 +59,7 @@ export default function Posts() {
       );
     }
 
-    return posts;
+    return [...posts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [activeFilter, searchQuery]);
 
   return (

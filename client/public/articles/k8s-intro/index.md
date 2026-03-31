@@ -1,6 +1,6 @@
 ![](./images/img_001.png)
 
-## \[Day1\] 挑戰開始：k8s初探＋簡介
+# [Day1] 挑戰開始：k8s初探＋簡介
 
 Author: Nick Zhuang
 Type: kubernetes
@@ -25,31 +25,31 @@ k8s是針對Docker環境所設計的管理框架，類似的框架還有Docker S
 
 k8s提供了一個彈性運行分佈式系統的框架。它可以負責的擴展要求，故障轉移，部署模式等。如此一來，能讓開發者專注在提供的服務上。
 
-#### k8s提供了一些功能：
+### k8s提供了一些功能：
 
-服務發現和負載平衡
+- **服務發現和負載平衡**
 
-k8s可以使用DNS名稱或使用自己的IP地址公開容器。如果容器的流量很高，k8s能夠負載均衡並分配網絡流量，以便部署穩定。
+    k8s可以使用DNS名稱或使用自己的IP地址公開容器。如果容器的流量很高，k8s能夠負載均衡並分配網絡流量，以便部署穩定。
 
-存儲編排
+- **存儲編排**
 
-k8s允許您自動掛載選擇的存儲系統，例如本地存儲，公共雲提供商等。
+    k8s允許您自動掛載選擇的存儲系統，例如本地存儲，公共雲提供商等。
 
-自動部署和回滾
+- **自動部署和回滾**
 
-可以使用k8s描述已部署容器的所需狀態，並且可以以受控速率將實際狀態更改為所需狀態。例如，可以自動化k8s為部署創建新容器，刪除現有容器並將所有資源用於新容器。
+    可以使用k8s描述已部署容器的所需狀態，並且可以以受控速率將實際狀態更改為所需狀態。例如，可以自動化k8s為部署創建新容器，刪除現有容器並將所有資源用於新容器。
 
-自動調度
+- **自動調度**
 
-k8s允許指定每個容器需要多少CPU和內存（RAM）。當容器指定了資源請求時，k8s可以更好地決定管理容器的資源。
+    k8s允許指定每個容器需要多少CPU和內存（RAM）。當容器指定了資源請求時，k8s可以更好地決定管理容器的資源。
 
-自我修復
+- **自我修復**
 
-k8s重新啟動失敗的容器，替換容器，殺死不回應用戶定義的運行狀況檢查的容器，並且在它們準備好服務之前不會將它們通告給客戶端。
+    k8s重新啟動失敗的容器，替換容器，殺死不回應用戶定義的運行狀況檢查的容器，並且在它們準備好服務之前不會將它們通告給客戶端。
 
-密鑰和配置管理
+- **密鑰和配置管理**
 
-k8s允許存儲和管理敏感信息，例如密碼、ssh密鑰。可以部署和更新機密和應用程序配置，而無需重建容器映像，也不會在配置中暴露機密。
+    k8s允許存儲和管理敏感信息，例如密碼、ssh密鑰。可以部署和更新機密和應用程序配置，而無需重建容器映像，也不會在配置中暴露機密。
 
 ## Kubernetes架構與使用
 
@@ -59,9 +59,8 @@ k8s允許存儲和管理敏感信息，例如密碼、ssh密鑰。可以部署�
 
 基本上，所有在k8s的node，分為master和non-master兩種，為求簡化，將non-master定義為slave，後續提到相關node皆以slave稱之
 
-Master node : 分為三個部分：kube-apiserver、 kube-controller-manager、kube-scheduler
-
-Slave node : 分為兩個部分：kubelet、kube-proxy
+1. Master node : 分為三個部分：kube-apiserver、 kube-controller-manager、kube-scheduler
+2. Slave node : 分為兩個部分：kubelet、kube-proxy
 
 ## Kubernetes中有哪些Component？
 
@@ -75,11 +74,7 @@ Slave node : 分為兩個部分：kubelet、kube-proxy
 
 ## 參考連結
 
-[k8s的觀念](https://kubernetes.io/docs/concepts/)
-
-[k8s的設計與架構](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/architecture/architecture.md)
-
-[k8s的發展藍圖](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/architecture/architectural-roadmap.md)
-
-[什麼是k8s？](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/)
-
+- [k8s的觀念](https://kubernetes.io/docs/concepts/)
+- [k8s的設計與架構](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/architecture/architecture.md)
+- [k8s的發展藍圖](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/architecture/architectural-roadmap.md)
+- [什麼是k8s？](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/)

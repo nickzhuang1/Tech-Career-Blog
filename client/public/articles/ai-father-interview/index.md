@@ -2,7 +2,7 @@
 
 ── 辛頓訪談說了啥？自學AI可能嗎？AI四巨頭是誰？
 
-### 前言
+## 前言
 
 這影片提到了先前的辛頓訪談，其實這影片已經出來蠻長一段時間了，主要講述過往研究的一些心路歷程，沒看過的建議去看看原始影片，相信透過大神的思考方式可以給你一些啟發。
 
@@ -10,7 +10,7 @@
 
 一開始不用看書，直接看影片自學即可，不懂的就問ChatGPT，反覆學習，就能逐步學會。
 
-### AI四巨頭
+## AI四巨頭
 
 AI四巨頭學術成就簡述（從近期開始）
 
@@ -48,9 +48,9 @@ AI四巨頭學術成就簡述（從近期開始）
 
 四巨頭詳細介紹：
 
-[https://aidc.shisu.edu.cn/ca/64/c13626a182884/page.htm](https://aidc.shisu.edu.cn/ca/64/c13626a182884/page.htm?fbclid=IwZXh0bgNhZW0CMTAAYnJpZBExejNhZW1EZFBVRDluQnl4VwEe2pnp3ciIqO50-8xj5I3Ou_REynet7yrOYvtcfbNCjTvyXjcsd9t_MuI_HqI_aem_aD1j4T6bWY1j15V1XUzGXg)
+- [https://aidc.shisu.edu.cn/ca/64/c13626a182884/page.htm](https://aidc.shisu.edu.cn/ca/64/c13626a182884/page.htm?fbclid=IwZXh0bgNhZW0CMTAAYnJpZBExejNhZW1EZFBVRDluQnl4VwEe2pnp3ciIqO50-8xj5I3Ou_REynet7yrOYvtcfbNCjTvyXjcsd9t_MuI_HqI_aem_aD1j4T6bWY1j15V1XUzGXg)
 
-### 新手建議
+## 新手建議
 
 另外還有個常見的問題，就是框架要選哪個？我該用Pytorch嗎？那個Tensorflow好像很厲害是不是該學一下？
 
@@ -58,9 +58,8 @@ AI四巨頭學術成就簡述（從近期開始）
 
 我自學AI比較早，那時候Pytorch用戶還沒很多，所以初期我是用Keras，就Infra出身的開發者會比較習慣。
 
-### 論文實作
+## 論文實作
 
 想要參考別人論文實作code的話，可以參考Papers with code這個網站
 
-[https://paperswithcode.com/](https://paperswithcode.com/?fbclid=IwZXh0bgNhZW0CMTAAYnJpZBExejNhZW1EZFBVRDluQnl4VwEecIPrg1zruVSytveIsSLlzfS5sjPjCiKB2foSZ0W-5bQtdeb0w0-j-it-86s_aem_LgOATMU825D7bJv2YRPfeg)
-
+- [https://paperswithcode.com/](https://paperswithcode.com/?fbclid=IwZXh0bgNhZW0CMTAAYnJpZBExejNhZW1EZFBVRDluQnl4VwEecIPrg1zruVSytveIsSLlzfS5sjPjCiKB2foSZ0W-5bQtdeb0w0-j-it-86s_aem_LgOATMU825D7bJv2YRPfeg)

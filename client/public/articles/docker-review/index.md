@@ -1,6 +1,6 @@
 ![](./images/img_001.png)
 
-## \[Day2\] 一日碼頭工：快速Docker複習
+# [Day2] 一日碼頭工：快速Docker複習
 
 Author: Nick Zhuang
 Type: docker
@@ -25,19 +25,15 @@ Type: docker
 
 但隨著時間推衍，後來人們發現了虛擬化的問題，像是：
 
-每次開好幾個系統都要等一下子，能否將時間縮更短？
-
-開發用的電腦，新進人員來了，環境設置整個重新來過，我的天，可不可以不要這麼累？
-
-我的電腦，現在同時開了好幾個虛擬機，好像有點卡頓，怎麼辦？
+- 每次開好幾個系統都要等一下子，能否將時間縮更短？
+- 開發用的電腦，新進人員來了，環境設置整個重新來過，我的天，可不可以不要這麼累？
+- 我的電腦，現在同時開了好幾個虛擬機，好像有點卡頓，怎麼辦？
 
 為了避免上述問題，於是容器化技術就誕生了，輕量化、快速啟動、易移植等特性，用了容器後：
 
-太好了，開機變快了
-
-不用擔心要重灌，直接請他裝Docker，我再把鏡像移植給他就好
-
-使用容器跑，容器並不會虛擬化硬體堆疊，而是會在作業系統層級虛擬化，進而讓多個容器直接在 OS 核心之上執行，就不會卡頓了
+- 太好了，開機變快了
+- 不用擔心要重灌，直接請他裝Docker，我再把鏡像移植給他就好
+- 使用容器跑，容器並不會虛擬化硬體堆疊，而是會在作業系統層級虛擬化，進而讓多個容器直接在 OS 核心之上執行，就不會卡頓了
 
 現在我們理解為何要用容器了，接下來都以Docker為例子，因為我們是要介紹k8s。
 
@@ -47,32 +43,43 @@ Type: docker
 
 ![](./images/img_003.png)
 
-#### 以下列出幾個常用的重點：
+### 以下列出幾個常用的重點：
 
 基本觀念：由鏡像啟動容器，從容器啟動程序
 
-#### 建置類：
-
-#建立新的鏡像，那個點是指當前目錄的Dockerfiledocker build -t myapp:1.0 .#列出所有的鏡像docker images
-#刪除鏡像docker rmi alpine:3.4
-
-​
-
-#### 傳輸類：
-
-#下載鏡像docker pull alpine:3.4
-#改鏡像名稱docker tag alpine:3.4 myrepo/myalpine:3.4
-#登入，可以是Docker hub或是private registrydocker login my.registry.com:8000
-#上傳鏡像docker push myrepo/myalpine:3.4
-
-​
-
-#### 執行類：
-
-#啟動容器docker run -it --name web alpine:3.4 bash#關閉容器docker stop web
-#列出執行的容器dockerps#刪除所有容器dockerrm -f $(dockerps -aq)#執行一個已經存在的容器dockerexec -it web bash
-
-​
+### 建置類：
+```bash
+#建立新的鏡像，那個點是指當前目錄的Dockerfile
+docker build -t myapp:1.0 .
+#列出所有的鏡像
+docker images
+#刪除鏡像
+docker rmi alpine:3.4
+```
+### 傳輸類：
+```bash
+#下載鏡像
+docker pull alpine:3.4
+#改鏡像名稱
+docker tag alpine:3.4 myrepo/myalpine:3.4
+#登入，可以是Docker hub或是private registry
+docker login my.registry.com:8000
+#上傳鏡像
+docker push myrepo/myalpine:3.4
+```
+### 執行類：
+```bash
+#啟動容器，-it是互動式的，--name是容器名稱，alpine:3.4是鏡像名稱，bash是要執行的程序
+docker run -it --name web alpine:3.4 bash
+#關閉容器
+docker stop web
+#列出執行的容器
+docker ps
+#刪除所有容器
+docker rm -f $(docker ps -aq)
+#執行一個已經存在的容器
+docker exec -it web bash
+```
 
 ## 小結
 
@@ -86,13 +93,8 @@ Type: docker
 
 ## 參考資料
 
-[Docker中文版文檔](https://philipzheng.gitbooks.io/docker_practice/content/introduction/what.html)
-
-[Docker官方文件](https://docs.docker.com/get-started/)
-
-[Docker安裝](https://docs.docker.com/install/)
-
-[Docker的Cheat Sheet](https://www.docker.com/sites/default/files/Docker_CheatSheet_08.09.2016_0.pdf)
-
-[什麼是k8s](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/)
-
+- [Docker中文版文檔](https://philipzheng.gitbooks.io/docker_practice/content/introduction/what.html)
+- [Docker官方文件](https://docs.docker.com/get-started/)
+- [Docker安裝](https://docs.docker.com/install/)
+- [Docker的Cheat Sheet](https://www.docker.com/sites/default/files/Docker_CheatSheet_08.09.2016_0.pdf)
+- [什麼是k8s](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/)

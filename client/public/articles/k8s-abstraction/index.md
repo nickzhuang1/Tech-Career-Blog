@@ -1,6 +1,6 @@
 ![](./images/img_001.png)
 
-## \[Day6\] 淺談k8s架構之二：什麼是Object？什麼是Abstraction？有何不同？
+# [Day6] 淺談k8s架構之二：什麼是Object？什麼是Abstraction？有何不同？
 
 Author: Nick Zhuang
 Type: kubernetes
@@ -13,25 +13,25 @@ Type: kubernetes
 
 ### Master
 
-#### kube-control-manager：
+### kube-control-manager：
 
 > k8s中負責管理的服務，它是基於kubernetes核心在運作的，也就是只要kubernetes有在運作，它會一直運行，能透過API Server來監控cluster
 
-#### kube-apiserver：
+### kube-apiserver：
 
 > k8s中提供監控的服務，自帶接口可與元件連接，像是Pod、Service、Controllers等，以REST作為operation定義了監控的執行方式，並提供前端分享cluster的狀態的方法來達成與元件互動的目的
 
-#### kube-scheduler：
+### kube-scheduler：
 
 > k8s中的排程器，因能夠獲取軟硬體及協定的資訊，所以會影響到整個master的效能，API Server能要求它給予額外的工作負載權限
 
 ### Slave
 
-#### kubelet：
+### kubelet：
 
 > kubelet相當於 node agent，用於管理該 Node 上的所有 pods以及與 master node 即時溝通。
 
-#### kube-proxy：
+### kube-proxy：
 
 > kube-proxy則是會將目前該 Node 上所有 Pods 的資訊傳給 iptables，讓 iptables 即時獲得在該 Node 上所有 Pod 的最新狀態。
 
@@ -106,31 +106,17 @@ Type: kubernetes
 
 ## 參考資料
 
-[kube controller manager介紹](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-controller-manager/)
-
-[kube api server介紹](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/)
-
-[kube scheduler介紹](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/)
-
-[kubelet介紹](https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/)
-
-[kube proxy介紹](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-proxy/)
-
-[Pod概觀](https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/)
-
-[Service概觀](https://kubernetes.io/docs/concepts/services-networking/service/)
-
-[Volume概觀](https://kubernetes.io/docs/concepts/storage/volumes/)
-
-[Namespace概觀](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/)
-
-[ReplicaSet概述](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/)
-
-[Deployment概述](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
-
-[StatefulSet概述](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/)
-
-[DaemonSet概述](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)
-
-[Job概述](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/)
-
+- [kube controller manager介紹](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-controller-manager/)
+- [kube api server介紹](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/)
+- [kube scheduler介紹](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/)
+- [kubelet介紹](https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/)
+- [kube proxy介紹](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-proxy/)
+- [Pod概觀](https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/)
+- [Service概觀](https://kubernetes.io/docs/concepts/services-networking/service/)
+- [Volume概觀](https://kubernetes.io/docs/concepts/storage/volumes/)
+- [Namespace概觀](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/)
+- [ReplicaSet概述](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/)
+- [Deployment概述](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
+- [StatefulSet概述](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/)
+- [DaemonSet概述](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)
+- [Job概述](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/)

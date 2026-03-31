@@ -1,6 +1,6 @@
 ![](./images/img_001.png)
 
-## \[Day25\] k8s管理篇延伸與EKS（一）：Service Discovery、Dashboard、Monitoring
+# [Day25] k8s管理篇延伸與EKS（一）：Service Discovery、Dashboard、Monitoring
 
 Author: Nick Zhuang
 Type: kubernetes
@@ -17,11 +17,11 @@ Type: kubernetes
 
 複習傳送門：
 
-[\[Day14\] k8s管理篇（一）：Monitoring、Job、CronJob](https://nick-zhuang.notion.site/1f0d2b68726680d0995bfe1b9a6008a0?pvs=25)
+[\[Day14\]k8s管理篇（一）：Monitoring、Job、CronJob](https://nickzhuang.com/posts/k8s-monitoring-job)
 
-[\[Day15\] k8s管理篇（二）：Resource Quota、Namespaces](https://nick-zhuang.notion.site/1f0d2b687266804a9236faaaaeefe4cb?pvs=25)
+[\[Day15\]k8s管理篇（二）：Resource Quota、Namespaces](https://nickzhuang.com/posts/k8s-quota-ns)
 
-[\[Day17\] k8s管理篇（三）：User Management、RBAC、Node Ｍaintenance](https://nick-zhuang.notion.site/1f0d2b687266803096d7f86170e1ca3c?pvs=25)
+[\[Day17\]k8s管理篇（三）：User Management、RBAC、Node Ｍaintenance](https://nickzhuang.com/posts/k8s-user-mgmt)
 
 ## 管理篇（上）
 
@@ -33,82 +33,75 @@ Type: kubernetes
 
 #### 啟動一個nginx的Service
 
+```bash
 $kubectl run nginx --image=nginx --port 80
 deployment.apps "nginx" created
-
-​
+```
 
 #### 檢查集群狀態
 
+```bash
 $kubectl get all
-NAME READY STATUS RESTARTS AGE
-pod/nginx-57867cc648-rkdt6 1/1 Running 0 7s
+NAME                         READY   STATUS    RESTARTS   AGE
+pod/nginx-57867cc648-rkdt6   1/1     Running   0          7s
 
-NAME TYPE CLUSTER-IP EXTERNAL-IP PORT(S) AGE
-service/kubernetes ClusterIP 10.100.0.1 <none>443/TCP 4h53m
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.100.0.1   <none>        443/TCP   4h53m
 
-NAME READY UP-TO-DATE AVAILABLE AGE
-deployment.apps/nginx 1/1 11 8s
+NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nginx   1/1     1            1           8s
 
-NAME DESIRED CURRENT READY AGE
-replicaset.apps/nginx-57867cc648 111 8s
-
-​
+NAME                               DESIRED   CURRENT   READY   AGE
+replicaset.apps/nginx-57867cc648   1         1         1       8s
+```
 
 #### 設置Port Forwarding
 
+```bash
 $kubectl port-forward deployment/nginx 8080:80
-Forwarding from 127.0.0.1:8080 ->80
-Forwarding from \[::1\]:8080 ->80
-
-​
+Forwarding from 127.0.0.1:8080 -> 80
+Forwarding from [::1]:8080 -> 80
+```
 
 #### Scale up Deployment
 
+```bash
 $kubectl scale deploy/nginx --replicas=4
 deployment.extensions/nginx scaled
-
-​
+```
 
 #### 檢查Pod狀態
 
+```bash
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-nginx-57867cc648-rkdt6 1/1 Running 0 74s
-nginx-57867cc648-tlvfn 0/1 ContainerCreating 0 3s
-nginx-57867cc648-vbcbr 0/1 ContainerCreating 0 3s
-nginx-57867cc648-zklj2 0/1 ContainerCreating 0 3s
-
-​
+NAME                     READY   STATUS              RESTARTS   AGE
+nginx-57867cc648-rkdt6   1/1     Running             0          74s
+nginx-57867cc648-tlvfn   0/1     ContainerCreating   0          3s
+nginx-57867cc648-vbcbr   0/1     ContainerCreating   0          3s
+nginx-57867cc648-zklj2   0/1     ContainerCreating   0          3s
+```
 
 #### 設置Load Balancer
 
+```bash
 $kubectl expose deploy/nginx --port 80 --target-port 80 --type LoadBalancer
 service/nginx exposed
-
-​
+```
 
 #### 檢查Service狀態
 
 可以發現到：
 
-外部IP是AWS提供的DNS：
+- 外部IP是AWS提供的DNS：`a81124d1de99711e9a6660a7201ce556-1276776701.ap-southeast-1.elb.amazonaws.com`
+- Port的部分：它會將你對該DNS的瀏覽請求轉發到`30256`這邊
 
-a81124d1de99711e9a6660a7201ce556-1276776701.ap-southeast-1.elb.amazonaws.com
-
-Port的部分：它會將你對該DNS的瀏覽請求轉發到
-
-30256
-
-這邊
-
+```bash
 $kubectl get svc
-NAME TYPE CLUSTER-IP EXTERNAL-IP PORT(S) AGE
-kubernetes ClusterIP 10.100.0.1 <none>443/TCP 4h54m
-nginx LoadBalancer 10.100.242.84 a81124d1de99711e9a6660a7201ce556-1276776701.ap-southeast-1.elb.amazonaws.com 80:30256/TCP 10s
-$kubectlset image deploy/nginx nginx=openresty/openresty:alpine
-
-​
+NAME         TYPE           CLUSTER-IP      EXTERNAL-IP                                                                    PORT(S)        AGE
+kubernetes   ClusterIP      10.100.0.1      <none>                                                                         443/TCP        4h54m
+nginx        LoadBalancer   10.100.242.84   a81124d1de99711e9a6660a7201ce556-1276776701.ap-southeast-1.elb.amazonaws.com   80:30256/TCP   10s
+$kubectl set image deploy/nginx nginx=openresty/openresty:alpine
+```
 
 #### 瀏覽器測試
 
@@ -116,26 +109,26 @@ $kubectlset image deploy/nginx nginx=openresty/openresty:alpine
 
 #### Scale down Deployment
 
+```bash
 $kubectl scale deploy/nginx --replicas=1
 deployment.extensions/nginx scaled
-
-​
+```
 
 #### 檢查Pod狀態
 
+```bash
 $kubectl get po
-NAME READY STATUS RESTARTS AGE
-nginx-57867cc648-rkdt6 1/1 Running 0 6m51s
-nginx-57867cc648-vbcbr 0/1 Terminating 0 5m40s
-
-​
+NAME                     READY   STATUS        RESTARTS   AGE
+nginx-57867cc648-rkdt6   1/1     Running       0          6m51s
+nginx-57867cc648-vbcbr   0/1     Terminating   0          5m40s
+```
 
 #### 修改Image
 
-$kubectlset image deploy/nginx nginx=openresty/openresty:alpine
+```bash
+$kubectl set image deploy/nginx nginx=openresty/openresty:alpine
 deployment.apps "nginx" image updated
-
-​
+```
 
 #### 刷新頁面
 
@@ -147,26 +140,19 @@ deployment.apps "nginx" image updated
 
 Deployment的設定：
 
-image改成
+- image改成`abiosoft/caddy:php`
+- containerPort改成`2015`
 
-abiosoft/caddy:php
-
-containerPort改成
-
-2015
-
+```bash 
 $kubectl edit deploy/nginx
 deployment.extensions/nginx edited
-
-​
+```
 
 ![](./images/img_004.png)
 
 Service的設定：
 
-將targetPort改成
-
-2015
+- 將targetPort改成`2015`
 
 ![](./images/img_005.png)
 
@@ -180,11 +166,11 @@ Service的設定：
 
 好了恢復原狀
 
+```bash
 $kubectl delete svc/nginx deploy/nginx
 service"nginx" deleted
 deployment.extensions "nginx" deleted
-
-​
+```
 
 ### 監控（Monitoring）
 
@@ -194,57 +180,71 @@ deployment.extensions "nginx" deleted
 
 檢查群集的節點及元件狀態
 
+```bash
 $kubectl get componentstatus
-NAME STATUS MESSAGE ERROR
-scheduler Healthy ok
-controller-manager Healthy ok
-etcd-0 Healthy {"health":"true"}$kubectl get no
-NAME STATUS ROLES AGE VERSION
-ip-192-168-1-251.ap-southeast-1.compute.internal Ready <none> 59s v1.13.8-eks-cd3eb0
-ip-192-168-61-14.ap-southeast-1.compute.internal Ready <none> 60s v1.13.8-eks-cd3eb0
-
-​
+NAME                 STATUS    MESSAGE              ERROR
+scheduler            Healthy   ok
+controller-manager   Healthy   ok
+etcd-0               Healthy   {"health": "true"}
+$kubectl get no
+NAME                                               STATUS   ROLES    AGE   VERSION
+ip-192-168-1-251.ap-southeast-1.compute.internal   Ready    <none>   59s   v1.13.8-eks-cd3eb0
+ip-192-168-61-14.ap-southeast-1.compute.internal   Ready    <none>   60s   v1.13.8-eks-cd3eb0
+```
 
 檢查Namespace
 
+```bash
 $kubectl get namespaces
-NAME STATUS AGE
-default Active 8m57s
-kube-public Active 8m56s
-kube-system Active 8m56s
-
-​
+NAME          STATUS   AGE
+default       Active   8m57s
+kube-public   Active   8m56s
+kube-system   Active   8m56s
+```
 
 新增一個Deployment，測試用
 
+```yaml
 $vim pod-deploy.yaml
 apiVersion: apps/v1
 kind: Deployment
-metadata:name: helloworld-deployment
-labels:app: helloworld
-spec:replicas:3selector:matchLabels:app: helloworld
-template:metadata:labels:app: helloworld
-spec:containers:-name: k8s-demo
-image: 105552010/k8s-demo:v1
-ports:-containerPort:3000
-
-​
+metadata:
+    name: helloworld-deployment
+    labels:
+    app: helloworld
+spec:
+    replicas: 3
+    selector:
+    matchLabels:
+        app: helloworld
+    template:
+    metadata:
+        labels:
+        app: helloworld
+    spec:
+        containers:
+        - name: k8s-demo
+        image: 105552010/k8s-demo:v1
+        ports:
+        - containerPort: 3000
+```
 
 接著apply它，等下看Dashboard檢查它就行
 
+```bash
 $kubectl apply -f pod-deploy.yaml
 deployment.extensions/helloworld-deployment created
-
-​
+```
 
 接著我們要開啟k8s的Dashboard，這邊的設置跟minikube有些不同，請特別注意
 
-#### 設置AWS的k8s Dashboard
+## 設置AWS的k8s Dashboard
 
 在AWS上k8s的Dashboard預設是關閉的，我們必須要做些設置才能用
 
 啟動Dashboard
 
+```bash
 $kubectl apply -f <https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml>
 secret/kubernetes-dashboard-certs created
 serviceaccount/kubernetes-dashboard created
@@ -252,87 +252,91 @@ role.rbac.authorization.k8s.io/kubernetes-dashboard-minimal created
 rolebinding.rbac.authorization.k8s.io/kubernetes-dashboard-minimal created
 deployment.apps/kubernetes-dashboard created
 service/kubernetes-dashboard created
-
-​
+```
 
 部署 heapster
 
+```bash
 $kubectl apply -f <https://raw.githubusercontent.com/kubernetes/heapster/master/deploy/kube-config/influxdb/heapster.yaml>
 serviceaccount "heapster" created
 deployment "heapster" created
 service"heapster" created
-
-​
+```
 
 為 heapster 部署 influxdb 後端至群集
 
+```bash
 $kubectl apply -f <https://raw.githubusercontent.com/kubernetes/heapster/master/deploy/kube-config/influxdb/influxdb.yaml>
 deployment "monitoring-influxdb" created
 service"monitoring-influxdb" created
-
-​
+```
 
 為 Dashboard 建立 heapster 群集角色連結
 
+```bash
 $kubectl apply -f <https://raw.githubusercontent.com/kubernetes/heapster/master/deploy/kube-config/rbac/heapster-rbac.yaml>
 clusterrolebinding "heapster" created
-
-​
+```
 
 EKS在RBAC的設置預設是啟動的，所以不用像minikube要重新啟動並調整參數
 
 建立EKS的Service Account
 
+```yaml
 $vim eks-admin-service-account.yaml
 apiVersion: v1
 kind: ServiceAccount
-metadata:name: eks-admin
-namespace: kube-system
-\-\-\-apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+    name: eks-admin
+    namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
-metadata:name: eks-admin
-roleRef:apiGroup: rbac.authorization.k8s.io
-kind: ClusterRole
-name: cluster-admin
-subjects:-kind: ServiceAccount
-name: eks-admin
-namespace: kube-system
-
-​
+metadata:
+    name: eks-admin
+roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: cluster-admin
+subjects:
+- kind: ServiceAccount
+    name: eks-admin
+    namespace: kube-system
+```
 
 套用設定至群集
 
+```bash
 $kubectl apply -f eks-admin-service-account.yaml
 serviceaccount "eks-admin" created
 clusterrolebinding.rbac.authorization.k8s.io "eks-admin" created
-
-​
+```
 
 檢查Token
 
-$kubectl -n kube-system describe secret $(kubectl -n kube-system get secret \|grep eks-admin \|awk'{print $1}')
-Name: eks-admin-token-lsfvp
-Namespace: kube-system
-Labels: <none>
-Annotations: kubernetes.io/service-account.name: eks-admin
-kubernetes.io/service-account.uid: 19813eac-eb2b-11e9-b8aa-0a3d58b6f4f2
+```bash
+$kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep eks-admin | awk '{print $1}')
+Name:         eks-admin-token-lsfvp
+Namespace:    kube-system
+Labels:       <none>
+Annotations:  kubernetes.io/service-account.name: eks-admin
+                kubernetes.io/service-account.uid: 19813eac-eb2b-11e9-b8aa-0a3d58b6f4f2
 
-Type: kubernetes.io/service-account-token
+Type:  kubernetes.io/service-account-token
 
 Data
 ====
-ca.crt: 1025 bytes
-namespace: 11 bytes
-token: eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJla3MtYWRtaW4tdG9rZW4tbHNmdnAiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZWtzLWFkbWluIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiMTk4MTNlYWMtZWIyYi0xMWU5LWI4YWEtMGEzZDU4YjZmNGYyIiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmUtc3lzdGVtOmVrcy1hZG1pbiJ9.En72ztniMhwDA6ZEJ0wQWsDTCp3mKFyqPCG1QnYErWLAdvEnTiLdpG9QtqfVnxSbZD-ajYaj7KeZD7nDR3yP1YWTDeTFoD7hhJS0OXlcp9Nc5QvvshmSdO4qrERP1jWXvkDyA8ijYuAZuB3\_\_L-rd2f0bMszYq0DtSV8dtNp\_VUd90twmBztolIWH\_kZxoVBLODo6-VU934KsQ6YzpdXTPt1ZySBOJTKd2WEg863\_0gyIOpAOjpYxiSz1KvutexrsdT7HVjHZkue7UrIm721Sf0UhwKaMuvY5XyFJ7qqTmKAq-GyZasATnR838GkidRyKoPvETVNq3pVQcWvlPYfvg
-
-​
+ca.crt:     1025 bytes
+namespace:  11 bytes
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJla3MtYWRtaW4tdG9rZW4tbHNmdnAiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZWtzLWFkbWluIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiMTk4MTNlYWMtZWIyYi0xMWU5LWI4YWEtMGEzZDU4YjZmNGYyIiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmUtc3lzdGVtOmVrcy1hZG1pbiJ9.En72ztniMhwDA6ZEJ0wQWsDTCp3mKFyqPCG1QnYErWLAdvEnTiLdpG9QtqfVnxSbZD-ajYaj7KeZD7nDR3yP1YWTDeTFoD7hhJS0OXlcp9Nc5QvvshmSdO4qrERP1jWXvkDyA8ijYuAZuB3__L-rd2f0bMszYq0DtSV8dtNp_VUd90twmBztolIWH_kZxoVBLODo6-VU934KsQ6YzpdXTPt1ZySBOJTKd2WEg863_0gyIOpAOjpYxiSz1KvutexrsdT7HVjHZkue7UrIm721Sf0UhwKaMuvY5XyFJ7qqTmKAq-GyZasATnR838GkidRyKoPvETVNq3pVQcWvlPYfvg
+```
 
 啟動kube-proxy，讓本地端能讀取Dashboard的內容
 
+```bash
 $kubectl proxy
 Starting to serve on 127.0.0.1:8001
-
-​
+```
 
 接著在VirtualBox中打開瀏覽器，輸入Token的內容
 
@@ -346,10 +350,11 @@ Starting to serve on 127.0.0.1:8001
 
 OK，測試成功，我們進到下一步。
 
-#### 安裝WeaveScope
+## 安裝WeaveScope
 
-透過YAML安裝（這版的k8s比較舊所以可以直接套用，如果版本太新沒法用的話請參考 [這裡](https://www.notion.so/k8s-Monitoring-Job-CronJob-ddcbf117e6ed49bbb2d4d2b1dbd39021)
+透過YAML安裝（這版的k8s比較舊所以可以直接套用，如果版本太新沒法用的話請參考 [這裡](https://nickzhuag.com/posts/k8s-monitoring-job)
 
+```bash
 $kubectl apply -f '<https://cloud.weave.works/k8s/scope.yaml>' -n weave
 namespace/weave created
 serviceaccount/weave-scope created
@@ -359,22 +364,21 @@ deployment.apps/weave-scope-app created
 service/weave-scope-app created
 deployment.apps/weave-scope-cluster-agent created
 daemonset.extensions/weave-scope-agent created
-
-​
+```
 
 檢查Weave Scope的Service設定
 
+```bash
 $kubectl get svc -n weave
-NAME TYPE CLUSTER-IP EXTERNAL-IP PORT(S) AGE
-weave-scope-app ClusterIP 10.100.114.110 <none>80/TCP 3m46s
-
-​
+NAME              TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
+weave-scope-app   ClusterIP   10.100.114.110   <none>        80/TCP    3m46s
+```
 
 設置Port Forwarding到4040
 
+```bash
 $kubectl port-forward -n weave "$(kubectl get -n weave pod --selector=weave-scope-component=app -o jsonpath='{.items..metadata.name}')"4040
-
-​
+```
 
 接著在VirtualBox裡面打開瀏覽器
 
@@ -388,9 +392,6 @@ $kubectl port-forward -n weave "$(kubectl get -n weave pod --selector=weave-scop
 
 ## 參考資料
 
-[簡易k8s管理：Service與Load Balancer](https://github.com/pahud/amazon-eks-workshop/blob/master/02-kubectl-basic-admin/kubectl-basic-admin.md)
-
-[AWS安裝Dashboard](https://docs.aws.amazon.com/zh_tw/eks/latest/userguide/dashboard-tutorial.html)
-
-[AWS安裝WeaveScope](https://www.weave.works/docs/scope/latest/installing/#k8s)
-
+- [簡易k8s管理：Service與Load Balancer](https://github.com/pahud/amazon-eks-workshop/blob/master/02-kubectl-basic-admin/kubectl-basic-admin.md)
+- [AWS安裝Dashboard](https://docs.aws.amazon.com/zh_tw/eks/latest/userguide/dashboard-tutorial.html)
+- [AWS安裝WeaveScope](https://www.weave.works/docs/scope/latest/installing/#k8s)
