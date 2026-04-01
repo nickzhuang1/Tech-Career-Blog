@@ -24,6 +24,18 @@ export default function Contact() {
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         <div className="max-w-lg mx-auto space-y-4">
+          {/* 演講照片 */}
+          <div className="rounded-md border border-border/40 bg-card overflow-hidden gradient-border">
+            <img
+              src="/aia-conference-2025.jpg"
+              alt="2025 台灣人工智慧學校年會演講"
+              className="w-full object-cover"
+            />
+            <div className="px-4 py-3">
+              <p className="text-xs font-medium">2025 台灣人工智慧學校年會</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Taiwan AI Academy Annual Conference · 台灣AI競爭力</p>
+            </div>
+          </div>
           <a
             href="https://www.linkedin.com/in/nick-zhuang/"
             target="_blank"
