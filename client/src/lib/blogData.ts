@@ -27,6 +27,16 @@ export const categories: Category[] = [
 ];
 
 export const blogPosts: BlogPost[] = [
+    {
+    id: "zsh-debug",
+    title: "zsh debug 實用技巧：如何追蹤與排查 zsh 問題",
+    date: "2026-04-03",
+    category: "ai",
+    tags: ["Shell", "zsh", "Debug", "DevOps"],
+    excerpt: "介紹 zsh shell 的 debug 技巧，包含 set -x、trap、PS4 等指令，協助你有效追蹤與排查 zsh 腳本問題。",
+    externalUrl: "https://nick-zhuang.notion.site/zsh-debug-1e8d2b68726680debugzsh",
+    readTime: "7 min",
+  },
   {
     id: "dli-notes",
     title: "DLI 講師筆記：深度學習基礎",
