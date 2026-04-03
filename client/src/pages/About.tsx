@@ -97,10 +97,10 @@ export default function About() {
                 <h2 className="font-semibold text-sm">認證</h2>
               </div>
               <ul className="space-y-2">
-                {aboutData.certifications.map((cert, i) => (
+                {aboutData.certifications.slice(0, 3).map((cert, i) => (
                   <li key={i} className="text-sm text-muted-foreground flex gap-2">
                     <span className="text-primary mt-0.5">›</span>
-                    <span>{cert}</span>
+                    <span>{cert.name}</span>
                   </li>
                 ))}
               </ul>
@@ -183,6 +183,14 @@ export default function About() {
                     <History className="w-3 h-3" />
                     大事記
                   </button>
+                  <button
+                    onClick={() => navigate("/certificates")}
+                    title="查看證書牆"
+                    className="flex-shrink-0 flex items-center gap-1 text-[10px] font-mono text-primary/70 hover:text-primary border border-primary/20 hover:border-primary/50 rounded-md px-2 py-1 transition-colors"
+                  >
+                    <ShieldCheck className="w-3 h-3" />
+                    證書牆
+                  </button>
                 </div>
               </div>
             </div>
@@ -190,7 +198,7 @@ export default function About() {
             {/* 展示圖片 */}
             <div className="rounded-md border border-border/40 bg-card p-4 gradient-border">
               <img
-                src="/showcase.jpg"
+                src="/showcase.png"
                 alt="著作、獎項與 NVIDIA 認證"
                 className="w-full rounded-md object-cover"
               />
