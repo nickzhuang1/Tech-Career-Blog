@@ -10,12 +10,12 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import { lazy, Suspense, useEffect } from "react";
 
-const Posts = lazy(() => import("@/pages/Posts"));
-const PostDetail = lazy(() => import("@/pages/PostDetail"));
 const About = lazy(() => import("@/pages/About"));
-const Contact = lazy(() => import("@/pages/Contact"));
 const Timeline = lazy(() => import("@/pages/Timeline"));
 const Certificates = lazy(() => import("@/pages/Certificates"));
+const Posts = lazy(() => import("@/pages/Posts"));
+const PostDetail = lazy(() => import("@/pages/PostDetail"));
+const Contact = lazy(() => import("@/pages/Contact"));
 
 function PageFallback() {
   return <div className="flex-1 min-h-[60vh]" />;
@@ -36,12 +36,24 @@ function Router() {
       <Suspense fallback={<PageFallback />}>
         <Switch>
           <Route path="/" component={Home} />
-          <Route path="/posts" component={Posts} />
-          <Route path="/posts/:id" component={PostDetail} />
-          <Route path="/about" component={About} />
-          <Route path="/timeline" component={Timeline} />
-          <Route path="/contact" component={Contact} />
-          <Route path="/certificates" component={Certificates} />
+          <Route path="/about" component={() => (
+            <Suspense fallback={<PageLoading />}> <About /> </Suspense>
+          )} />
+          <Route path="/timeline" component={() => (
+            <Suspense fallback={<PageLoading />}> <Timeline /> </Suspense>
+          )} />
+          <Route path="/certificates" component={() => (
+            <Suspense fallback={<PageLoading />}> <Certificates /> </Suspense>
+          )} />
+          <Route path="/posts" component={() => (
+            <Suspense fallback={<PageLoading />}> <Posts /> </Suspense>
+          )} />
+          <Route path="/posts/:id" component={() => (
+            <Suspense fallback={<PageLoading />}> <PostDetail /> </Suspense>
+          )} />
+          <Route path="/contact" component={() => (
+            <Suspense fallback={<PageLoading />}> <Contact /> </Suspense>
+          )} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>
@@ -49,6 +61,14 @@ function Router() {
   );
 }
 
+// 全螢幕 loading 動畫元件
+function PageLoading() {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-primary border-solid border-opacity-30 border-t-primary" />
+    </div>
+  );
+}
 function App() {
   const [location] = useLocation();
   useEffect(() => {
