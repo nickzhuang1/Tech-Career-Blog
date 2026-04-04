@@ -451,16 +451,9 @@ export default function PostDetail() {
         ) : (
           <div className="text-center py-12">
             <p className="text-muted-foreground mb-4">此文章內容尚未收錄</p>
-            <a
-              href={post.externalUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-primary text-sm"
-              data-testid="link-external"
-            >
-              前往 Notion 閱讀完整內容
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
+            <div className="inline-flex items-center gap-1.5 text-muted-foreground text-sm">
+              尚未提供外部連結
+            </div>
           </div>
         )}
       </article>
