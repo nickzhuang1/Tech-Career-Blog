@@ -291,8 +291,8 @@ export const aboutData = {
   },
   certifications: [
     { name: "NVIDIA Certified Professional | AI Infrastructure", image: "/certificates/NVIDIA Certified Professional | AI Infrastructure.png", category: "NVIDIA" },
-    { name: "NVIDIA Certified Assosiate | Generative AI LLMs", image: "/certificates/NVIDIA Certified Assosiate | Generative AI LLMs.png", category: "NVIDIA" },
-    { name: "NVIDIA Certified Assosiate | AI Infrastructure and Operations", image: "/certificates/NVIDIA Certified Assosiate | AI Infrastructure and Operations.png", category: "NVIDIA" },
+    { name: "NVIDIA Certified Associate | Generative AI LLMs", image: "/certificates/NVIDIA Certified Associate | Generative AI LLMs.png", category: "NVIDIA" },
+    { name: "NVIDIA Certified Associate | AI Infrastructure and Operations", image: "/certificates/NVIDIA Certified Associate | AI Infrastructure and Operations.png", category: "NVIDIA" },
     { name: "Amazon EKS Starter- Docker on AWS EKS with Kubernetes", image: "/certificates/Amazon EKS Starter- Docker on AWS EKS with Kubernetes.jpeg", category: "Udemy" },
     { name: "Building RAG Agents with LLMs", image: "/certificates/Building RAG Agents with LLMs.jpeg", category: "NVIDIA" },
     { name: "Generative AI with Diffusion Models", image: "/certificates/Generative AI with Diffusion Models.jpeg", category: "NVIDIA" },
