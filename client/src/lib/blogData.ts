@@ -26,7 +26,17 @@ export const categories: Category[] = [
 ];
 
 export const blogPosts: BlogPost[] = [
-    {
+  // 2026 新增文章
+  {
+    id: "nvidia-cert-experience",
+    title: "NVIDIA 證照準備心得",
+    date: "2026-04-11",
+    category: "about-ai-cloud",
+    tags: ["NVIDIA", "證照", "考試心得", "AI Infrastructure", "Generative AI"],
+    excerpt: "Nick Zhuang 分享三張 NVIDIA 證照考取經驗、準備策略與考場實錄，給有志於挑戰 NVIDIA 證照的朋友參考。",
+    readTime: "15 min",
+  },
+  {
     id: "zsh-debug",
     title: "zsh debug 紀錄：zprofile、zshrc、腳本的 debug 技巧",
     date: "2026-04-03",
