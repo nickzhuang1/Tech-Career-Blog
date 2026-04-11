@@ -85,6 +85,21 @@ export default function Certificates() {
             </div>
           </div>
         ))}
+
+        {/* Credly 證書連結區塊 */}
+        <div className="max-w-4xl mx-auto px-4 pb-10">
+          <div className="bg-muted/40 border border-border/30 rounded-lg p-6 flex flex-col items-center text-center">
+            <span className="font-semibold text-lg mb-2">更多證書請見 Credly</span>
+            <a
+              href="https://www.credly.com/users/nick-zhuang/badges#credly"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block mt-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90 transition-colors shadow"
+            >
+              前往 Credly 證書頁面
+            </a>
+          </div>
+        </div>
       </div>
 
       {/* Modal */}
