@@ -51,16 +51,15 @@ export function Header() {
 
           <div className="flex items-center gap-2">
             <Button
-              size="icon"
               variant="ghost"
               onClick={toggleTheme}
               data-testid="button-theme-toggle"
               aria-label="切換主題"
               title="切換主題"
-              className="flex items-center gap-1 px-2"
+              className="group flex items-center gap-1 px-2"
             >
               {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              <span className="hidden sm:inline text-xs font-mono">切換主題</span>
+              <span className="hidden sm:inline text-xs font-mono text-foreground group-hover:text-accent-foreground transition-colors">切換主題</span>
             </Button>
 
             <Button
