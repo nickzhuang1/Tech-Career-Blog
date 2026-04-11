@@ -27,13 +27,13 @@ export default function Contact() {
           {/* 演講照片 */}
           <div className="rounded-md border border-border/40 bg-card overflow-hidden gradient-border">
             <img
-              src="/aia-conference-2025.jpg"
-              alt="2025 台灣人工智慧學校年會演講"
+              src="/contact-photo.jpg"
+              alt="Nick Zhuang 旅遊照"
               className="w-full object-cover"
             />
             <div className="px-4 py-3">
-              <p className="text-xs font-medium">2025 台灣人工智慧學校年會</p>
-              <p className="text-xs text-muted-foreground mt-0.5">Taiwan AI Academy Annual Conference · 台灣AI競爭力</p>
+              <p className="text-xs font-medium">Nick Zhuang 旅遊寫真</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Salzburg, Austria · 2025</p>
             </div>
           </div>
           <a
