@@ -28,6 +28,15 @@ export const categories: Category[] = [
 export const blogPosts: BlogPost[] = [
   // 2026 新增文章
   {
+    id: "leave-notion-cloudflare",
+    title: "一年後，我離開了 Notion：自架站方法分享 Cloudflare 篇",
+    date: "2026-04-18",
+    category: "life",
+    tags: ["架站", "Cloudflare", "技術心得"],
+    excerpt: "從 Notion 轉移到自架站，並用 Cloudflare Pages 部署的完整經驗分享，包含流量、SEO、維護、AI 工具應用等心得。",
+    readTime: "12 min",
+  },
+  {
     id: "nvidia-cert-experience",
     title: "NVIDIA 證照準備心得",
     date: "2026-04-11",

@@ -1,7 +1,5 @@
 ![NVIDIA 證照徽章](./certs.png)
 
-【NVIDIA 證照準備心得】
-
 自從去年 5 月，參加 NVIDIA 的網路研討會，偶然間看到 NVIDIA 證照考取半價優惠，想說給自己一個機會挑展一下自我，於是開啟了考照的連續之路。
 
 我的第一張 NVIDIA 證照，是 NVIDIA Certified Associate | AI Infrastructure and Operations，這個難度算是入門等級，當初的想法很簡單，只是想透過準備證照的過程，進而去理解在這塊有沒有什麼需要補強的地方，畢竟公司提供對應的服務，除了要對客戶負責之外，後續的優化也是我們的重點工作。
