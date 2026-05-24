@@ -17,7 +17,7 @@ export interface Category {
 }
 
 export const categories: Category[] = [
-  { id: "ai", name: "AI", nameEn: "AI", count: 10 },
+  { id: "ai", name: "AI", nameEn: "AI", count: 11 },
   { id: "career", name: "職涯", nameEn: "Career", count: 2 },
   { id: "life", name: "人生探索", nameEn: "Life Exploration", count: 3 },
   { id: "deep-learning", name: "深度學習", nameEn: "Deep Learning", count: 1 },
@@ -27,6 +27,15 @@ export const categories: Category[] = [
 
 export const blogPosts: BlogPost[] = [
   // 2026 新增文章
+  {
+    id: "nvidia-cert-pro",
+    title: "企業 AI 基礎建設全攻略：從網路底層到 AI 應用的完整藍圖",
+    date: "2026-05-24",
+    category: "ai",
+    tags: ["NVIDIA", "AI Infrastructure", "AI", "K8S"],
+    excerpt: "深入拆解 NVIDIA Certified Professional | AI Infrastructure 的技術核心，從底層高速網路、GPU 虛擬化，到 Enterprise K8S 與上層 AI 軟體平台，帶你走過企業 AI 工廠的五層架構。",
+    readTime: "20 min",
+  },
   {
     id: "leave-notion-cloudflare",
     title: "一年後，我離開了 Notion：自架站方法分享 Cloudflare 篇",
