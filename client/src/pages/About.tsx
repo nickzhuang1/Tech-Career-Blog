@@ -97,7 +97,7 @@ export default function About() {
                 <h2 className="font-semibold text-sm">認證</h2>
               </div>
               <ul className="space-y-2">
-                {aboutData.certifications.slice(0, 3).map((cert, i) => (
+                {aboutData.certifications.filter((cert) => cert.name.startsWith("NVIDIA Certified")).map((cert, i) => (
                   <li key={i} className="text-sm text-muted-foreground flex gap-2">
                     <span className="text-primary mt-0.5">›</span>
                     <span>{cert.name}</span>
