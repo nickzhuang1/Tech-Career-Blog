@@ -17,6 +17,10 @@ const badgeVariants = cva(
           "border-transparent bg-destructive text-destructive-foreground shadow-xs",
 
         outline: " border [border-color:var(--badge-outline)] shadow-xs",
+
+        // 文章標籤：青色系（與 Posts 頁的分類列紫色區隔）
+        tag:
+          "border-cyan-500/25 bg-cyan-500/10 text-cyan-700 dark:text-cyan-300",
       },
     },
     defaultVariants: {

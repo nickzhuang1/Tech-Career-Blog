@@ -13,16 +13,15 @@ export interface Category {
   id: string;
   name: string;
   nameEn: string;
-  count: number;
 }
 
 export const categories: Category[] = [
-  { id: "ai", name: "AI", nameEn: "AI", count: 11 },
-  { id: "career", name: "職涯", nameEn: "Career", count: 2 },
-  { id: "life", name: "人生探索", nameEn: "Life Exploration", count: 3 },
-  { id: "deep-learning", name: "深度學習", nameEn: "Deep Learning", count: 1 },
-  { id: "gen-ai", name: "Gen AI", nameEn: "Generative AI", count: 31 },
-  { id: "k8s-docker", name: "K8S & Docker", nameEn: "K8S & Docker", count: 30 },
+  { id: "ai", name: "AI", nameEn: "AI" },
+  { id: "career", name: "職涯", nameEn: "Career" },
+  { id: "life", name: "人生探索", nameEn: "Life Exploration" },
+  { id: "deep-learning", name: "深度學習", nameEn: "Deep Learning" },
+  { id: "gen-ai", name: "Gen AI", nameEn: "Generative AI" },
+  { id: "k8s-docker", name: "K8S & Docker", nameEn: "K8S & Docker" },
 ];
 
 export const blogPosts: BlogPost[] = [
@@ -58,7 +57,7 @@ export const blogPosts: BlogPost[] = [
     id: "nvidia-cert-experience",
     title: "NVIDIA 證照準備心得",
     date: "2026-04-11",
-    category: "about-ai-cloud",
+    category: "ai",
     tags: ["NVIDIA", "證照", "考試心得", "AI Infrastructure", "Generative AI"],
     excerpt: "Nick Zhuang 分享三張 NVIDIA 證照考取經驗、準備策略與考場實錄，給有志於挑戰 NVIDIA 證照的朋友參考。",
     readTime: "15 min",

@@ -45,7 +45,7 @@ export function BlogCard({ post }: { post: BlogPost }) {
 
         <div className="flex items-center gap-1.5 flex-wrap">
           {post.tags.slice(0, 3).map((tag) => (
-            <Badge key={tag} variant="secondary" className="text-[11px] font-normal py-0.5 px-2">
+            <Badge key={tag} variant="tag" className="text-[11px] font-normal py-0.5 px-2">
               {tag}
             </Badge>
           ))}
@@ -95,7 +95,7 @@ export function HeroBlogCard({ post }: { post: BlogPost }) {
 
         <div className="flex items-center gap-1.5 flex-wrap">
           {post.tags.map((tag) => (
-            <Badge key={tag} variant="secondary" className="text-[11px] font-normal py-0.5 px-2">
+            <Badge key={tag} variant="tag" className="text-[11px] font-normal py-0.5 px-2">
               {tag}
             </Badge>
           ))}

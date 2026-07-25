@@ -143,7 +143,7 @@ export default function Home() {
           {topTags.map((tag) => (
             <Link key={tag} href={`/posts?filter=${encodeURIComponent(tag)}`}>
               <Badge
-                variant="secondary"
+                variant="tag"
                 className="cursor-pointer text-sm font-normal py-1.5 px-3.5"
                 data-testid={`badge-tag-${tag.toLowerCase().replace(/\s+/g, "-")}`}
               >

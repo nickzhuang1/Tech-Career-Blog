@@ -229,9 +229,12 @@ function renderMarkdown(md: string, articleId?: string): JSX.Element[] {
             dangerouslySetInnerHTML={{ __html: inline(txt) }} />
         </p>
       );
-    } else if (/^(#{1,4}) /.test(line)) {
-      const lv = (line.match(/^(#{1,4}) /) ?? ["", ""])[1].length;
-      const txt = line.replace(/^#{1,4} /, "");
+    } else if (/^# /.test(line)) {
+      // 文章標題（H1）已由上方的標題列顯示，內文中的 H1 省略以避免重複
+      continue;
+    } else if (/^(#{2,4}) /.test(line)) {
+      const lv = (line.match(/^(#{2,4}) /) ?? ["", ""])[1].length;
+      const txt = line.replace(/^#{2,4} /, "");
       const Tag = `h${lv}` as "h1" | "h2" | "h3" | "h4";
       const hcls = [
         "text-2xl font-bold mt-10 mb-4 scroll-mt-20",
@@ -430,7 +433,7 @@ export default function PostDetail() {
 
           <div className="flex items-center gap-1.5 flex-wrap">
             {post.tags.map((tag) => (
-              <Badge key={tag} variant="secondary" className="text-xs font-normal py-0.5 px-2">
+              <Badge key={tag} variant="tag" className="text-xs font-normal py-0.5 px-2">
                 {tag}
               </Badge>
             ))}
