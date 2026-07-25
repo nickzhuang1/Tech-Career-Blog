@@ -313,6 +313,7 @@ export const aboutData = {
     { name: "NVIDIA Certified Associate | Generative AI LLMs", image: "/certificates/NVIDIA Certified Associate | Generative AI LLMs.png", category: "NVIDIA" },
     { name: "NVIDIA Certified Associate | Generative AI Multimodal", image: "/certificates/NVIDIA Certified Associate | Generative AI Multimodal.png", category: "NVIDIA" },
     { name: "NVIDIA Certified Associate | AI Infrastructure and Operations", image: "/certificates/NVIDIA Certified Associate | AI Infrastructure and Operations.png", category: "NVIDIA" },
+    { name: "使用提示工程（Prompt Engineering）開發大型語言模型（LLM）應用程式", image: "/certificates/使用提示工程（Prompt Engineering）開發大型語言模型（LLM）應用程式.jpeg", category: "NVIDIA" },
     { name: "Amazon EKS Starter- Docker on AWS EKS with Kubernetes", image: "/certificates/Amazon EKS Starter- Docker on AWS EKS with Kubernetes.jpeg", category: "Udemy" },
     { name: "Rapid Application Development with Large Language Models (LLMs)", image: "/certificates/Rapid Application Development with Large Language Models (LLMs).jpeg", category: "NVIDIA" },
     { name: "Building RAG Agents with LLMs", image: "/certificates/Building RAG Agents with LLMs.jpeg", category: "NVIDIA" },
