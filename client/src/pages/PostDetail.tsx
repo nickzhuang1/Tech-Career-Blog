@@ -229,12 +229,9 @@ function renderMarkdown(md: string, articleId?: string): JSX.Element[] {
             dangerouslySetInnerHTML={{ __html: inline(txt) }} />
         </p>
       );
-    } else if (/^# /.test(line)) {
-      // 文章標題（H1）已由上方的標題列顯示，內文中的 H1 省略以避免重複
-      continue;
-    } else if (/^(#{2,4}) /.test(line)) {
-      const lv = (line.match(/^(#{2,4}) /) ?? ["", ""])[1].length;
-      const txt = line.replace(/^#{2,4} /, "");
+    } else if (/^(#{1,4}) /.test(line)) {
+      const lv = (line.match(/^(#{1,4}) /) ?? ["", ""])[1].length;
+      const txt = line.replace(/^#{1,4} /, "");
       const Tag = `h${lv}` as "h1" | "h2" | "h3" | "h4";
       const hcls = [
         "text-2xl font-bold mt-10 mb-4 scroll-mt-20",
