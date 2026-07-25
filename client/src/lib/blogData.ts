@@ -28,6 +28,15 @@ export const categories: Category[] = [
 export const blogPosts: BlogPost[] = [
   // 2026 新增文章
   {
+    id: "glm-5.2-rd-leader-reflections",
+    title: "研發主管的真情告白：開源最強大語言模型的能力與反思",
+    date: "2026-07-25",
+    category: "ai",
+    tags: ["AI", "LLM", "Open Source", "職涯"],
+    excerpt: "在公司地端架設 GLM-5.2 後，研發團隊的樣貌徹底改變：寫程式從2小時縮短到10分鐘、Junior 與 Senior 的需求位移、規劃工作交給 AI 出方案。一位研發主管記下這波算力無限時代的真實體感與反思。",
+    readTime: "5 min",
+  },
+  {
     id: "nvidia-cert-pro",
     title: "企業 AI 基礎建設全攻略：從網路底層到 AI 應用的完整藍圖",
     date: "2026-05-24",
