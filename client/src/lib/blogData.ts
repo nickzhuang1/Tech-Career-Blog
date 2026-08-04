@@ -296,6 +296,7 @@ export const aboutData = {
     },
   ],
   talks: [
+    "2026 The Tech'o'Space Podcast – C.Y. Intelligence & the AI-Native Cloud",
     "2026 勤益科大 工作坊 – 虛擬化與容器：未來架構與 AI 容器",
     "2025 TPMS 第一屆精準醫學 AI 工作坊 – RAG 與生醫應用概論",
     "2025 AIA 年會 – Unlocking LLM Inference with vLLM: A Quick Benchmark Guide",
@@ -349,7 +350,6 @@ export const aboutData = {
     "閱讀書籍",
     "旅行",
     "重量訓練",
-    "研讀聖經",
     "地海戰記",
     "學習語言",
     "美食獵人",
