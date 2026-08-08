@@ -27,6 +27,15 @@ export const categories: Category[] = [
 export const blogPosts: BlogPost[] = [
   // 2026 新增文章
   {
+    id: "nvidia-cert-fathers-day",
+    title: "父親節快樂：NVIDIA證書+1的故事",
+    date: "2026-08-08",
+    category: "ai",
+    tags: ["NVIDIA", "證照", "考試心得", "Data Science"],
+    excerpt: "父親節這天拿到第 5 張 NVIDIA 認證。回顧一年來每 2~3 個月不間斷的考試旅程，從基礎設施到應用層的 GPU 生態系全貌，以及 NCA-ADS 拿下 91 分歷屆最高分的實錄。",
+    readTime: "4 min",
+  },
+  {
     id: "glm-5.2-rd-leader-reflections",
     title: "研發主管的真情告白：開源最強大語言模型的能力與反思",
     date: "2026-07-25",
