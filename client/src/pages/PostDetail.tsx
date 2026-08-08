@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, Link } from "wouter";
-import { blogPosts } from "@/lib/blogData";
+import { blogPosts, series } from "@/lib/blogData";
+
+function seriesName(id: string) {
+  return series.find((s) => s.id === id)?.name ?? id;
+}
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { useTheme } from "@/components/ThemeProvider";
 import { Badge } from "@/components/ui/badge";
@@ -436,7 +440,7 @@ export default function PostDetail() {
             ))}
             {post.series && (
               <Badge variant="outline" className="text-xs font-normal py-0.5 px-2 border-primary/30 text-primary">
-                {post.series}
+                {seriesName(post.series)}
               </Badge>
             )}
           </div>

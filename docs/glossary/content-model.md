@@ -10,7 +10,7 @@ Blog 資料模型的關鍵名詞，統一理解。
 - `category`（對應 `categories` 陣列的 id）
 - `tags[]`（freeform tag labels）
 - `excerpt` / `readTime`
-- 選配 `series`（同一系列群組用）
+- 選配 `series`：掛進某系列的話，填 `series` registry 的 **id**（英文 slug，如 `ironman-2023`），不填顯示名。顯示、卡片、篩選都靠 id。
 
 內容本體放在 `client/public/articles/{id}/index.md`，可以用相對路徑圖片（`./images/...`）也支援絕對路徑。
 
@@ -23,6 +23,12 @@ Markdown 慣例：
 - `category` 指定文章歸屬的大分類，用來對應 Posts 頁面上的分類篩選列。
 - `tags`則让文章具備細緻的主題標籤，為頁面上的標籤篩選列與文章卡面命名。
 - 有「Mirror Tags」的群組：分類名稱與同名標籤（例如 `ai` 分類對應 `AI` 標籤等），標籤過濾列想知道分類；經手確認後我們目前已把標籤篩選列：隱藏與分類同名（鏡像）的標籤， 確保 左 touc場景 "分類＝大類、標籤＝細主題" 呈現出比較不重复。
+
+## series（series registry）
+- 系列是可選的文章群組（目前有 2023 鐵人賽、2019 鐵人賽，各 30 篇）。Registry 型別 `Series { id, name }`。
+- `id` 是過濾與 URL 的 key（`?series=ironman-2023`），`name` 是顯示字串。UI 呈現時需用 `series.find(s => s.id === …)?.name` 對照。
+- Posts 頁的篩選維度完整名單：`series` → `category` → `filter`（tag）→ 搜尋字串。
+- tag ≠ series（歷史教訓見 `ADR-0004`）：tag 是 freeform 標籤，系列是固定清單，兩者不可混用。
 
 ## certifications（NVIDIA/⋯）
 All certification achievements；在 `blogData.certifications` array 中，每筆須具有 `name`、 `image`（可選）和`category`。 About 頁使用 `startsWith("NVIDIA Certified")` 的過濾 器來找到證書； Certificates 頁依照 category 分組顯示。

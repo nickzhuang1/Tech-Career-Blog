@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useSearch, useLocation } from "wouter";
-import { blogPosts, categories } from "@/lib/blogData";
+import { blogPosts, categories, series } from "@/lib/blogData";
 import { BlogCard } from "@/components/BlogCard";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -50,6 +50,7 @@ export default function Posts() {
   const params = new URLSearchParams(search);
   const activeFilter = params.get("filter");
   const activeCategory = params.get("category");
+  const activeSeries = params.get("series");
   const [searchQuery, setSearchQuery] = useState("");
 
   const tagList = useMemo(() => buildTagList(blogPosts), []);
@@ -64,7 +65,7 @@ export default function Posts() {
   }, []);
 
   // 以當前 query 為基底套用變更，保留其他 param（null 代表移除該 key）
-  const updateParams = (partial: { filter?: string | null; category?: string | null }) => {
+  const updateParams = (partial: { filter?: string | null; category?: string | null; series?: string | null }) => {
     const next = new URLSearchParams(params);
     for (const [key, value] of Object.entries(partial)) {
       if (value === null) next.delete(key);
@@ -76,6 +77,10 @@ export default function Posts() {
 
   const filteredPosts = useMemo(() => {
     let posts = blogPosts;
+
+    if (activeSeries) {
+      posts = posts.filter((p) => p.series === activeSeries);
+    }
 
     if (activeCategory) {
       posts = posts.filter((p) => p.category === activeCategory);
@@ -96,7 +101,7 @@ export default function Posts() {
     }
 
     return [...posts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  }, [activeCategory, activeFilter, searchQuery]);
+  }, [activeSeries, activeCategory, activeFilter, searchQuery]);
 
   return (
     <div className="min-h-screen">
@@ -131,6 +136,21 @@ export default function Posts() {
       </section>
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* 系列篩選列（僅在 URL 帶 ?series= 時出現，點擊解除） */}
+        {activeSeries && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            <Badge
+              variant="default"
+              className="cursor-pointer text-sm font-normal py-1.5 px-3.5"
+              onClick={() => updateParams({ series: null })}
+              data-testid={`badge-series-${activeSeries}`}
+            >
+              系列：{series.find((s) => s.id === activeSeries)?.name ?? activeSeries}
+              <span className="ml-1.5" aria-hidden="true">✕</span>
+            </Badge>
+          </div>
+        )}
+
         {/* 分類篩選列 */}
         <div className="flex flex-wrap gap-2 mb-4">
           <Badge

@@ -94,13 +94,13 @@ export default function Home() {
                 </div>
               </div>
               <div className="space-y-1.5">
-                <Link href="/posts?filter=Gen%20AI">
+                <Link href="/posts?series=ironman-2023">
                   <span className="flex items-center justify-between text-xs text-muted-foreground cursor-pointer hover-elevate rounded p-1 -mx-1" data-testid="link-series-2023">
                     <span>2023 鐵人賽 - Gen AI</span>
                     <span className="text-primary font-mono">30</span>
                   </span>
                 </Link>
-                <Link href="/posts?filter=K8S">
+                <Link href="/posts?series=ironman-2019">
                   <span className="flex items-center justify-between text-xs text-muted-foreground cursor-pointer hover-elevate rounded p-1 -mx-1" data-testid="link-series-2019">
                     <span>2019 鐵人賽 - K8S</span>
                     <span className="text-primary font-mono">30</span>

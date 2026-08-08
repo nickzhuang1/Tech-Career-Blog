@@ -1,7 +1,11 @@
 import { ArrowUpRight, Clock, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
-import type { BlogPost } from "@/lib/blogData";
+import { series, type BlogPost } from "@/lib/blogData";
+
+function seriesName(id: string) {
+  return series.find((s) => s.id === id)?.name ?? id;
+}
 
 function formatDate(dateStr: string) {
   const d = new Date(dateStr);
@@ -51,7 +55,7 @@ export function BlogCard({ post }: { post: BlogPost }) {
           ))}
           {post.series && (
             <Badge variant="outline" className="text-[11px] font-normal py-0.5 px-2 border-primary/30 text-primary">
-              {post.series}
+              {seriesName(post.series)}
             </Badge>
           )}
         </div>
