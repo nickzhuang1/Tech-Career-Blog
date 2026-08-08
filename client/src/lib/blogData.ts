@@ -266,7 +266,7 @@ export const aboutData = {
   nameZh: "莊翔甯",
   title: "CTO @ C.Y. Intelligence",
   titleZh: "承羽智慧 技術長",
-  bio: "中央大學資工所畢。曾任上市公司部門 Tech Lead，現任承羽智慧技術長。曾任 NVIDIA DLI 講師並與 NVIDIA 共同發表公開課。著有「圖像生成式 AI 的生存指南」，為繁體中文第一本講述圖像生成式 AI 理論與實務的書籍。",
+  bio: "中央大學資工所畢，現任承羽智慧技術長，曾任上市公司部門 Tech Lead。NVIDIA DLI 認證講師，曾與 NVIDIA 共同發表公開課；持有 NVIDIA Certified Professional（AI Infrastructure）等共五張 NVIDIA Certified 認證。曾獲 113 年度 AIGO 潛力新星盃 特優獎（Top 1）。著有「圖像生成式 AI 的生存指南」，為繁體中文第一本講述圖像生成式 AI 理論與實務的書籍。",
   current: "承羽智慧 – 技術長",
   workHistory: [
     "承啟科技 – 應用發展部 – Tech Lead",
