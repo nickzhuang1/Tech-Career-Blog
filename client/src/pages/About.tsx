@@ -196,10 +196,15 @@ export default function About() {
             </div>
 
             {/* 展示圖片 */}
-            <div className="rounded-md border border-border/40 bg-card p-4 gradient-border">
+            <div className="rounded-md border border-border/40 bg-card p-4 gradient-border space-y-2">
               <img
                 src="/showcase.png"
-                alt="著作、獎項與 NVIDIA 認證"
+                alt="著作與獎盃"
+                className="w-full rounded-md object-cover"
+              />
+              <img
+                src="/nv-certs.png"
+                alt="NVIDIA 認證"
                 className="w-full rounded-md object-cover"
               />
             </div>
@@ -271,19 +276,7 @@ export default function About() {
               </div>
             </div>
 
-            {/* Status */}
-            <div className="rounded-md border border-primary/20 bg-gradient-to-br from-card to-primary/5 p-5">
-              <p className="font-mono text-xs text-primary/70 mb-2">// status</p>
-              <p className="text-sm font-medium mb-1">{aboutData.titleZh}</p>
-              <div className="space-y-2">
-                <p className="text-xs text-muted-foreground">{aboutData.nameZh}</p>
-                <div className="mt-3 h-px bg-border/50" />
-                <div className="mt-3 flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                  <span className="text-xs text-muted-foreground">Active & Building</span>
-                </div>
-              </div>
-            </div>
+            {/* Status 區塊已移除 */}
           </div>
         </div>
       </div>

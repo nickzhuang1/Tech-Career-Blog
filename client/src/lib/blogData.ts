@@ -322,6 +322,7 @@ export const aboutData = {
     { name: "NVIDIA Certified Associate | Generative AI LLMs", image: "/certificates/NVIDIA Certified Associate | Generative AI LLMs.png", category: "NVIDIA" },
     { name: "NVIDIA Certified Associate | Generative AI Multimodal", image: "/certificates/NVIDIA Certified Associate | Generative AI Multimodal.png", category: "NVIDIA" },
     { name: "NVIDIA Certified Associate | AI Infrastructure and Operations", image: "/certificates/NVIDIA Certified Associate | AI Infrastructure and Operations.png", category: "NVIDIA" },
+    { name: "NVIDIA Certified Associate | Accelerated Data Science", image: "/certificates/NVIDIA Certified Associate | Accelerated Data Science.png", category: "NVIDIA" },
     { name: "使用提示工程（Prompt Engineering）開發大型語言模型（LLM）應用程式", image: "/certificates/使用提示工程（Prompt Engineering）開發大型語言模型（LLM）應用程式.jpeg", category: "NVIDIA" },
     { name: "Amazon EKS Starter- Docker on AWS EKS with Kubernetes", image: "/certificates/Amazon EKS Starter- Docker on AWS EKS with Kubernetes.jpeg", category: "Udemy" },
     { name: "Rapid Application Development with Large Language Models (LLMs)", image: "/certificates/Rapid Application Development with Large Language Models (LLMs).jpeg", category: "NVIDIA" },
@@ -369,7 +370,7 @@ export const aboutData = {
     { year: 2023, items: ["承羽智慧就職（1/2）", "進階完善 AI 模型訓練平台", "中央資工所畢業", "開發 AI 雲平台系統", "IT 邦鐵人賽：AI & Data"], highlights: [2, 4] },
     { year: 2024, items: ["完善 AI 雲平台系統", "出書：圖像生成式 AI 的生存指南", "NVIDIA 課程研習", "AIGO 潛力新星盃：品牌商品屬性自動分類及顧客消費預測（特優）"], highlights: [1, 3] },
     { year: 2025, items: ["AI 雲平台系統：重構與新功能", "構建監控硬體系統", "GCP 課程研習", "Google Cloud 生成式 AI 培訓", "NCA-AIIO & NCA-GENL 認證"], highlights: [4] },
-    { year: 2026, items: ["AI 雲平台：新架構設計與開發", "NCP-AII 認證", "NCA-ADS 認證", "NCA-GENM 認證"], highlights: [1], current: true },
+    { year: 2026, items: ["AI 雲平台：新架構設計與開發", "NCP-AII 認證", "NCA-ADS 認證", "NCA-GENM 認證", "NVIDIA 課程研習"], highlights: [1], current: true },
   ] as { year: number; items: string[]; highlights?: number[]; current?: boolean }[],
 };
 
