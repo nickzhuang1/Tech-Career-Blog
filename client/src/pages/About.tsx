@@ -14,6 +14,7 @@ import {
   Activity,
   Heart,
   History,
+  Trophy,
 } from "lucide-react";
 import { useLocation } from "wouter";
 import { FaLinkedin } from "react-icons/fa";
@@ -248,6 +249,17 @@ export default function About() {
                 >
                   <FaGithub className="w-4 h-4" />
                   <span>GitHub</span>
+                  <ExternalLink className="w-3 h-3 ml-auto opacity-40" />
+                </a>
+                <a
+                  href={aboutData.social.ithome}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover-elevate rounded-md p-1.5 -mx-1.5"
+                  data-testid="link-about-ithome"
+                >
+                  <Trophy className="w-4 h-4" />
+                  <span>iThome 鐵人賽</span>
                   <ExternalLink className="w-3 h-3 ml-auto opacity-40" />
                 </a>
                 <a

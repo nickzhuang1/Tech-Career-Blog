@@ -31,7 +31,7 @@ import Timeline from "../client/src/pages/Timeline";
 import Certificates from "../client/src/pages/Certificates";
 import Contact from "../client/src/pages/Contact";
 import Collection from "../client/src/pages/Collection";
-import { blogPosts, aboutData, series } from "../client/src/lib/blogData";
+import { blogPosts, aboutData, series, personProfiles } from "../client/src/lib/blogData";
 import { collections, collectionPath } from "../client/src/lib/collections";
 import { ogFileForPost, ogFileForCollection } from "./generate-og";
 import { buildTitle } from "../client/src/lib/seoTitle";
@@ -255,8 +255,16 @@ const homeJsonLd = () => ({
         name: "C.Y. Intelligence",
         alternateName: "承羽智慧",
       },
-      sameAs: [aboutData.links.github, aboutData.links.linkedin],
+      sameAs: personProfiles,
       knowsAbout: aboutData.expertise,
+      // 著作是 E-E-A-T 裡「這人真的寫過東西」最硬的證據，資料本來就在 aboutData.books
+      authorOf: aboutData.books.map((b) => ({
+        "@type": "Book",
+        name: b.title,
+        alternateName: b.titleEn,
+        inLanguage: "zh-TW",
+        author: { "@id": PERSON_ID },
+      })),
       // 憑證與獲獎是 E-E-A-T 裡「可驗證的專業」那一段。
       // 只列 NVIDIA 體系的認證（五張 Certified），課程結業證明對外意義不大。
       hasCredential: aboutData.certifications
@@ -294,15 +302,12 @@ function articleJsonLd(post: (typeof blogPosts)[number], wordCount: number): obj
         dateModified: modified,
         author: {
           "@type": "Person",
+          "@id": PERSON_ID,
           name: aboutData.name,
           url: `${SITE}/about/`,
-          sameAs: [aboutData.links.github, aboutData.links.linkedin],
+          sameAs: personProfiles,
         },
-        publisher: {
-          "@type": "Person",
-          name: aboutData.name,
-          url: `${SITE}/about/`,
-        },
+        publisher: { "@id": PERSON_ID },
         image: [`${SITE}/${ogFileForPost(post.id)}`],
         mainEntityOfPage: { "@type": "WebPage", "@id": url },
         articleSection: post.category,

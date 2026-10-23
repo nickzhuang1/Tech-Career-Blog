@@ -345,6 +345,8 @@ export const aboutData = {
   ],
   social: {
     facebook: "https://www.facebook.com/xiangning.zhuang/",
+    /** iThome 鐵人賽個人頁：兩屆鐵人賽的原始出處，也是身分佐證 */
+    ithome: "https://ithelp.ithome.com.tw/users/20120468/ironman",
     linkedin: "https://www.linkedin.com/in/nick-zhuang/",
     blog: "https://www.nickzhuang.com",
     email: "mailto:nickzhuang1@gmail.com",
@@ -406,4 +408,19 @@ export const aboutData = {
     { year: 2026, items: ["AI 雲平台：新架構設計與開發", "NCP-AII 認證", "NCA-ADS 認證", "NCA-GENM 認證", "NVIDIA 課程研習"], highlights: [1], current: true },
   ] as { year: number; items: string[]; highlights?: number[]; current?: boolean }[],
 };
+
+/**
+ * 可驗證的外部身分頁面，供 JSON-LD 的 Person.sameAs 使用。
+ * E-E-A-T 的核心是「這個作者在站外也真的存在」——同一個名字出現在越多
+ * 獨立且可查證的地方，Google 越能把「Nick Zhuang」與這些內容綁在一起。
+ *
+ * 只收個人頁面（profile URL）；站台自己的網址不算（Person 已有 url 欄位），
+ * 書籍與文章另外用 authorOf 表達。
+ */
+export const personProfiles = [
+  aboutData.social.github,
+  aboutData.social.linkedin,
+  aboutData.social.facebook,
+  aboutData.social.ithome,
+].filter((u): u is string => typeof u === "string" && u.startsWith("http"));
 
