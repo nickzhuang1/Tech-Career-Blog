@@ -6,7 +6,11 @@ import { Button } from "@/components/ui/button";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { buildTitle } from "@/lib/seoTitle";
 
-/** 每個管道的圖示與配色，Contact 頁專用的呈現方式 */
+/**
+ * 每個管道的圖示與配色，Contact 頁專用的呈現方式。
+ * 配色規則（按功能分組、不還原品牌色）寫在 lib/contactLinks.ts 的檔頭，
+ * 新增管道前先看那段再挑漸層。
+ */
 const CHANNEL_STYLE: Record<
   ContactChannelKey,
   { icon: React.ComponentType<{ className?: string }>; gradient: string; action: string }

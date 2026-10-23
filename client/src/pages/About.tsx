@@ -23,7 +23,10 @@ import { FaGithub } from "react-icons/fa";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { buildTitle } from "@/lib/seoTitle";
 
-/** 各管道的圖示，About 頁的連結區用（與 Contact 頁共用 contactChannels 資料） */
+/**
+ * 各管道的圖示，About 頁的連結區用（與 Contact 頁共用 contactChannels 資料）。
+ * 圖示家族與配色規則見 lib/contactLinks.ts 檔頭：一律 Font Awesome 實心。
+ */
 const CHANNEL_ICON: Record<ContactChannelKey, React.ComponentType<{ className?: string }>> = {
   linkedin: FaLinkedin,
   facebook: FaFacebook,
