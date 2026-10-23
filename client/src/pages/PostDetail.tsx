@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, Link } from "wouter";
 import { blogPosts, series } from "@/lib/blogData";
+import { collectionForSeries, collectionForTag, collectionPath } from "@/lib/collections";
 import imageMetaJson from "@/lib/imageMeta.json";
 
 /**
@@ -436,6 +437,7 @@ export default function PostDetail(
   const post = blogPosts.find((p) => p.id === id);
 
   // 系列導覽（P0-3）：讓 30 篇的系列串成一個強連結聚落
+  const seriesHub = post?.series ? collectionForSeries(post.series) : undefined;
   const seriesIds = post?.series ? (seriesGroups[post.series] ?? []) : [];
   const posInSeries = id ? seriesIds.indexOf(id) : -1;
   const prevInSeries = posInSeries > 0 ? seriesIds[posInSeries - 1] : undefined;
@@ -531,16 +533,44 @@ export default function PostDetail(
           </div>
 
           <div className="flex items-center gap-1.5 flex-wrap">
-            {post.tags.map((tag) => (
-              <Badge key={tag} variant="tag" className="text-xs font-normal py-0.5 px-2">
-                {tag}
-              </Badge>
-            ))}
-            {post.series && (
-              <Badge variant="outline" className="text-xs font-normal py-0.5 px-2 border-primary/30 text-primary">
-                {seriesName(post.series)}
-              </Badge>
-            )}
+            {post.tags.map((tag) => {
+              const linked = collectionForTag(tag);
+              const badge = (
+                <Badge variant="tag" className="text-xs font-normal py-0.5 px-2">
+                  {tag}
+                </Badge>
+              );
+              // 只有被收錄成聚合頁的標籤才做成連結，避免指向不存在的頁面
+              return linked ? (
+                <Link key={tag} href={collectionPath(linked)}>
+                  <span className="cursor-pointer" data-testid={`link-tag-${linked.slug}`}>
+                    {badge}
+                  </span>
+                </Link>
+              ) : (
+                <span key={tag}>{badge}</span>
+              );
+            })}
+            {post.series &&
+              (collectionForSeries(post.series) ? (
+                <Link href={collectionPath(collectionForSeries(post.series)!)}>
+                  <span className="cursor-pointer" data-testid="link-series-hub">
+                    <Badge
+                      variant="outline"
+                      className="text-xs font-normal py-0.5 px-2 border-primary/30 text-primary"
+                    >
+                      {seriesName(post.series)}
+                    </Badge>
+                  </span>
+                </Link>
+              ) : (
+                <Badge
+                  variant="outline"
+                  className="text-xs font-normal py-0.5 px-2 border-primary/30 text-primary"
+                >
+                  {seriesName(post.series)}
+                </Badge>
+              ))}
           </div>
         </div>
       </div>
@@ -580,7 +610,13 @@ export default function PostDetail(
               ) : (
                 <span className="text-xs text-muted-foreground/60">系列首篇</span>
               )}
-              <Link href={`/posts?series=${post.series}`}>
+              <Link
+                href={
+                  seriesHub
+                    ? collectionPath(seriesHub)
+                    : `/posts?series=${post.series}`
+                }
+              >
                 <span className="text-primary cursor-pointer" data-testid="link-series-index">系列目錄</span>
               </Link>
               {nextInSeries ? (
