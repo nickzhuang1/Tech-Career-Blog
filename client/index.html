@@ -1,9 +1,22 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-TW" class="dark">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
+  <script>
+    // 主題在第一次繪製前就決定，避免白畫面閃爍；也讓 JS 尚未載入或載入失敗時
+    // 仍然維持使用者選過的主題（HTML 預設已是 class="dark"）。
+    (function () {
+      try {
+        if (localStorage.getItem("theme") === "light") {
+          document.documentElement.classList.remove("dark");
+        }
+      } catch (e) {
+        /* 無法讀取偏好時維持預設深色 */
+      }
+    })();
+  </script>
   <title>Nick's Blog - AI異想封印 | CTO的爐邊雜談</title>
   <meta name="description" content="CTO的爐邊雜談 — 分享 AI 技術、系統架構、與職涯探索的深度觀點。十年軟體開發經驗，從前端到後端，從雲端到人工智慧。" />
   <meta property="og:title" content="Nick's Blog - AI異想封印 | CTO的爐邊雜談" />
