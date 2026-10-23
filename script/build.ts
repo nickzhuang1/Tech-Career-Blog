@@ -39,6 +39,9 @@ async function buildAll() {
   console.log("generating sitemap...");
   await import("./generate-sitemap.ts");
 
+  console.log("generating rss feed...");
+  await import("./generate-feed.ts");
+
   // 2) 圖片最佳化：產生 webp 與尺寸表，必須在 vite build 之前
   //    （client/src/lib/imageMeta.json 會被 bundle 進前端）
   const { optimizeImages, applyImagesToDist } = await import("./optimize-images.ts");

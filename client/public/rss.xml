@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nick's Blog - AI異想封印</title>
+    <link>https://nickzhuang.com/</link>
+    <description>CTO的爐邊雜談 — 分享 AI 技術、系統架構、與職涯探索的深度觀點。</description>
+    <language>zh-TW</language>
+    <lastBuildDate>Sat, 08 Aug 2026 00:00:00 GMT</lastBuildDate>
+    <atom:link href="https://nickzhuang.com/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>父親節快樂：NVIDIA證書+1的故事</title>
+      <link>https://nickzhuang.com/posts/nvidia-cert-fathers-day/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/nvidia-cert-fathers-day/</guid>
+      <pubDate>Sat, 08 Aug 2026 00:00:00 GMT</pubDate>
+      <description>父親節這天拿到第 5 張 NVIDIA 認證。回顧一年來每 2~3 個月不間斷的考試旅程，從基礎設施到應用層的 GPU 生態系全貌，以及 NCA-ADS 拿下 91 分歷屆最高分的實錄。</description>
+      <category>NVIDIA</category>
+      <category>證照</category>
+      <category>考試心得</category>
+      <category>Data Science</category>
+    </item>
+    <item>
+      <title>研發主管的真情告白：開源最強大語言模型的能力與反思</title>
+      <link>https://nickzhuang.com/posts/glm-5.2-rd-leader-reflections/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/glm-5.2-rd-leader-reflections/</guid>
+      <pubDate>Sat, 25 Jul 2026 00:00:00 GMT</pubDate>
+      <description>在公司地端架設 GLM-5.2 後，研發團隊的樣貌徹底改變：寫程式從2小時縮短到10分鐘、Junior 與 Senior 的需求位移、規劃工作交給 AI 出方案。一位研發主管記下這波算力無限時代的真實體感與反思。</description>
+      <category>AI</category>
+      <category>LLM</category>
+      <category>Open Source</category>
+      <category>職涯</category>
+    </item>
+    <item>
+      <title>企業 AI 基礎建設全攻略：從網路底層到 AI 應用的完整藍圖</title>
+      <link>https://nickzhuang.com/posts/nvidia-cert-pro/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/nvidia-cert-pro/</guid>
+      <pubDate>Sun, 24 May 2026 00:00:00 GMT</pubDate>
+      <description>深入拆解 NVIDIA Certified Professional | AI Infrastructure 的技術核心，從底層高速網路、GPU 虛擬化，到 Enterprise K8S 與上層 AI 軟體平台，帶你走過企業 AI 工廠的五層架構。</description>
+      <category>NVIDIA</category>
+      <category>AI Infrastructure</category>
+      <category>AI</category>
+      <category>K8S</category>
+    </item>
+    <item>
+      <title>一年後，我離開了 Notion：自架站方法分享 Cloudflare 篇</title>
+      <link>https://nickzhuang.com/posts/leave-notion-cloudflare/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/leave-notion-cloudflare/</guid>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <description>從 Notion 轉移到自架站，並用 Cloudflare Pages 部署的完整經驗分享，包含流量、SEO、維護、AI 工具應用等心得。</description>
+      <category>架站</category>
+      <category>Cloudflare</category>
+      <category>技術心得</category>
+    </item>
+    <item>
+      <title>NVIDIA 證照準備心得</title>
+      <link>https://nickzhuang.com/posts/nvidia-cert-experience/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/nvidia-cert-experience/</guid>
+      <pubDate>Sat, 11 Apr 2026 00:00:00 GMT</pubDate>
+      <description>Nick Zhuang 分享三張 NVIDIA 證照考取經驗、準備策略與考場實錄，給有志於挑戰 NVIDIA 證照的朋友參考。</description>
+      <category>NVIDIA</category>
+      <category>證照</category>
+      <category>考試心得</category>
+      <category>AI Infrastructure</category>
+      <category>Generative AI</category>
+    </item>
+    <item>
+      <title>zsh debug 紀錄：zprofile、zshrc、腳本的 debug 技巧</title>
+      <link>https://nickzhuang.com/posts/zsh-debug/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/zsh-debug/</guid>
+      <pubDate>Fri, 03 Apr 2026 00:00:00 GMT</pubDate>
+      <description>分享 zsh shell 的 debug 技巧，協助追蹤與排查 zsh 腳本問題。</description>
+      <category>Shell</category>
+      <category>zsh</category>
+      <category>Debug</category>
+      <category>DevOps</category>
+    </item>
+    <item>
+      <title>DLI 講師筆記：深度學習基礎</title>
+      <link>https://nickzhuang.com/posts/dli-notes/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/dli-notes/</guid>
+      <pubDate>Fri, 03 Oct 2025 00:00:00 GMT</pubDate>
+      <description>身為 NVIDIA DLI 認證講師，分享深度學習基礎課程的教學筆記與心得，涵蓋神經網路架構、訓練技巧與實務應用。</description>
+      <category>AI</category>
+      <category>Deep Learning</category>
+      <category>NVIDIA</category>
+    </item>
+    <item>
+      <title>關於我：AI 與雲端的技術探索之路</title>
+      <link>https://nickzhuang.com/posts/about-ai-cloud/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/about-ai-cloud/</guid>
+      <pubDate>Sun, 14 Sep 2025 00:00:00 GMT</pubDate>
+      <description>從軟體工程師到 CTO，超過十年的技術職涯歷程。分享在 AI 軟體開發與系統架構設計中的成長與蛻變。</description>
+      <category>職涯</category>
+      <category>人生探索</category>
+    </item>
+    <item>
+      <title>聯發創新基地開源模型與百工百業應用講座</title>
+      <link>https://nickzhuang.com/posts/mediatek-lecture/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/mediatek-lecture/</guid>
+      <pubDate>Thu, 28 Aug 2025 00:00:00 GMT</pubDate>
+      <description>受邀於聯發創新基地分享開源模型的應用場景，探討如何將 AI 技術落地到各行各業中。</description>
+      <category>AI</category>
+      <category>Gen AI</category>
+      <category>Open Source</category>
+    </item>
+    <item>
+      <title>完課取證！史上體感難度最高的 NVIDIA DLI 課程：Building RAG Agents with LLMs</title>
+      <link>https://nickzhuang.com/posts/nvidia-rag/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/nvidia-rag/</guid>
+      <pubDate>Mon, 21 Apr 2025 00:00:00 GMT</pubDate>
+      <description>挑戰 NVIDIA DLI 最高難度課程，深入學習 RAG Agent 的建構方式，結合 LLM 實現更精準的知識檢索與回答系統。</description>
+      <category>AI</category>
+      <category>RAG</category>
+      <category>LLM</category>
+      <category>NVIDIA</category>
+    </item>
+    <item>
+      <title>一年之後，我離開了 Wordpress</title>
+      <link>https://nickzhuang.com/posts/leave-wordpress/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/leave-wordpress/</guid>
+      <pubDate>Thu, 17 Apr 2025 00:00:00 GMT</pubDate>
+      <description>從 WordPress 遷移到 Notion 的心路歷程，探討為什麼選擇離開傳統部落格平台，以及新平台帶來的改變。</description>
+      <category>人生探索</category>
+      <category>規劃</category>
+    </item>
+    <item>
+      <title>2025 AIA 春季論壇: 開源模型的衝擊與對應</title>
+      <link>https://nickzhuang.com/posts/aia-forum-2025/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/aia-forum-2025/</guid>
+      <pubDate>Fri, 28 Mar 2025 00:00:00 GMT</pubDate>
+      <description>參與 AIA 春季論壇，深度分析開源模型對產業的衝擊，以及企業該如何佈局與應對這波技術變革。</description>
+      <category>AI</category>
+      <category>Open Source</category>
+    </item>
+    <item>
+      <title>我透過 Cursor，拿到了 AI 比賽的最佳獎項</title>
+      <link>https://nickzhuang.com/posts/cursor-ai-award/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/cursor-ai-award/</guid>
+      <pubDate>Sun, 17 Nov 2024 00:00:00 GMT</pubDate>
+      <description>利用 AI 輔助開發工具 Cursor 參加 AI 競賽並獲得最佳獎項的經驗分享，展示 AI 工具如何改變開發者的工作方式。</description>
+      <category>AI</category>
+      <category>Cursor</category>
+      <category>Deep Learning</category>
+    </item>
+    <item>
+      <title>生成式 AI 驅動未來變革：開源工具與技術架構的雙向探索</title>
+      <link>https://nickzhuang.com/posts/gen-ai-future/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/gen-ai-future/</guid>
+      <pubDate>Mon, 11 Nov 2024 00:00:00 GMT</pubDate>
+      <description>探索生成式 AI 如何驅動未來的技術變革，從開源工具到企業級技術架構，雙向深入剖析。</description>
+      <category>AI</category>
+      <category>Gen AI</category>
+      <category>Deep Learning</category>
+    </item>
+    <item>
+      <title>從「AI 之父辛頓訪談 &amp; AI 四巨頭」看待自學 AI 這件事</title>
+      <link>https://nickzhuang.com/posts/ai-father-interview/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/ai-father-interview/</guid>
+      <pubDate>Thu, 10 Oct 2024 00:00:00 GMT</pubDate>
+      <description>從 Geoffrey Hinton 的訪談與 AI 領域四大巨頭的觀點出發，探討自學 AI 的方法論與未來發展方向。</description>
+      <category>AI</category>
+      <category>Deep Learning</category>
+    </item>
+    <item>
+      <title>NVIDIA 課程：Generative AI with Diffusion Models 筆記分享</title>
+      <link>https://nickzhuang.com/posts/nvidia-diffusion/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/nvidia-diffusion/</guid>
+      <pubDate>Sun, 18 Aug 2024 00:00:00 GMT</pubDate>
+      <description>NVIDIA DLI 擴散模型課程的完整學習筆記，從數學原理到實作，深入理解生成式 AI 的核心技術。</description>
+      <category>AI</category>
+      <category>Gen AI</category>
+      <category>Deep Learning</category>
+      <category>NVIDIA</category>
+    </item>
+    <item>
+      <title>經理人之道-技術領袖航向成長與改變的參考指南</title>
+      <link>https://nickzhuang.com/posts/manager-path/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/manager-path/</guid>
+      <pubDate>Sun, 16 Jun 2024 00:00:00 GMT</pubDate>
+      <description>從技術工程師到技術領導者的成長之路，分享管理心得與領導力養成的參考指南。</description>
+      <category>職涯</category>
+      <category>規劃</category>
+    </item>
+    <item>
+      <title>為什麼你會看到這篇部落格？</title>
+      <link>https://nickzhuang.com/posts/why-blog/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/why-blog/</guid>
+      <pubDate>Sun, 28 Apr 2024 00:00:00 GMT</pubDate>
+      <description>分享創建這個部落格的初衷，以及為什麼選擇用文字記錄技術旅程與人生探索。</description>
+      <category>AI</category>
+      <category>人生探索</category>
+    </item>
+    <item>
+      <title>AIGC 的前世今生</title>
+      <link>https://nickzhuang.com/posts/aigc-overview/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/aigc-overview/</guid>
+      <pubDate>Sun, 15 Oct 2023 00:00:00 GMT</pubDate>
+      <description>全面回顧 AIGC 的發展歷程，從早期生成模型到現代的大型語言模型與擴散模型。</description>
+      <category>Gen AI</category>
+      <category>AIGC</category>
+    </item>
+    <item>
+      <title>SD XL：SD 的限界突破</title>
+      <link>https://nickzhuang.com/posts/sd-xl/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/sd-xl/</guid>
+      <pubDate>Sat, 14 Oct 2023 00:00:00 GMT</pubDate>
+      <description>探索 Stable Diffusion XL 的架構升級與效果提升。</description>
+      <category>Gen AI</category>
+      <category>Stable Diffusion</category>
+    </item>
+    <item>
+      <title>SD 訓練 LoRA</title>
+      <link>https://nickzhuang.com/posts/sd-lora/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/sd-lora/</guid>
+      <pubDate>Fri, 13 Oct 2023 00:00:00 GMT</pubDate>
+      <description>實戰教學如何訓練 Stable Diffusion 的 LoRA 模型。</description>
+      <category>Gen AI</category>
+      <category>Stable Diffusion</category>
+      <category>LoRA</category>
+    </item>
+    <item>
+      <title>SD 訓練 Checkpoint</title>
+      <link>https://nickzhuang.com/posts/sd-checkpoint/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/sd-checkpoint/</guid>
+      <pubDate>Thu, 12 Oct 2023 00:00:00 GMT</pubDate>
+      <description>深入了解如何訓練 Stable Diffusion 的 Checkpoint 模型。</description>
+      <category>Gen AI</category>
+      <category>Stable Diffusion</category>
+    </item>
+    <item>
+      <title>SD 的進階使用技巧</title>
+      <link>https://nickzhuang.com/posts/sd-advanced/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/sd-advanced/</guid>
+      <pubDate>Wed, 11 Oct 2023 00:00:00 GMT</pubDate>
+      <description>進階的 Stable Diffusion 使用技巧，包含提示詞工程與參數調校。</description>
+      <category>Gen AI</category>
+      <category>Stable Diffusion</category>
+    </item>
+    <item>
+      <title>SwinIR，圖像重建的突破</title>
+      <link>https://nickzhuang.com/posts/swinir/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/swinir/</guid>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 GMT</pubDate>
+      <description>了解 SwinIR 在圖像超解析度重建中的技術突破。</description>
+      <category>Gen AI</category>
+      <category>Deep Learning</category>
+    </item>
+    <item>
+      <title>ControlNet，控制狂人？</title>
+      <link>https://nickzhuang.com/posts/controlnet/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/controlnet/</guid>
+      <pubDate>Mon, 09 Oct 2023 00:00:00 GMT</pubDate>
+      <description>探索 ControlNet 如何實現精確的圖像生成控制。</description>
+      <category>Gen AI</category>
+      <category>Stable Diffusion</category>
+    </item>
+    <item>
+      <title>Stable Diffusion 進階插件</title>
+      <link>https://nickzhuang.com/posts/sd-plugin-2/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/sd-plugin-2/</guid>
+      <pubDate>Sun, 08 Oct 2023 00:00:00 GMT</pubDate>
+      <description>Stable Diffusion 進階插件推薦與使用技巧。</description>
+      <category>Gen AI</category>
+      <category>Stable Diffusion</category>
+    </item>
+    <item>
+      <title>Stable Diffusion 基礎插件</title>
+      <link>https://nickzhuang.com/posts/sd-plugin-1/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/sd-plugin-1/</guid>
+      <pubDate>Sat, 07 Oct 2023 00:00:00 GMT</pubDate>
+      <description>Stable Diffusion 常用基礎插件的介紹與使用教學。</description>
+      <category>Gen AI</category>
+      <category>Stable Diffusion</category>
+    </item>
+    <item>
+      <title>歡樂下載站：Civitai 及 HuggingFace</title>
+      <link>https://nickzhuang.com/posts/civitai/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/civitai/</guid>
+      <pubDate>Fri, 06 Oct 2023 00:00:00 GMT</pubDate>
+      <description>介紹 Civitai 和 HuggingFace 模型資源平台的使用方法。</description>
+      <category>Gen AI</category>
+      <category>Stable Diffusion</category>
+    </item>
+    <item>
+      <title>HyperNetwork，感覺很高級</title>
+      <link>https://nickzhuang.com/posts/hypernetwork/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/hypernetwork/</guid>
+      <pubDate>Thu, 05 Oct 2023 00:00:00 GMT</pubDate>
+      <description>探索 HyperNetwork 在 Stable Diffusion 中的風格控制應用。</description>
+      <category>Gen AI</category>
+      <category>Stable Diffusion</category>
+    </item>
+    <item>
+      <title>LoRA，微調方法的新突破</title>
+      <link>https://nickzhuang.com/posts/lora-theory/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/lora-theory/</guid>
+      <pubDate>Wed, 04 Oct 2023 00:00:00 GMT</pubDate>
+      <description>深入了解 LoRA 低秩適應技術的原理與在模型微調中的應用。</description>
+      <category>Gen AI</category>
+      <category>LoRA</category>
+    </item>
+  </channel>
+</rss>
