@@ -198,7 +198,7 @@ export default function About() {
             {/* 展示圖片 */}
             <div className="rounded-md border border-border/40 bg-card p-4 gradient-border space-y-2">
               <img
-                src="/showcase.png"
+                src="/showcase.webp"
                 alt="著作與獎盃"
                 className="w-full rounded-md object-cover"
               />
