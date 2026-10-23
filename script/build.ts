@@ -35,6 +35,10 @@ const allowlist = [
 async function buildAll() {
   await rm("dist", { recursive: true, force: true });
 
+  // 1) sitemap 寫入 client/public/，必須在 vite build 之前（public 會被複製進 dist）
+  console.log("generating sitemap...");
+  await import("./generate-sitemap.ts");
+
   console.log("building client...");
   await viteBuild();
 
@@ -62,6 +66,11 @@ async function buildAll() {
 
   await copyFile("dist/public/index.html", "dist/public/404.html");
   console.log("copied index.html → 404.html");
+
+  // 2) 靜態預渲染：把每個路由渲染成帶完整 meta/內文的靜態 HTML（SEO）
+  console.log("prerendering routes...");
+  const { prerenderRoutes } = await import("./prerender.tsx");
+  await prerenderRoutes();
 }
 
 buildAll().catch((err) => {

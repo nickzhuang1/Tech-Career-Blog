@@ -1,5 +1,7 @@
-/posts / 200
-/about / 200
-/contact / 200
-/timeline / 200
-/certifications / 200
+# 舊路徑修正（301 給搜尋引擎與外部連結）
+/certifications /certificates 301
+
+# 注意：不要加 `/* /index.html 200` 萬用回退——
+# Cloudflare Pages 驗證器會因 destination 自我匹配而報 100324 無限循環錯誤。
+# SPA 回退由 404.html（build.ts 複製自 index.html）負責，
+# 所有 SEO 路由則由 prerender.tsx 產出實體靜態 HTML。

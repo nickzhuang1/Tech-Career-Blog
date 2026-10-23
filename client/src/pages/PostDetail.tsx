@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, Link } from "wouter";
 import { blogPosts, series } from "@/lib/blogData";
-
 function seriesName(id: string) {
   return series.find((s) => s.id === id)?.name ?? id;
 }
@@ -64,6 +63,7 @@ function renderMarkdown(md: string, articleId?: string): JSX.Element[] {
   const out: JSX.Element[] = [];
   let keyIdx = 0;
   const nk = () => `md-${keyIdx++}`;
+
 
   function esc(s: string): string {
     return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -348,12 +348,16 @@ function slugId(text: string): string {
     .trim();
 }
 
-export default function PostDetail() {
-  const { id } = useParams<{ id: string }>();
+export default function PostDetail(
+  { postId, initialContent }: { postId?: string; initialContent?: string } = {}
+) {
+  const { id: paramId } = useParams<{ id: string }>();
+  // postId / initialContent 由建置時預渲染腳本注入；瀏覽器端走原本 useParams + fetch
+  const id = postId ?? paramId;
   const post = blogPosts.find((p) => p.id === id);
   const nextId = id && post?.series ? seriesNextMap[id] : undefined;
   const nextPost = nextId ? blogPosts.find((p) => p.id === nextId) : undefined;
-  const [content, setContent] = useState<string | undefined>(undefined);
+  const [content, setContent] = useState<string | undefined>(initialContent);
   const { theme } = useTheme();
 
   // 隨 theme 動態切換 highlight.js CSS 主題
@@ -377,7 +381,8 @@ export default function PostDetail() {
 
   usePageTitle(
     post ? `${post.title} | Nick's Blog` : "文章未找到 | Nick's Blog",
-    post?.excerpt
+    post?.excerpt,
+    post ? `/posts/${post.id}` : "/posts"
   );
   useEffect(() => { window.scrollTo(0, 0); }, [id]);
 
