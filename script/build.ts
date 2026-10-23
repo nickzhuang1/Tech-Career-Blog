@@ -39,8 +39,16 @@ async function buildAll() {
   console.log("generating sitemap...");
   await import("./generate-sitemap.ts");
 
+  // 2) 圖片最佳化：產生 webp 與尺寸表，必須在 vite build 之前
+  //    （client/src/lib/imageMeta.json 會被 bundle 進前端）
+  const { optimizeImages, applyImagesToDist } = await import("./optimize-images.ts");
+  await optimizeImages();
+
   console.log("building client...");
   await viteBuild();
+
+  // 3) vite 已把原圖複製進 dist，這裡換成 webp 並移除原檔以縮小上傳量
+  applyImagesToDist();
 
   console.log("building server...");
   const pkg = JSON.parse(await readFile("package.json", "utf-8"));

@@ -1,6 +1,34 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, Link } from "wouter";
 import { blogPosts, series } from "@/lib/blogData";
+import imageMetaJson from "@/lib/imageMeta.json";
+
+/**
+ * 建置時由 script/optimize-images.ts 產生的圖片尺寸對照表。
+ * key = "<articleId>/<markdown 內的相對路徑>"，value = 實際輸出檔（webp）與原始尺寸。
+ * 用途：1) 把 src 換成 webp  2) 補 width/height 避免 CLS
+ */
+type ImageMetaEntry = { src: string; w: number; h: number };
+const IMAGE_META = imageMetaJson as Record<string, ImageMetaEntry>;
+
+// 開發模式（vite dev）直接吃 client/public 的原圖，不指向建置才產生的 webp；
+// production bundle 會把這個判斷常數化並移除死分支。
+const IS_DEV = Boolean((import.meta as { env?: { DEV?: boolean } }).env?.DEV);
+
+function resolveArticleImage(
+  rawSrc: string,
+  articleId?: string,
+): { src: string; w?: number; h?: number } {
+  if (rawSrc.startsWith("http") || !articleId) return { src: rawSrc };
+  const rel = rawSrc.replace(/^\.\//, "");
+  const entry = IMAGE_META[`${articleId}/${rel}`];
+  if (entry && entry.w && entry.h) {
+    const src = IS_DEV ? `/articles/${articleId}/${rel}` : `/articles/${entry.src}`;
+    return { src, w: entry.w, h: entry.h };
+  }
+  return { src: `/articles/${articleId}/${rel}` };
+}
+
 function seriesName(id: string) {
   return series.find((s) => s.id === id)?.name ?? id;
 }
@@ -31,8 +59,8 @@ function MermaidDiagram({ chart, id }: { chart: string; id: string }) {
   return <div ref={ref} className="my-6 overflow-x-auto" />;
 }
 
-// 系列導航查表：articleId → 同系列下一篇的 id
-const seriesNextMap: Record<string, string> = (() => {
+// 系列分組查表：seriesId → 依 blogData 順序排列的 articleId 陣列
+const seriesGroups: Record<string, string[]> = (() => {
   const groups: Record<string, string[]> = {};
   for (const post of blogPosts) {
     if (post.series) {
@@ -40,14 +68,32 @@ const seriesNextMap: Record<string, string> = (() => {
       groups[post.series].push(post.id);
     }
   }
-  const map: Record<string, string> = {};
-  for (const ids of Object.values(groups)) {
-    for (let i = 0; i < ids.length - 1; i++) {
-      map[ids[i]] = ids[i + 1];
-    }
-  }
-  return map;
+  return groups;
 })();
+
+/**
+ * 相關文章：tag 交集為主，同分類／同系列為輔。
+ *
+ * 重寫前，文章頁的靜態 HTML 裡「文章 → 文章」的內部連結是 0 條，
+ * 79 篇文章等於只有 /posts 一個入口，主題聚落彼此沒有訊號交流。
+ * 這裡補上 3 條，讓相關主題互相串連（排序必須穩定，否則 prerender 與 hydration 會不一致）。
+ */
+function relatedPosts(current: (typeof blogPosts)[number], count = 3) {
+  return blogPosts
+    .filter((p) => p.id !== current.id)
+    .map((p) => {
+      const sharedTags = p.tags.filter((t) => current.tags.includes(t)).length;
+      const score =
+        sharedTags * 2 +
+        (p.category === current.category ? 1 : 0) +
+        (p.series && p.series === current.series ? 1 : 0);
+      return { post: p, score };
+    })
+    .filter((x) => x.score > 0)
+    .sort((a, b) => b.score - a.score || (a.post.date < b.post.date ? 1 : -1))
+    .slice(0, count)
+    .map((x) => x.post);
+}
 
 function formatDate(dateStr: string) {
   const d = new Date(dateStr);
@@ -58,12 +104,29 @@ function formatDate(dateStr: string) {
   });
 }
 
-function renderMarkdown(md: string, articleId?: string): JSX.Element[] {
+function renderMarkdown(md: string, articleId?: string, fallbackAlt?: string): JSX.Element[] {
   const rawLines = md.split("\n");
   const out: JSX.Element[] = [];
   let keyIdx = 0;
   const nk = () => `md-${keyIdx++}`;
 
+  // ── 圖片處理（SEO / CWV）──────────────────────────────────────────
+  // 1) 第一章圖 eager + fetchpriority=high：它通常是 LCP 元素，原本被 lazy 延後
+  // 2) 其餘 lazy
+  // 3) 缺 alt 時（337 張有 321 張是空的）用最近的標題當描述，至少有上下文而不是空字串
+  let imgSeq = 0;
+  let lastHeading = "";
+  const altOf = (alt: string): string => {
+    const t = alt.trim();
+    if (t) return t;
+    const base = lastHeading || fallbackAlt || "";
+    return base ? `${base} 示意圖` : "";
+  };
+  const imgLoading = (): { loading: "eager" | "lazy"; fetchpriority?: "high" } => {
+    const first = imgSeq === 0;
+    imgSeq++;
+    return first ? { loading: "eager", fetchpriority: "high" } : { loading: "lazy" };
+  };
 
   function esc(s: string): string {
     return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -82,8 +145,7 @@ function renderMarkdown(md: string, articleId?: string): JSX.Element[] {
       .replace(/`([^`]+)`/g, '<code class="bg-muted px-1.5 py-0.5 rounded text-[13px] font-mono">$1</code>')
       // image-as-link: [![alt](imgSrc)extraText](linkUrl)
       .replace(/\[!\[([^\]]*)\]\(([^)]+)\)([^\]]*)\]\(([^)]+)\)/g, (_, alt, imgSrc, extraText, url) => {
-        const resolvedSrc = imgSrc.startsWith("http") ? imgSrc
-          : articleId ? `/articles/${articleId}/${imgSrc.replace(/^\.\//, "")}` : imgSrc;
+        const resolvedSrc = resolveArticleImage(imgSrc, articleId).src;
         const safe = url.startsWith("http") || url.startsWith("/") || url.startsWith("#") ? url : "#";
         const ext = !url.startsWith("#") ? ` target="_blank" rel="noopener noreferrer"` : "";
         return `<a href="${safe}"${ext} class="inline-flex items-center gap-1.5 text-primary underline underline-offset-2">`
@@ -156,10 +218,18 @@ function renderMarkdown(md: string, articleId?: string): JSX.Element[] {
                 {cont.map((l, ci) => {
                   const imgM = l.trim().match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
                   if (imgM) {
-                    let src = imgM[2];
-                    if (!src.startsWith("http") && articleId)
-                      src = `/articles/${articleId}/${src.replace(/^\.\//, "")}`;
-                    return <img key={ci} src={src} alt={imgM[1] || ""} className="rounded-md max-w-full my-2" loading="lazy" />;
+                    const img = resolveArticleImage(imgM[2], articleId);
+                    return (
+                      <img
+                        key={ci}
+                        src={img.src}
+                        alt={altOf(imgM[1] || "")}
+                        width={img.w}
+                        height={img.h}
+                        className="rounded-md max-w-full h-auto my-2"
+                        {...imgLoading()}
+                      />
+                    );
                   }
                   return (
                     <span key={ci} className="block mt-0.5"
@@ -236,6 +306,7 @@ function renderMarkdown(md: string, articleId?: string): JSX.Element[] {
     } else if (/^(#{1,4}) /.test(line)) {
       const lv = (line.match(/^(#{1,4}) /) ?? ["", ""])[1].length;
       const txt = line.replace(/^#{1,4} /, "");
+      lastHeading = slugId(txt);
       const Tag = `h${lv}` as "h1" | "h2" | "h3" | "h4";
       const hcls = [
         "text-2xl font-bold mt-10 mb-4 scroll-mt-20",
@@ -247,12 +318,17 @@ function renderMarkdown(md: string, articleId?: string): JSX.Element[] {
     } else if (line.startsWith("![")) {
       const m = line.match(/!\[([^\]]*)\]\(([^)]+)\)/);
       if (m) {
-        let src = m[2];
-        if (!src.startsWith("http") && articleId)
-          src = `/articles/${articleId}/${src.replace(/^\.\//, "")}`;
+        const img = resolveArticleImage(m[2], articleId);
         out.push(
           <figure key={nk()} className="my-6">
-            <img src={src} alt={m[1] || ""} className="rounded-md max-w-full" loading="lazy" />
+            <img
+              src={img.src}
+              alt={altOf(m[1] || "")}
+              width={img.w}
+              height={img.h}
+              className="rounded-md max-w-full h-auto"
+              {...imgLoading()}
+            />
           </figure>
         );
       }
@@ -355,8 +431,15 @@ export default function PostDetail(
   // postId / initialContent 由建置時預渲染腳本注入；瀏覽器端走原本 useParams + fetch
   const id = postId ?? paramId;
   const post = blogPosts.find((p) => p.id === id);
-  const nextId = id && post?.series ? seriesNextMap[id] : undefined;
-  const nextPost = nextId ? blogPosts.find((p) => p.id === nextId) : undefined;
+
+  // 系列導覽（P0-3）：讓 30 篇的系列串成一個強連結聚落
+  const seriesIds = post?.series ? (seriesGroups[post.series] ?? []) : [];
+  const posInSeries = id ? seriesIds.indexOf(id) : -1;
+  const prevInSeries = posInSeries > 0 ? seriesIds[posInSeries - 1] : undefined;
+  const nextInSeries =
+    posInSeries >= 0 && posInSeries < seriesIds.length - 1 ? seriesIds[posInSeries + 1] : undefined;
+
+  const related = post ? relatedPosts(post, 3) : [];
   const [content, setContent] = useState<string | undefined>(initialContent);
   const { theme } = useTheme();
 
@@ -455,7 +538,7 @@ export default function PostDetail(
       <article className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-10" data-testid="article-content">
         {content ? (
           <div className="text-sm sm:text-[15px] text-foreground/90">
-            {renderMarkdown(content, id)}
+            {renderMarkdown(content, id, post.title)}
           </div>
         ) : (
           <div className="text-center py-12">
@@ -467,6 +550,63 @@ export default function PostDetail(
         )}
       </article>
 
+      {post.series && seriesIds.length > 0 && (
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 pb-8">
+          <div className="rounded-md border border-primary/20 bg-primary/5 p-4">
+            <div className="flex items-center justify-between gap-3 mb-2">
+              <p className="text-sm font-medium text-primary">{seriesName(post.series)}</p>
+              <span className="text-xs font-mono text-muted-foreground">
+                {posInSeries + 1} / {seriesIds.length}
+              </span>
+            </div>
+            <div className="flex items-center justify-between gap-3 text-sm">
+              {prevInSeries ? (
+                <Link href={`/posts/${prevInSeries}`}>
+                  <span className="inline-flex items-center gap-1 text-muted-foreground cursor-pointer" data-testid="link-series-prev">
+                    <ArrowLeft className="w-3.5 h-3.5" />
+                    上一篇
+                  </span>
+                </Link>
+              ) : (
+                <span className="text-xs text-muted-foreground/60">系列首篇</span>
+              )}
+              <Link href={`/posts?series=${post.series}`}>
+                <span className="text-primary cursor-pointer" data-testid="link-series-index">系列目錄</span>
+              </Link>
+              {nextInSeries ? (
+                <Link href={`/posts/${nextInSeries}`}>
+                  <span className="inline-flex items-center gap-1 text-muted-foreground cursor-pointer" data-testid="link-series-next">
+                    下一篇
+                    <ArrowLeft className="w-3.5 h-3.5 rotate-180" />
+                  </span>
+                </Link>
+              ) : (
+                <span className="text-xs text-muted-foreground/60">系列完結</span>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {related.length > 0 && (
+        <section className="max-w-3xl mx-auto px-4 sm:px-6 pb-10" data-testid="section-related">
+          <h2 className="text-base font-semibold mb-3">相關文章</h2>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {related.map((p) => (
+              <Link key={p.id} href={`/posts/${p.id}`} className="block hover-elevate rounded-md">
+                <article className="h-full rounded-md border border-border/40 bg-card p-4 gradient-border">
+                  <p className="text-sm font-medium leading-snug mb-2 line-clamp-3">{p.title}</p>
+                  <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
+                    <Calendar className="w-3 h-3" />
+                    <span>{formatDate(p.date)}</span>
+                  </div>
+                </article>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
       <div className="max-w-3xl mx-auto px-4 sm:px-6 pb-12">
         <div className="border-t border-border/30 pt-6 flex items-center justify-between">
           <Link href="/posts">
@@ -475,14 +615,6 @@ export default function PostDetail(
               返回文章列表
             </span>
           </Link>
-          {nextPost && (
-            <Link href={`/posts/${nextPost.id}`}>
-              <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground cursor-pointer">
-                下一篇
-                <ArrowLeft className="w-3.5 h-3.5 rotate-180" />
-              </span>
-            </Link>
-          )}
         </div>
       </div>
     </div>

@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "type": "module",
   "license": "MIT",
+  "packageManager": "pnpm@10.32.1",
   "scripts": {
     "dev": "NODE_ENV=development tsx server/index.ts",
     "build": "tsx script/build.ts",
+    "sitemap": "tsx script/generate-sitemap.ts",
     "start": "NODE_ENV=production node dist/index.cjs",
     "check": "tsc",
     "db:push": "drizzle-kit push"
@@ -98,6 +100,7 @@
     "drizzle-kit": "^0.31.8",
     "esbuild": "^0.25.0",
     "postcss": "^8.4.47",
+    "sharp": "^0.35.5",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.20.5",
     "typescript": "5.6.3",
