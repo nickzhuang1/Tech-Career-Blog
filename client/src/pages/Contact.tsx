@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function Contact() {
-  usePageTitle("聯繫我 | Nick's Blog", "如有任何技術合作、演講邀約或交流，歡迎聯繫。");
+  usePageTitle("聯繫我 | Nick's Blog", "如有任何技術合作、演講邀約或交流，歡迎聯繫。", "/contact");
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">

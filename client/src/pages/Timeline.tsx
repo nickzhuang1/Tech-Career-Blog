@@ -36,7 +36,7 @@ function buildPath(entries: TimelineEntry[]) {
 type CardPos = { top: number; left?: number; right?: number };
 
 export default function Timeline() {
-  usePageTitle("大事記 | Nick's Blog", "Nick Zhuang 的職涯大事記時間線");
+  usePageTitle("大事記 | Nick's Blog", "Nick Zhuang 的職涯大事記時間線", "/timeline");
   const [, navigate] = useLocation();
   const [expanded, setExpanded] = useState<number | null>(null);
   const [cardPos, setCardPos] = useState<CardPos | null>(null);

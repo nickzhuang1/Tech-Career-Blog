@@ -22,7 +22,7 @@ import { FaGithub } from "react-icons/fa";
 import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function About() {
-  usePageTitle("關於我 | Nick's Blog", "AI 與雲端的技術探索之路 — Nick Zhuang 的職涯介紹。");
+  usePageTitle("關於我 | Nick's Blog", "AI 與雲端的技術探索之路 — Nick Zhuang 的職涯介紹。", "/about");
   const [, navigate] = useLocation();
 
   return (

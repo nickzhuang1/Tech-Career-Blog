@@ -43,7 +43,7 @@ function buildTagList(posts: typeof blogPosts) {
 }
 
 export default function Posts() {
-  usePageTitle("所有文章 | Nick's Blog", "瀏覽所有技術文章與職涯分享。");
+  usePageTitle("所有文章 | Nick's Blog", "瀏覽所有技術文章與職涯分享。", "/posts");
 
   const search = useSearch();
   const [, setLocation] = useLocation();

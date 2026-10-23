@@ -6,7 +6,7 @@ import { ArrowRight, Sparkles, BookOpen, Layers, Code2 } from "lucide-react";
 import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function Home() {
-  usePageTitle("Nick's Blog - AI異想封印 | CTO的爐邊雜談", "CTO的爐邊雜談 — 分享 AI 技術、系統架構、與職涯探索的深度觀點。");
+  usePageTitle("Nick's Blog - AI異想封印 | CTO的爐邊雜談", "CTO的爐邊雜談 — 分享 AI 技術、系統架構、與職涯探索的深度觀點。", "/");
 
   const featured = blogPosts[0];
   const recent = blogPosts.slice(1, 7);

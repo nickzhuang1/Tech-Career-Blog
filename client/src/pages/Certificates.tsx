@@ -4,7 +4,7 @@ import { ShieldCheck, X, ChevronLeft, ChevronRight, ArrowLeft } from "lucide-rea
 import { useLocation } from "wouter";
 import { usePageTitle } from "@/hooks/usePageTitle";
 export default function Certificates() {
-  usePageTitle("證書牆 | Nick's Blog", "Nick Zhuang 所獲得的所有專業證書展示。");
+  usePageTitle("證書牆 | Nick's Blog", "Nick Zhuang 所獲得的所有專業證書展示。", "/certificates");
   const [, navigate] = useLocation();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const certs = aboutData.certifications;
