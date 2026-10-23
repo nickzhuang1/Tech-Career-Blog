@@ -31,10 +31,12 @@ export default function Home() {
               <span className="text-xs font-medium text-primary">Tech Blog</span>
             </div>
 
+            {/* 冒號留在第一行結尾，讓 <h1> 的文字內容是完整的一句
+                「AI 異想封印：技術與職涯筆記」，而不是兩段斷開的品牌詞 */}
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-5 leading-[1.1]">
-              <span className="gradient-text">AI 異想封印</span>
+              <span className="gradient-text">AI 異想封印：</span>
               <br />
-              <span className="text-foreground">Nick 的職場幻界</span>
+              <span className="text-foreground">技術與職涯筆記</span>
             </h1>
 
             <p className="text-base sm:text-lg text-muted-foreground max-w-xl mb-10 leading-relaxed">
