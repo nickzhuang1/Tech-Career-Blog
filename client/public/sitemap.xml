@@ -511,4 +511,35 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+
+  <url>
+    <loc>https://nickzhuang.com/series/ironman-2023/</loc>
+    <lastmod>2023-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nickzhuang.com/series/ironman-2019/</loc>
+    <lastmod>2019-10-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nickzhuang.com/category/ai/</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nickzhuang.com/tag/nvidia/</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nickzhuang.com/tag/deep-learning/</loc>
+    <lastmod>2025-10-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>

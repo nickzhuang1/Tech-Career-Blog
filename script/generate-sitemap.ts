@@ -1,4 +1,5 @@
 import { blogPosts } from "../client/src/lib/blogData";
+import { collections, collectionPath } from "../client/src/lib/collections";
 import { writeFileSync } from "fs";
 
 const DOMAIN = "https://nickzhuang.com";
@@ -23,6 +24,18 @@ const staticPages = [
   { url: "/contact", priority: "0.5", changefreq: "monthly" },
 ];
 
+// 主題聚合頁（系列 / 分類 / 標籤）：有獨立導讀文案，值得被索引
+const collectionEntries = collections.map((c) => {
+  const latest = c.posts.reduce((m, p) => (p.date > m ? p.date : m), "");
+  return `
+  <url>
+    <loc>${DOMAIN}${withTrailingSlash(collectionPath(c))}</loc>
+    <lastmod>${latest || now}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>`;
+});
+
 const urls = [
   ...staticPages.map(p => `
   <url>
@@ -43,7 +56,10 @@ const urls = [
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.join("")}
+${collectionEntries.join("")}
 </urlset>`;
 
 writeFileSync("client/public/sitemap.xml", xml);
-console.log(`生成完成，共 ${staticPages.length + blogPosts.length} 個 URL`);
+console.log(
+  `生成完成，共 ${staticPages.length + collections.length + blogPosts.length} 個 URL`,
+);

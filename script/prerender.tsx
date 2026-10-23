@@ -30,7 +30,9 @@ import About from "../client/src/pages/About";
 import Timeline from "../client/src/pages/Timeline";
 import Certificates from "../client/src/pages/Certificates";
 import Contact from "../client/src/pages/Contact";
+import Collection from "../client/src/pages/Collection";
 import { blogPosts, aboutData } from "../client/src/lib/blogData";
+import { collections, collectionPath } from "../client/src/lib/collections";
 
 const SITE = "https://nickzhuang.com";
 const OUT_DIR = path.resolve(process.cwd(), "dist/public");
@@ -248,6 +250,50 @@ function articleJsonLd(post: (typeof blogPosts)[number]): object {
   };
 }
 
+/**
+ * 主題聚合頁的結構化資料：CollectionPage + ItemList + BreadcrumbList。
+ * ItemList 讓 Google 知道這頁是一個有順序的內容集合，而不是零散連結。
+ */
+function collectionJsonLd(c: (typeof collections)[number]): object {
+  const url = `${SITE}${collectionPath(c)}/`;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": `${url}#collection`,
+        name: c.name,
+        description: c.description,
+        url,
+        inLanguage: "zh-TW",
+        isPartOf: {
+          "@type": "WebSite",
+          name: "Nick's Blog - AI異想封印",
+          url: `${SITE}/`,
+        },
+        mainEntity: {
+          "@type": "ItemList",
+          numberOfItems: c.posts.length,
+          itemListElement: c.posts.map((post, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            url: `${SITE}/posts/${post.id}/`,
+            name: post.title,
+          })),
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "首頁", item: `${SITE}/` },
+          { "@type": "ListItem", position: 2, name: "所有文章", item: `${SITE}/posts/` },
+          { "@type": "ListItem", position: 3, name: c.name, item: url },
+        ],
+      },
+    ],
+  };
+}
+
 export async function prerenderRoutes(): Promise<number> {
   const template = readFileSync(path.join(OUT_DIR, "index.html"), "utf8");
 
@@ -301,6 +347,15 @@ export async function prerenderRoutes(): Promise<number> {
       },
       el: <Contact />,
     },
+    ...collections.map((c) => ({
+      meta: {
+        title: `${c.seoTitle} | Nick's Blog`,
+        description: c.description,
+        path: collectionPath(c),
+        jsonLd: collectionJsonLd(c),
+      },
+      el: <Collection kind={c.kind} slug={c.slug} />,
+    })),
     ...blogPosts.map((post) => ({
       meta: {
         title: `${post.title} | Nick's Blog`,

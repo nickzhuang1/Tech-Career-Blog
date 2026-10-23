@@ -15,6 +15,7 @@ const Timeline = lazy(() => import("@/pages/Timeline"));
 const Certificates = lazy(() => import("@/pages/Certificates"));
 const Posts = lazy(() => import("@/pages/Posts"));
 const PostDetail = lazy(() => import("@/pages/PostDetail"));
+const Collection = lazy(() => import("@/pages/Collection"));
 const Contact = lazy(() => import("@/pages/Contact"));
 
 function PageFallback() {
@@ -50,6 +51,16 @@ function Router() {
           )} />
           <Route path="/posts/:id" component={() => (
             <Suspense fallback={<PageLoading />}> <PostDetail /> </Suspense>
+          )} />
+          {/* 主題聚合頁：系列 / 分類 / 標籤（皆由 client/src/lib/collections.ts 定義） */}
+          <Route path="/series/:slug" component={() => (
+            <Suspense fallback={<PageLoading />}> <Collection kind="series" /> </Suspense>
+          )} />
+          <Route path="/category/:slug" component={() => (
+            <Suspense fallback={<PageLoading />}> <Collection kind="category" /> </Suspense>
+          )} />
+          <Route path="/tag/:slug" component={() => (
+            <Suspense fallback={<PageLoading />}> <Collection kind="tag" /> </Suspense>
           )} />
           <Route path="/contact" component={() => (
             <Suspense fallback={<PageLoading />}> <Contact /> </Suspense>
