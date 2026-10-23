@@ -33,6 +33,7 @@ import Contact from "../client/src/pages/Contact";
 import Collection from "../client/src/pages/Collection";
 import { blogPosts, aboutData } from "../client/src/lib/blogData";
 import { collections, collectionPath } from "../client/src/lib/collections";
+import { ogFileForPost, ogFileForCollection } from "./generate-og";
 
 const SITE = "https://nickzhuang.com";
 const OUT_DIR = path.resolve(process.cwd(), "dist/public");
@@ -46,6 +47,8 @@ interface PageMeta {
   jsonLd?: object;
   /** 文章頁專用：時間與分類語意（對應 article:published_time 等 meta） */
   article?: { published: string; modified: string; section: string };
+  /** 這頁專屬的分享圖（未指定時沿用 index.html 的站台預設圖） */
+  image?: { url: string; width: number; height: number; alt: string };
 }
 
 interface PageDef {
@@ -110,6 +113,34 @@ function injectMeta(template: string, meta: PageMeta): string {
     /<meta name="twitter:description" content="[^"]*"/,
     `<meta name="twitter:description" content="${escAttr(meta.description)}"`,
   );
+  if (meta.image) {
+    out = rep(
+      out,
+      /<meta property="og:image" content="[^"]*"/,
+      `<meta property="og:image" content="${meta.image.url}"`,
+    );
+    out = rep(
+      out,
+      /<meta property="og:image:width" content="[^"]*"/,
+      `<meta property="og:image:width" content="${meta.image.width}"`,
+    );
+    out = rep(
+      out,
+      /<meta property="og:image:height" content="[^"]*"/,
+      `<meta property="og:image:height" content="${meta.image.height}"`,
+    );
+    out = rep(
+      out,
+      /<meta property="og:image:alt" content="[^"]*"/,
+      `<meta property="og:image:alt" content="${escAttr(meta.image.alt)}"`,
+    );
+    out = rep(
+      out,
+      /<meta name="twitter:image" content="[^"]*"/,
+      `<meta name="twitter:image" content="${meta.image.url}"`,
+    );
+  }
+
   // 語意標記：每頁都標註作者（E-E-A-T）；文章頁再加上發佈／更新時間與分類，
   // 讓搜尋結果有機會顯示時間戳，也讓 JSON-LD 與 meta 兩邊說法一致。
   const semanticTags = [`<meta name="author" content="${escAttr(aboutData.name)}">`];
@@ -233,7 +264,7 @@ function articleJsonLd(post: (typeof blogPosts)[number]): object {
           name: aboutData.name,
           url: `${SITE}/about/`,
         },
-        image: [`${SITE}/og-image.png`],
+        image: [`${SITE}/${ogFileForPost(post.id)}`],
         mainEntityOfPage: { "@type": "WebPage", "@id": url },
         articleSection: post.category,
         keywords: post.tags.join(", "),
@@ -353,6 +384,12 @@ export async function prerenderRoutes(): Promise<number> {
         description: c.description,
         path: collectionPath(c),
         jsonLd: collectionJsonLd(c),
+        image: {
+          url: `${SITE}/${ogFileForCollection(c)}`,
+          width: 1200,
+          height: 630,
+          alt: c.name,
+        },
       },
       el: <Collection kind={c.kind} slug={c.slug} />,
     })),
@@ -367,6 +404,12 @@ export async function prerenderRoutes(): Promise<number> {
           published: post.date,
           modified: post.updated ?? post.date,
           section: post.category,
+        },
+        image: {
+          url: `${SITE}/${ogFileForPost(post.id)}`,
+          width: 1200,
+          height: 630,
+          alt: post.title,
         },
       },
       el: <PostDetail postId={post.id} initialContent={loadMarkdown(post.id)} />,

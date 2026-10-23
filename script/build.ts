@@ -53,6 +53,10 @@ async function buildAll() {
   // 3) vite 已把原圖複製進 dist，這裡換成 webp 並移除原檔以縮小上傳量
   applyImagesToDist();
 
+  // 4) 每篇文章／聚合頁的 OG 分享圖（寫進 dist，不進 repo）
+  const { generateOgImages } = await import("./generate-og.ts");
+  await generateOgImages();
+
   console.log("building server...");
   const pkg = JSON.parse(await readFile("package.json", "utf-8"));
   const allDeps = [
