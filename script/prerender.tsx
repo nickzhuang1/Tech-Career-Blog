@@ -16,6 +16,7 @@
  */
 import * as React from "react";
 import { renderToString } from "react-dom/server";
+import type { BaseLocationHook, BaseSearchHook } from "wouter";
 import type { ReactElement } from "react";
 import { Router } from "wouter";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
@@ -179,8 +180,11 @@ function injectMeta(template: string, meta: PageMeta): string {
  * 沒有 server snapshot，renderToString 會直接失敗。
  */
 function staticHooks(routePath: string, routeSearch = "") {
-  const hook = () => [routePath, () => {}] as const;
-  const searchHook = () => [routeSearch, () => {}] as const;
+  // BaseLocationHook 回傳 [path, navigate]；navigate 在 SSR 期間不會被呼叫
+  const hook = (() => [routePath, () => {}]) as unknown as BaseLocationHook;
+  // BaseSearchHook 回傳的是「搜尋字串」本身，不是 tuple
+  //（wouter 內部會做 sanitizeSearch(router.searchHook(router))，吃的是字串）
+  const searchHook = (() => routeSearch) as unknown as BaseSearchHook;
   return { hook, searchHook };
 }
 

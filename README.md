@@ -123,6 +123,13 @@ pnpm build
 | 7 | esbuild | `dist/index.cjs`（本機預覽用，**不需上傳**） |
 | 8 | `script/prerender.tsx` | 90 個含完整 meta 的靜態 HTML ＋ `404.html`（noindex、無 canonical） |
 
+`script/` 底下的建置腳本不在 `tsconfig.json` 的 include 範圍內，型別檢查走獨立設定：
+
+```bash
+pnpm typecheck         # client + server + script 三邊都檢查
+pnpm typecheck:script  # 只檢查建置腳本（改 script/ 之後先跑這個）
+```
+
 最終 `dist/public` 約 46 MB、703 個檔案。
 
 ---
