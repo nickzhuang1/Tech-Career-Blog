@@ -9,16 +9,15 @@ import {
   Award,
   Mic,
   ShieldCheck,
-  Mail,
   Link2,
   Activity,
   Heart,
   History,
-  Trophy,
 } from "lucide-react";
 import { contactChannels, type ContactChannelKey } from "@/lib/contactLinks";
 import { useLocation } from "wouter";
-import { FaLinkedin } from "react-icons/fa";
+import { FaLinkedin, FaEnvelope } from "react-icons/fa";
+import { FaTrophy } from "react-icons/fa6";
 import { FaFacebook } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
 import { usePageTitle } from "@/hooks/usePageTitle";
@@ -29,8 +28,8 @@ const CHANNEL_ICON: Record<ContactChannelKey, React.ComponentType<{ className?: 
   linkedin: FaLinkedin,
   facebook: FaFacebook,
   github: FaGithub,
-  ithome: Trophy,
-  email: Mail,
+  ithome: FaTrophy,
+  email: FaEnvelope,
 };
 
 export default function About() {

@@ -1,5 +1,6 @@
-import { Mail, MessageSquare, Trophy } from "lucide-react";
-import { FaLinkedin, FaFacebook, FaGithub } from "react-icons/fa";
+import { MessageSquare } from "lucide-react";
+import { FaLinkedin, FaFacebook, FaGithub, FaEnvelope } from "react-icons/fa";
+import { FaTrophy } from "react-icons/fa6";
 import { contactChannels, type ContactChannelKey } from "@/lib/contactLinks";
 import { Button } from "@/components/ui/button";
 import { usePageTitle } from "@/hooks/usePageTitle";
@@ -13,8 +14,8 @@ const CHANNEL_STYLE: Record<
   linkedin: { icon: FaLinkedin, gradient: "from-purple-500/20 to-cyan-400/20", action: "前往" },
   facebook: { icon: FaFacebook, gradient: "from-blue-500/20 to-blue-400/20", action: "前往" },
   github: { icon: FaGithub, gradient: "from-gray-500/20 to-gray-400/20", action: "前往" },
-  ithome: { icon: Trophy, gradient: "from-orange-500/20 to-amber-400/20", action: "前往" },
-  email: { icon: Mail, gradient: "from-purple-500/20 to-cyan-400/20", action: "寄信" },
+  ithome: { icon: FaTrophy, gradient: "from-purple-500/20 to-cyan-400/20", action: "前往" },
+  email: { icon: FaEnvelope, gradient: "from-purple-500/20 to-cyan-400/20", action: "寄信" },
 };
 
 export default function Contact() {
