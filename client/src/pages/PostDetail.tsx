@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, Link } from "wouter";
-import { blogPosts, series } from "@/lib/blogData";
+import { blogPosts, series, aboutData, shortBio } from "@/lib/blogData";
 import { collectionForSeries, collectionForTag, collectionPath } from "@/lib/collections";
 import imageMetaJson from "@/lib/imageMeta.json";
 
@@ -37,7 +37,7 @@ import { usePageTitle } from "@/hooks/usePageTitle";
 import { buildTitle } from "@/lib/seoTitle";
 import { useTheme } from "@/components/ThemeProvider";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Calendar, Clock, ExternalLink } from "lucide-react";
+import { ArrowLeft, Calendar, ChevronRight, Clock, ExternalLink } from "lucide-react";
 import hljs from "highlight.js/lib/core";
 import bash from "highlight.js/lib/languages/bash";
 import yaml from "highlight.js/lib/languages/yaml";
@@ -504,12 +504,31 @@ export default function PostDetail(
     <div className="min-h-screen">
       <div className="border-b border-border/30">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-          <Link href="/posts">
-            <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground mb-6 cursor-pointer" data-testid="link-back">
-              <ArrowLeft className="w-3.5 h-3.5" />
-              返回文章列表
-            </span>
-          </Link>
+          {/* 麵包屑：與 JSON-LD 的 BreadcrumbList 同一層級，讓畫面上看到的
+              導覽路徑與機器讀到的結構一致（也讓那條從文章頁流出的內鏈
+              帶有「所有文章」的錨文字，而不是「返回」這種無語意的字） */}
+          <nav aria-label="麵包屑" className="mb-6">
+            <ol className="flex items-center gap-1 text-sm text-muted-foreground flex-wrap">
+              <li>
+                <Link href="/">
+                  <span className="inline-flex items-center gap-1.5 cursor-pointer hover:text-foreground" data-testid="crumb-home">
+                    <ArrowLeft className="w-3.5 h-3.5" />
+                    首頁
+                  </span>
+                </Link>
+              </li>
+              <li aria-hidden="true"><ChevronRight className="w-3.5 h-3.5 opacity-40" /></li>
+              <li>
+                <Link href="/posts">
+                  <span className="cursor-pointer hover:text-foreground" data-testid="link-back">所有文章</span>
+                </Link>
+              </li>
+              <li aria-hidden="true"><ChevronRight className="w-3.5 h-3.5 opacity-40" /></li>
+              <li className="text-foreground/60 truncate max-w-[14rem] sm:max-w-md" aria-current="page">
+                {post.title}
+              </li>
+            </ol>
+          </nav>
 
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-4 leading-tight" data-testid="text-post-title">
             {post.title}
@@ -590,6 +609,56 @@ export default function PostDetail(
           </div>
         )}
       </article>
+
+      {/* 關於作者：文章讀完的當下是唯一會想「這誰寫的」的時刻。
+          資料全部來自 aboutData／shortBio，不在這裡另寫一份。 */}
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 pb-8">
+        <div className="rounded-md border border-border/40 bg-card p-5 gradient-border">
+          <div className="flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
+              <span className="text-sm font-semibold text-primary">NZ</span>
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 mb-1.5">
+                <p className="text-sm font-semibold" data-testid="text-author-name">{aboutData.nameZh}</p>
+                <span className="text-xs text-muted-foreground">{aboutData.title}</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed mb-3">{shortBio}</p>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
+                <Link href="/about">
+                  <span className="text-primary cursor-pointer hover:underline" data-testid="link-author-about">
+                    關於我 →
+                  </span>
+                </Link>
+                <a
+                  href={aboutData.social.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
+                >
+                  GitHub <ExternalLink className="w-3 h-3 opacity-50" />
+                </a>
+                <a
+                  href={aboutData.social.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
+                >
+                  LinkedIn <ExternalLink className="w-3 h-3 opacity-50" />
+                </a>
+                <a
+                  href={aboutData.social.ithome}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
+                >
+                  iThome 鐵人賽 <ExternalLink className="w-3 h-3 opacity-50" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {post.series && seriesIds.length > 0 && (
         <div className="max-w-3xl mx-auto px-4 sm:px-6 pb-8">

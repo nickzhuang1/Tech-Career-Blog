@@ -410,6 +410,14 @@ export const aboutData = {
 };
 
 /**
+ * 文章頁「關於作者」卡片用的短版自我介紹（約 60 字）。
+ * bio 是給 About 頁的完整版，卡片塞不下；兩者都放這裡，避免文案分岔。
+ * 注意「曾任 NVIDIA DLI 認證講師」——這是過去身分，不能用現在式。
+ */
+export const shortBio =
+  "中央大學資工所畢，現任承羽智慧技術長。曾任 NVIDIA DLI 認證講師，著有《圖像生成式 AI 的生存指南》，兩度完成 iThome 鐵人賽。";
+
+/**
  * 可驗證的外部身分頁面，供 JSON-LD 的 Person.sameAs 使用。
  * E-E-A-T 的核心是「這個作者在站外也真的存在」——同一個名字出現在越多
  * 獨立且可查證的地方，Google 越能把「Nick Zhuang」與這些內容綁在一起。
