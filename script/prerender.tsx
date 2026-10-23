@@ -35,6 +35,7 @@ import { blogPosts, aboutData } from "../client/src/lib/blogData";
 import { collections, collectionPath } from "../client/src/lib/collections";
 import { ogFileForPost, ogFileForCollection } from "./generate-og";
 import { buildTitle } from "../client/src/lib/seoTitle";
+import NotFound from "../client/src/pages/not-found";
 import { HOME_TAGLINE, homeDescription } from "../client/src/lib/site";
 
 const SITE = "https://nickzhuang.com";
@@ -51,6 +52,8 @@ interface PageMeta {
   article?: { published: string; modified: string; section: string };
   /** 這頁專屬的分享圖（未指定時沿用 index.html 的站台預設圖） */
   image?: { url: string; width: number; height: number; alt: string };
+  /** 不該被索引的頁面（如 404）：移除 canonical 與 og:url，改標 noindex, follow */
+  noindex?: boolean;
 }
 
 interface PageDef {
@@ -100,11 +103,19 @@ function injectMeta(template: string, meta: PageMeta): string {
       `<meta property="og:type" content="${meta.ogType}"`,
     );
   }
-  out = rep(
-    out,
-    /<link rel="canonical" href="[^"]*"/,
-    `<link rel="canonical" href="${url}"`,
-  );
+  if (meta.noindex) {
+    // 404 這類頁面：canonical 指向任何網址都是錯的（它不該有標準網址），
+    // og:url 同理；改用 noindex, follow 讓爬蟲不要索引、但仍可沿著連結走。
+    out = out.replace(/\s*<link rel="canonical"[^>]*>/, "");
+    out = out.replace(/\s*<meta property="og:url"[^>]*>/, "");
+    out = out.replace("</head>", `  <meta name="robots" content="noindex, follow">\n</head>`);
+  } else {
+    out = rep(
+      out,
+      /<link rel="canonical" href="[^"]*"/,
+      `<link rel="canonical" href="${url}"`,
+    );
+  }
   out = rep(
     out,
     /<meta name="twitter:title" content="[^"]*"/,
@@ -435,6 +446,24 @@ export async function prerenderRoutes(): Promise<number> {
     } catch (err) {
       failed.push(`${meta.path}: ${(err as Error).message}`);
     }
+  }
+
+  // 404：Cloudflare 對不存在的路徑回這個檔案（狀態碼仍是 404）。
+  // 用真正的 NotFound 頁預渲染，沒有 JS 的訪客才看得到內容；
+  // 同時 noindex + 不帶 canonical，避免被當成首頁的重複內容。
+  try {
+    const notFoundHtml = injectMeta(template, {
+      title: buildTitle("找不到頁面"),
+      description: "找不到這個頁面。可能是網址有誤，或文章已經搬家。回首頁或所有文章重新開始。",
+      path: "/404",
+      noindex: true,
+    })
+      .replace('<div id="root"></div>', () => `<div id="root">${renderApp("/404", <NotFound />)}</div>`)
+      .replace(/dateTime="/g, 'datetime="');
+    writeFileSync(path.join(OUT_DIR, "404.html"), notFoundHtml);
+    console.log("prerender: 404.html（noindex、無 canonical、含 NotFound 內容）");
+  } catch (err) {
+    failed.push(`404: ${(err as Error).message}`);
   }
 
   if (failed.length) {

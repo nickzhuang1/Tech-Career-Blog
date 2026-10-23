@@ -453,10 +453,25 @@ Google 對「有明確更新紀錄」的技術文章評價通常較高。
 每月固定看：GSC 覆蓋率與查詢 → PageSpeed Insights 手機分數 → 熱門文章的 LCP/CLS →
 哪些文章有點擊但跳出率高（標題與內容不符）。
 
-### P3-7 小修：`404.html`
-`build.ts` 目前把 `index.html` 直接複製成 `404.html`，所以 404 頁帶著「canonical → 首頁」。
-因為狀態碼確實是 404，Google 不會索引，風險低；但正確做法是移除 canonical、改放
-`<meta name="robots" content="noindex, follow">`，並換成 404 專用標題。
+### P3-7 `404.html` ✅（2026-10-23 完成）
+
+原本 `build.ts` 把 `index.html` 直接複製成 `404.html`，於是 404 頁帶著
+`canonical → 首頁`、首頁標題與首頁描述，等於告訴 Google「這個不存在的網址其實是首頁」。
+狀態碼本身是 404（Cloudflare `not_found_handling: 404-page`），風險有限，但宣告是錯的。
+
+**修正**
+
+| 項目 | 之前 | 之後 |
+|---|---|---|
+| 產生方式 | `build.ts` 複製 `index.html` | `prerender.tsx` 用真正的 `NotFound` 元件渲染 |
+| `<title>` | 首頁標題 | `找不到頁面 \| Nick` |
+| `canonical` | `https://nickzhuang.com`（錯） | 移除 |
+| `og:url` | 首頁網址（錯） | 移除 |
+| `robots` | 無 | `noindex, follow` |
+| 頁面內容 | 空殼，需等 JS | 已預渲染「404 頁面不存在…回到首頁」 |
+
+`PageMeta` 新增 `noindex?: boolean`，其他頁面行為不變（首頁與各聚合頁的 canonical
+仍分別是 `https://nickzhuang.com/`、`/posts/`、`/series/ironman-2019/`）。
 
 ### P3-8（選）多語系
 若未來要出英文版，才需要 `hreflang` 與 `/en/` 路徑規劃。現階段 79 篇全中文，不需要。

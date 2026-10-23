@@ -1,6 +1,6 @@
 import { build as esbuild } from "esbuild";
 import { build as viteBuild } from "vite";
-import { rm, readFile, copyFile } from "fs/promises";
+import { rm, readFile } from "fs/promises";
 
 // server deps to bundle to reduce openat(2) syscalls
 // which helps cold start times
@@ -79,8 +79,7 @@ async function buildAll() {
     logLevel: "info",
   });
 
-  await copyFile("dist/public/index.html", "dist/public/404.html");
-  console.log("copied index.html → 404.html");
+  // 404.html 由 prerender 產生（需要渲染 NotFound 元件），見 script/prerender.tsx
 
   // 2) 靜態預渲染：把每個路由渲染成帶完整 meta/內文的靜態 HTML（SEO）
   console.log("prerendering routes...");

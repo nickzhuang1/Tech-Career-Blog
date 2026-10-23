@@ -121,7 +121,7 @@ pnpm build
 | 5 | `optimize-images（apply）` | 以 WebP 取代原圖並移除原檔 |
 | 6 | `script/generate-og.ts` | 84 張 1200×630 標題卡 → `dist/public/og/` |
 | 7 | esbuild | `dist/index.cjs`（本機預覽用，**不需上傳**） |
-| 8 | `script/prerender.tsx` | 90 個含完整 meta 的靜態 HTML |
+| 8 | `script/prerender.tsx` | 90 個含完整 meta 的靜態 HTML ＋ `404.html`（noindex、無 canonical） |
 
 最終 `dist/public` 約 46 MB、703 個檔案。
 
@@ -138,6 +138,8 @@ pnpm build
 curl -sI https://nickzhuang.com/posts/<id>/ | head -1                        # 200
 curl -s https://nickzhuang.com/posts/<id>/ | grep -o '<link rel="canonical"[^>]*>'
 curl -s https://nickzhuang.com/sitemap.xml | grep -c '<loc>'                  # 90
+curl -sI https://nickzhuang.com/no-such-page | head -1                        # 404
+curl -s https://nickzhuang.com/404.html | grep -o 'noindex\|rel="canonical"'  # 只有 noindex
 curl -sI https://nickzhuang.com/articles/<id>/images/<file>.webp | grep -i cache-control
 ```
 
