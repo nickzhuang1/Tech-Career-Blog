@@ -5,9 +5,10 @@ import { Link } from "wouter";
 import { ArrowRight, Sparkles, BookOpen, Layers, Code2 } from "lucide-react";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { buildTitle } from "@/lib/seoTitle";
+import { HOME_TAGLINE, homeDescription, yearsOfExperience } from "@/lib/site";
 
 export default function Home() {
-  usePageTitle(buildTitle("AI 異想封印：技術實戰與職涯思索"), "分享 AI 技術實戰、系統架構與職涯思索。十餘年軟體開發經驗，從前端到後端、從雲端到人工智慧。這裡有 K8S 與生成式 AI 的實作筆記、NVIDIA 認證備考心法，以及技術管理路上的職涯觀察。", "/");
+  usePageTitle(buildTitle(HOME_TAGLINE), homeDescription(), "/");
 
   const featured = blogPosts[0];
   const recent = blogPosts.slice(1, 7);
@@ -41,7 +42,7 @@ export default function Home() {
             </h1>
 
             <p className="text-base sm:text-lg text-muted-foreground max-w-xl mb-10 leading-relaxed">
-              12 年軟體開發，從前端到後端、從雲端到 AI。
+              {yearsOfExperience()} 年軟體開發，從前端到後端、從雲端到 AI。
               分享技術洞察、架構設計、與職涯成長的深度觀點。
             </p>
 
@@ -55,7 +56,7 @@ export default function Home() {
                 <p className="text-[11px] text-muted-foreground">個標籤</p>
               </div>
               <div className="rounded-md border border-border/40 bg-card/50 p-3 text-center gradient-border" data-testid="stat-experience">
-                <p className="text-lg font-bold gradient-text">12+</p>
+                <p className="text-lg font-bold gradient-text">{yearsOfExperience()}+</p>
                 <p className="text-[11px] text-muted-foreground">年經驗</p>
               </div>
             </div>

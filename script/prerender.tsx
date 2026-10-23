@@ -35,6 +35,7 @@ import { blogPosts, aboutData } from "../client/src/lib/blogData";
 import { collections, collectionPath } from "../client/src/lib/collections";
 import { ogFileForPost, ogFileForCollection } from "./generate-og";
 import { buildTitle } from "../client/src/lib/seoTitle";
+import { HOME_TAGLINE, homeDescription } from "../client/src/lib/site";
 
 const SITE = "https://nickzhuang.com";
 const OUT_DIR = path.resolve(process.cwd(), "dist/public");
@@ -194,8 +195,7 @@ function loadMarkdown(id: string): string | undefined {
 
 const PERSON_ID = `${SITE}/#person`;
 const WEBSITE_ID = `${SITE}/#website`;
-const HOME_DESCRIPTION =
-  "分享 AI 技術實戰、系統架構與職涯思索。十餘年軟體開發經驗，從前端到後端、從雲端到人工智慧。這裡有 K8S 與生成式 AI 的實作筆記、NVIDIA 認證備考心法，以及技術管理路上的職涯觀察。";
+const HOME_DESCRIPTION = homeDescription();
 
 /**
  * 首頁的實體資訊（WebSite + Person）。
@@ -332,7 +332,7 @@ export async function prerenderRoutes(): Promise<number> {
   const pages: PageDef[] = [
     {
       meta: {
-        title: buildTitle("AI 異想封印：技術實戰與職涯思索"),
+        title: buildTitle(HOME_TAGLINE),
         description: HOME_DESCRIPTION,
         path: "/",
         jsonLd: homeJsonLd(),

@@ -389,10 +389,16 @@ const lv = Math.min(Math.max((line.match(/^(#{1,4}) /) ?? ["", ""])[1].length, 2
 | 位置 | 之前 | 之後 |
 |---|---|---|
 | `<title>`／`og:title` | `Nick's Blog - AI異想封印 \| CTO的爐邊雜談` | `AI 異想封印：技術實戰與職涯思索 \| Nick`（寬度 38） |
-| `description` | `CTO的爐邊雜談 — 分享 AI 技術…`（41 字） | `分享 AI 技術實戰、系統架構與職涯思索。十餘年軟體開發經驗…`（97 字） |
+| `description` | `CTO的爐邊雜談 — 分享 AI 技術…`（41 字） | `分享 AI 技術實戰、系統架構與職涯思索。12 年軟體開發經驗…`（98 字） |
 
 **站名實體不變**：`og:site_name`、RSS 標題、JSON-LD `WebSite.name` 仍是
 `Nick's Blog - AI異想封印` —— 那是「網站叫什麼」，與首頁標語是兩件事。
+
+**年資改為推算**：原本首頁副標寫「12 年」、統計卡寫「12+」、description 寫「十年」，
+三處數字不一致且會過期。新增 `client/src/lib/site.ts`，以第一份工作到職日
+`2013-12-03` 為基準推算 `yearsOfExperience()`，首頁副標、統計卡與 description
+全部改用它 —— 2026-12-03 之後建置會自動變成 13 年，不需要回頭改文案。
+靜態殼層 `client/index.html` 的 description 刻意不含數字（它是無 JS 時的 fallback）。
 
 ### P2-4 語言一致性 ✅（不成立，2026-08-15 修正誤判）
 
