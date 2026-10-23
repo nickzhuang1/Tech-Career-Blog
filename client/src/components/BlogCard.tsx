@@ -82,7 +82,7 @@ export function HeroBlogCard({ post }: { post: BlogPost }) {
           {post.title}
         </h2>
 
-        <p className="text-sm text-muted-foreground leading-relaxed mb-4 max-w-xl">
+        <p className="text-sm text-muted-foreground leading-relaxed mb-4 max-w-xl line-clamp-3">
           {post.excerpt}
         </p>
 
