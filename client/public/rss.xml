@@ -3,7 +3,7 @@
   <channel>
     <title>Nick's Blog - AI異想封印</title>
     <link>https://nickzhuang.com/</link>
-    <description>CTO的爐邊雜談 — 分享 AI 技術、系統架構、與職涯探索的深度觀點。</description>
+    <description>分享 AI 技術實戰、系統架構與職涯思索。12 年軟體開發經驗，從前端到後端、從雲端到人工智慧。這裡有 K8S 與生成式 AI 的實作筆記、NVIDIA 認證備考心法，以及技術管理路上的職涯觀察。</description>
     <language>zh-TW</language>
     <lastBuildDate>Sat, 08 Aug 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://nickzhuang.com/rss.xml" rel="self" type="application/rss+xml" />
@@ -78,7 +78,7 @@
       <link>https://nickzhuang.com/posts/dli-notes/</link>
       <guid isPermaLink="true">https://nickzhuang.com/posts/dli-notes/</guid>
       <pubDate>Fri, 03 Oct 2025 00:00:00 GMT</pubDate>
-      <description>身為 NVIDIA DLI 認證講師，把深度學習基礎課的講義整理成筆記：從 Von Neumann 架構的限制、專家系統為何失靈講起，說明資料量與算力怎麼把深度學習推上台面，適合第一次接觸的人建立整體骨架。</description>
+      <description>曾任 NVIDIA DLI 認證講師，把深度學習基礎課的講義整理成筆記：從 Von Neumann 架構的限制、專家系統為何失靈講起，說明資料量與算力怎麼把深度學習推上台面，適合第一次接觸的人建立整體骨架。</description>
       <category>AI</category>
       <category>Deep Learning</category>
       <category>NVIDIA</category>

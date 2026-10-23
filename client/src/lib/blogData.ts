@@ -104,7 +104,7 @@ export const blogPosts: BlogPost[] = [
     date: "2025-10-03",
     category: "ai",
     tags: ["AI", "Deep Learning", "NVIDIA"],
-    excerpt: "身為 NVIDIA DLI 認證講師，把深度學習基礎課的講義整理成筆記：從 Von Neumann 架構的限制、專家系統為何失靈講起，說明資料量與算力怎麼把深度學習推上台面，適合第一次接觸的人建立整體骨架。",
+    excerpt: "曾任 NVIDIA DLI 認證講師，把深度學習基礎課的講義整理成筆記：從 Von Neumann 架構的限制、專家系統為何失靈講起，說明資料量與算力怎麼把深度學習推上台面，適合第一次接觸的人建立整體骨架。",
     readTime: "8 min",
   },
   {
@@ -290,7 +290,7 @@ export const aboutData = {
   },
   title: "CTO @ C.Y. Intelligence",
   titleZh: "承羽智慧 技術長",
-  bio: "中央大學資工所畢，現任承羽智慧技術長，曾任上市公司部門 Tech Lead。NVIDIA DLI 認證講師，曾與 NVIDIA 共同發表公開課；持有 NVIDIA Certified Professional（AI Infrastructure）等共五張 NVIDIA Certified 認證。曾獲 113 年度 AIGO 潛力新星盃 特優獎（Top 1）。著有「圖像生成式 AI 的生存指南」，為繁體中文第一本講述圖像生成式 AI 理論與實務的書籍。",
+  bio: "中央大學資工所畢，現任承羽智慧技術長，曾任上市公司部門 Tech Lead。曾任 NVIDIA DLI 認證講師，並與 NVIDIA 共同發表公開課；持有 NVIDIA Certified Professional（AI Infrastructure）等共五張 NVIDIA Certified 認證。曾獲 113 年度 AIGO 潛力新星盃 特優獎（Top 1）。著有「圖像生成式 AI 的生存指南」，為繁體中文第一本講述圖像生成式 AI 理論與實務的書籍。",
   current: "承羽智慧 – 技術長",
   workHistory: [
     "承啟科技 – 應用發展部 – Tech Lead",

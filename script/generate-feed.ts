@@ -8,6 +8,7 @@
  * 上傳 dist/public 即生效（與 generate-sitemap.ts 相同策略）。
  */
 import { blogPosts } from "../client/src/lib/blogData";
+import { homeDescription } from "../client/src/lib/site";
 import { writeFileSync } from "fs";
 
 const DOMAIN = "https://nickzhuang.com";
@@ -47,7 +48,7 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>
   <channel>
     <title>Nick's Blog - AI異想封印</title>
     <link>${DOMAIN}/</link>
-    <description>CTO的爐邊雜談 — 分享 AI 技術、系統架構、與職涯探索的深度觀點。</description>
+    <description>${esc(homeDescription())}</description>
     <language>zh-TW</language>
     <lastBuildDate>${lastBuild}</lastBuildDate>
     <atom:link href="${DOMAIN}/rss.xml" rel="self" type="application/rss+xml" />
