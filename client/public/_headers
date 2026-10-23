@@ -1,3 +1,13 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  X-Frame-Options: SAMEORIGIN
+
+# 不設 Cache-Control：實測線上（Cloudflare Workers Static Assets）對 HTML、
+# sitemap.xml、rss.xml、og 圖的預設值已經是 public, max-age=0, must-revalidate，
+# 手動上傳後立刻生效。在這裡覆寫只會多一份要維護的規則。
+
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
