@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, Link } from "wouter";
 import { blogPosts, series, aboutData, shortBio } from "@/lib/blogData";
+import { contactChannels } from "@/lib/contactLinks";
 import { collectionForSeries, collectionForTag, collectionPath } from "@/lib/collections";
 import imageMetaJson from "@/lib/imageMeta.json";
 
@@ -630,30 +631,21 @@ export default function PostDetail(
                     關於我 →
                   </span>
                 </Link>
-                <a
-                  href={aboutData.social.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
-                >
-                  GitHub <ExternalLink className="w-3 h-3 opacity-50" />
-                </a>
-                <a
-                  href={aboutData.social.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
-                >
-                  LinkedIn <ExternalLink className="w-3 h-3 opacity-50" />
-                </a>
-                <a
-                  href={aboutData.social.ithome}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
-                >
-                  iThome 鐵人賽 <ExternalLink className="w-3 h-3 opacity-50" />
-                </a>
+                {/* 與 Contact 頁同一份清單：新增管道只要改 contactLinks.ts */}
+                {contactChannels.map((channel) => (
+                  <a
+                    key={channel.key}
+                    href={channel.href}
+                    {...(channel.external
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
+                    className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
+                    data-testid={`author-channel-${channel.key}`}
+                  >
+                    {channel.shortLabel}
+                    <ExternalLink className="w-3 h-3 opacity-50" />
+                  </a>
+                ))}
               </div>
             </div>
           </div>

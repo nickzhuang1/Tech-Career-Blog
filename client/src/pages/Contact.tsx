@@ -1,8 +1,21 @@
-import { Mail, MessageSquare } from "lucide-react";
+import { Mail, MessageSquare, Trophy } from "lucide-react";
 import { FaLinkedin, FaFacebook, FaGithub } from "react-icons/fa";
+import { contactChannels, type ContactChannelKey } from "@/lib/contactLinks";
 import { Button } from "@/components/ui/button";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { buildTitle } from "@/lib/seoTitle";
+
+/** 每個管道的圖示與配色，Contact 頁專用的呈現方式 */
+const CHANNEL_STYLE: Record<
+  ContactChannelKey,
+  { icon: React.ComponentType<{ className?: string }>; gradient: string; action: string }
+> = {
+  linkedin: { icon: FaLinkedin, gradient: "from-purple-500/20 to-cyan-400/20", action: "前往" },
+  facebook: { icon: FaFacebook, gradient: "from-blue-500/20 to-blue-400/20", action: "前往" },
+  github: { icon: FaGithub, gradient: "from-gray-500/20 to-gray-400/20", action: "前往" },
+  ithome: { icon: Trophy, gradient: "from-orange-500/20 to-amber-400/20", action: "前往" },
+  email: { icon: Mail, gradient: "from-purple-500/20 to-cyan-400/20", action: "寄信" },
+};
 
 export default function Contact() {
   usePageTitle(buildTitle("聯繫我"), "如有任何技術合作、演講邀約或交流，歡迎聯繫。", "/contact");
@@ -37,95 +50,41 @@ export default function Contact() {
               <p className="text-xs text-muted-foreground mt-0.5">Salzburg, Austria · 2025</p>
             </div>
           </div>
-          <a
-            href="https://www.linkedin.com/in/nick-zhuang/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block hover-elevate active-elevate-2 rounded-md"
-            data-testid="link-contact-linkedin"
-          >
-            <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-md bg-gradient-to-br from-purple-500/20 to-cyan-400/20 flex items-center justify-center">
-                  <FaLinkedin className="w-5 h-5 text-primary" />
+          {contactChannels.map((channel) => {
+            const style = CHANNEL_STYLE[channel.key];
+            const Icon = style.icon;
+            return (
+              <a
+                key={channel.key}
+                href={channel.href}
+                {...(channel.external
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
+                className="block hover-elevate active-elevate-2 rounded-md"
+                data-testid={`link-contact-${channel.key}`}
+              >
+                <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
+                  <div className="flex items-center gap-4">
+                    <div className={`w-10 h-10 rounded-md bg-gradient-to-br ${style.gradient} flex items-center justify-center`}>
+                      <Icon className="w-5 h-5 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">{channel.label}</p>
+                      <p className="text-xs text-muted-foreground">{channel.description}</p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      tabIndex={-1}
+                      data-testid={`button-visit-${channel.key}`}
+                    >
+                      {style.action}
+                    </Button>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">LinkedIn</p>
-                  <p className="text-xs text-muted-foreground">專業社群交流</p>
-                </div>
-                <Button variant="ghost" size="sm" tabIndex={-1} data-testid="button-visit-linkedin">
-                  前往
-                </Button>
-              </div>
-            </div>
-          </a>
-
-          <a
-            href="https://www.facebook.com/xiangning.zhuang/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block hover-elevate active-elevate-2 rounded-md"
-            data-testid="link-contact-facebook"
-          >
-            <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-md bg-gradient-to-br from-blue-500/20 to-blue-400/20 flex items-center justify-center">
-                  <FaFacebook className="w-5 h-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Facebook</p>
-                  <p className="text-xs text-muted-foreground">社群互動交流</p>
-                </div>
-                <Button variant="ghost" size="sm" tabIndex={-1} data-testid="button-visit-facebook">
-                  前往
-                </Button>
-              </div>
-            </div>
-          </a>
-
-          <a
-            href="https://github.com/nickzhuang1"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block hover-elevate active-elevate-2 rounded-md"
-            data-testid="link-contact-github"
-          >
-            <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-md bg-gradient-to-br from-gray-500/20 to-gray-400/20 flex items-center justify-center">
-                  <FaGithub className="w-5 h-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">GitHub</p>
-                  <p className="text-xs text-muted-foreground">開源專案與程式碼</p>
-                </div>
-                <Button variant="ghost" size="sm" tabIndex={-1} data-testid="button-visit-github">
-                  前往
-                </Button>
-              </div>
-            </div>
-          </a>
-
-          <a
-            href="mailto:nickzhuang1@gmail.com"
-            className="block hover-elevate active-elevate-2 rounded-md"
-            data-testid="link-contact-email"
-          >
-            <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-md bg-gradient-to-br from-purple-500/20 to-cyan-400/20 flex items-center justify-center">
-                  <Mail className="w-5 h-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">Email</p>
-                  <p className="text-xs text-muted-foreground">技術合作與邀約</p>
-                </div>
-                <Button variant="ghost" size="sm" tabIndex={-1} data-testid="button-send-email">
-                  寄信
-                </Button>
-              </div>
-            </div>
-          </a>
+              </a>
+            );
+          })}
 
           <div className="rounded-md border border-primary/20 bg-gradient-to-br from-card to-primary/5 p-6 text-center">
             <p className="font-mono text-xs text-primary/70 mb-3">// open to</p>

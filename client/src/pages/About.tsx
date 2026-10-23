@@ -16,12 +16,22 @@ import {
   History,
   Trophy,
 } from "lucide-react";
+import { contactChannels, type ContactChannelKey } from "@/lib/contactLinks";
 import { useLocation } from "wouter";
 import { FaLinkedin } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { buildTitle } from "@/lib/seoTitle";
+
+/** 各管道的圖示，About 頁的連結區用（與 Contact 頁共用 contactChannels 資料） */
+const CHANNEL_ICON: Record<ContactChannelKey, React.ComponentType<{ className?: string }>> = {
+  linkedin: FaLinkedin,
+  facebook: FaFacebook,
+  github: FaGithub,
+  ithome: Trophy,
+  email: Mail,
+};
 
 export default function About() {
   usePageTitle(buildTitle("關於我"), "AI 與雲端的技術探索之路 — Nick Zhuang 的職涯介紹。", "/about");
@@ -218,59 +228,24 @@ export default function About() {
                 <h2 className="font-semibold text-sm">連結</h2>
               </div>
               <div className="space-y-2">
-                <a
-                  href={aboutData.social.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-muted-foreground hover-elevate rounded-md p-1.5 -mx-1.5"
-                  data-testid="link-about-linkedin"
-                >
-                  <FaLinkedin className="w-4 h-4" />
-                  <span>LinkedIn</span>
-                  <ExternalLink className="w-3 h-3 ml-auto opacity-40" />
-                </a>
-                <a
-                  href={aboutData.social.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-muted-foreground hover-elevate rounded-md p-1.5 -mx-1.5"
-                  data-testid="link-about-facebook"
-                >
-                  <FaFacebook className="w-4 h-4" />
-                  <span>Facebook</span>
-                  <ExternalLink className="w-3 h-3 ml-auto opacity-40" />
-                </a>
-                <a
-                  href={aboutData.social.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-muted-foreground hover-elevate rounded-md p-1.5 -mx-1.5"
-                  data-testid="link-about-github"
-                >
-                  <FaGithub className="w-4 h-4" />
-                  <span>GitHub</span>
-                  <ExternalLink className="w-3 h-3 ml-auto opacity-40" />
-                </a>
-                <a
-                  href={aboutData.social.ithome}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-muted-foreground hover-elevate rounded-md p-1.5 -mx-1.5"
-                  data-testid="link-about-ithome"
-                >
-                  <Trophy className="w-4 h-4" />
-                  <span>iThome 鐵人賽</span>
-                  <ExternalLink className="w-3 h-3 ml-auto opacity-40" />
-                </a>
-                <a
-                  href={aboutData.social.email}
-                  className="flex items-center gap-2 text-sm text-muted-foreground hover-elevate rounded-md p-1.5 -mx-1.5"
-                  data-testid="link-about-email"
-                >
-                  <Mail className="w-4 h-4" />
-                  <span>Email</span>
-                  <ExternalLink className="w-3 h-3 ml-auto opacity-40" />
-                </a>
+                {contactChannels.map((channel) => {
+                  const Icon = CHANNEL_ICON[channel.key];
+                  return (
+                    <a
+                      key={channel.key}
+                      href={channel.href}
+                      {...(channel.external
+                        ? { target: "_blank", rel: "noopener noreferrer" }
+                        : {})}
+                      className="flex items-center gap-2 text-sm text-muted-foreground hover-elevate rounded-md p-1.5 -mx-1.5"
+                      data-testid={`link-about-${channel.key}`}
+                    >
+                      <Icon className="w-4 h-4" />
+                      <span>{channel.label}</span>
+                      <ExternalLink className="w-3 h-3 ml-auto opacity-40" />
+                    </a>
+                  );
+                })}
               </div>
             </div>
 
