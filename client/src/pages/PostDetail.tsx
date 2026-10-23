@@ -304,10 +304,13 @@ function renderMarkdown(md: string, articleId?: string, fallbackAlt?: string): J
         </p>
       );
     } else if (/^(#{1,4}) /.test(line)) {
-      const lv = (line.match(/^(#{1,4}) /) ?? ["", ""])[1].length;
+      const mdLevel = (line.match(/^(#{1,4}) /) ?? ["", ""])[1].length;
+      // 文章標題已是頁面唯一的 h1；內文的 "# " 降一階渲染成 h2。
+      // 79 篇裡有 60 篇原本會出現兩個 h1，爬蟲難以判斷頁面主題。
+      const lv = mdLevel === 1 ? 2 : mdLevel;
       const txt = line.replace(/^#{1,4} /, "");
       lastHeading = slugId(txt);
-      const Tag = `h${lv}` as "h1" | "h2" | "h3" | "h4";
+      const Tag = `h${lv}` as "h2" | "h3" | "h4";
       const hcls = [
         "text-2xl font-bold mt-10 mb-4 scroll-mt-20",
         "text-xl font-bold mt-10 mb-4 scroll-mt-20",
