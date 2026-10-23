@@ -4,9 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
 import { ArrowRight, Sparkles, BookOpen, Layers, Code2 } from "lucide-react";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import { buildTitle } from "@/lib/seoTitle";
 
 export default function Home() {
-  usePageTitle("Nick's Blog - AI異想封印 | CTO的爐邊雜談", "CTO的爐邊雜談 — 分享 AI 技術、系統架構、與職涯探索的深度觀點。", "/");
+  usePageTitle(buildTitle("AI 異想封印：技術實戰與職涯思索"), "分享 AI 技術實戰、系統架構與職涯思索。十餘年軟體開發經驗，從前端到後端、從雲端到人工智慧。這裡有 K8S 與生成式 AI 的實作筆記、NVIDIA 認證備考心法，以及技術管理路上的職涯觀察。", "/");
 
   const featured = blogPosts[0];
   const recent = blogPosts.slice(1, 7);
@@ -36,7 +37,7 @@ export default function Home() {
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-5 leading-[1.1]">
               <span className="gradient-text">AI 異想封印：</span>
               <br />
-              <span className="text-foreground">技術與職涯筆記</span>
+              <span className="text-foreground">技術實戰與職涯思索</span>
             </h1>
 
             <p className="text-base sm:text-lg text-muted-foreground max-w-xl mb-10 leading-relaxed">

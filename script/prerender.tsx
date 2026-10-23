@@ -195,7 +195,7 @@ function loadMarkdown(id: string): string | undefined {
 const PERSON_ID = `${SITE}/#person`;
 const WEBSITE_ID = `${SITE}/#website`;
 const HOME_DESCRIPTION =
-  "CTO的爐邊雜談 — 分享 AI 技術、系統架構、與職涯探索的深度觀點。十年軟體開發經驗，從前端到後端，從雲端到人工智慧。";
+  "分享 AI 技術實戰、系統架構與職涯思索。十餘年軟體開發經驗，從前端到後端、從雲端到人工智慧。這裡有 K8S 與生成式 AI 的實作筆記、NVIDIA 認證備考心法，以及技術管理路上的職涯觀察。";
 
 /**
  * 首頁的實體資訊（WebSite + Person）。
@@ -332,7 +332,7 @@ export async function prerenderRoutes(): Promise<number> {
   const pages: PageDef[] = [
     {
       meta: {
-        title: "Nick's Blog - AI異想封印 | CTO的爐邊雜談",
+        title: buildTitle("AI 異想封印：技術實戰與職涯思索"),
         description: HOME_DESCRIPTION,
         path: "/",
         jsonLd: homeJsonLd(),
