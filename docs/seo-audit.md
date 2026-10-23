@@ -203,6 +203,15 @@ c) 補 alt：可以先用「文章標題 + 圖序」自動補齊，再由你人�
 
 ## 四、P1 — 影響曝光與點擊率（2–3 週內）
 
+| 項目 | 狀態 |
+|---|---|
+| P1-1 主題聚合頁 / 系列頁 | ⬜ 待做（目前最大的結構缺口） |
+| P1-2 結構化資料 | ✅ 已完成 |
+| P1-3 每篇獨立 OG 圖 | ⬜ 待做（`og:image:width/height/alt` 已補） |
+| P1-4 H1 重複 | ✅ 已完成 |
+| P1-5 日期與作者語意 | ✅ 已完成 |
+| P1-6 RSS / Atom | ✅ 已完成 |
+
 ### P1-1 缺少可索引的「主題聚合頁 / 系列頁」
 
 目前分類與系列都是查詢字串：`/posts?filter=K8S`、`/posts?series=ironman-2023`，
@@ -218,7 +227,7 @@ c) 補 alt：可以先用「文章標題 + 圖序」自動補齊，再由你人�
 重點：每個聚合頁都要有**獨一無二的介紹文案**，不要只是列表，否則會變成 thin content 反而扣分。
 這些頁面同樣要納入 `prerender.tsx` 與 sitemap。
 
-### P1-2 結構化資料只有一半
+### P1-2 結構化資料只有一半 ✅
 
 現在只有文章頁的 `BlogPosting`。建議補：
 
@@ -227,7 +236,7 @@ c) 補 alt：可以先用「文章標題 + 圖序」自動補齊，再由你人�
 - `Person` 補 `sameAs`（GitHub / LinkedIn / iThome / 書籍頁）與 `jobTitle`、`worksFor`
   → 對「CTO / 個人品牌」這類查詢的實體辨識與 E-E-A-T 很有幫助
 
-### P1-3 OG 圖全站共用一張，且比例不符
+### P1-3 OG 圖全站共用一張，且比例不符（部分完成）
 
 - 79 篇文章全部指向同一張 `og-image.png`
 - 尺寸 2072×1036（比例 2:1），Twitter `summary_large_image` 建議 1200×630（1.91:1），分享時會被裁切
@@ -236,7 +245,7 @@ c) 補 alt：可以先用「文章標題 + 圖序」自動補齊，再由你人�
 **修法**：優先用文章自己的 `cover.jpg` 當 og:image（沒有才 fallback），並在 `prerender.tsx` 補上尺寸與 alt。
 社群分享的點擊率會直接反映在流量上。
 
-### P1-4 H1 重複（60 / 79 篇有兩個 H1）
+### P1-4 H1 重複（60 / 79 篇有兩個 H1）✅
 
 `PostDetail` 的標題已是 `<h1>`，但文章 Markdown 的 `# 標題`（79 篇中 61 篇有）也被渲染成 `<h1>`。
 
@@ -245,7 +254,7 @@ c) 補 alt：可以先用「文章標題 + 圖序」自動補齊，再由你人�
 const lv = Math.min(Math.max((line.match(/^(#{1,4}) /) ?? ["", ""])[1].length, 2), 4);
 ```
 
-### P1-5 缺少日期與作者語意
+### P1-5 缺少日期與作者語意 ✅
 
 - 沒有 `<time datetime="2026-08-08">`（日期只是純文字 `<span>`）
 - 沒有 `<meta name="author">`、`article:published_time`、`article:modified_time`
@@ -253,12 +262,24 @@ const lv = Math.min(Math.max((line.match(/^(#{1,4}) /) ?? ["", ""])[1].length, 2
 
 **修法**：`blogData` 加 `updated?: string`；渲染時用 `<time>`；`injectMeta` 補 `article:*`。
 
-### P1-6 沒有 RSS / Atom
+### P1-6 沒有 RSS / Atom ✅
 
 沒有 `feed.xml`，也沒有 `<link rel="alternate" type="application/rss+xml">`。
 對技術部落格來說，RSS 是聚合器、電子報、開發者社群自動抓取的入口，成本很低。
 
 ---
+
+### Batch A 實作記錄（2026-08-15）
+
+| 項目 | 落實方式 | 驗證 |
+|---|---|---|
+| P1-4 | `renderMarkdown` 把 Markdown 的 `#` 降一階渲染成 `h2`（`##`/`###`/`####` 不變） | 85/85 頁面 H1 數 = 1（原本 60 篇是 2） |
+| P1-5 | 文章頁日期改 `<time datetime>`；`blogData` 加 `updated?`（未填時 `dateModified` = `date`，不造假）；每頁 `meta name="author"`，文章頁加 `article:published_time` / `modified_time` / `section` | 79 篇文章頁全部有 `<time datetime>`，0 個缺 author |
+| P1-2 | 首頁 JSON-LD：`WebSite` + `Person`（`jobTitle`、`worksFor`、`knowsAbout`、`alumniOf`、`sameAs` → GitHub / LinkedIn）；文章 JSON-LD 改 `@graph`，加入 `BreadcrumbList` | 首頁 `[WebSite, Person]`、文章 `[BlogPosting, BreadcrumbList]` |
+| P1-6 | 新增 `script/generate-feed.ts`（RSS 2.0，最新 30 篇，結尾斜線 URL）；`index.html` 加 `rel="alternate"` | 30 筆 item，全部斜線結尾 |
+| P1-3 | `index.html` 補 `og:image:width/height/alt`（2072×1036） | 已輸出，但 79 篇仍共用同一張圖 |
+
+踩到的坑：React 18 的 `renderToString` 會把 `dateTime` 序列化成 `dateTime="…"`（HTML 屬性名大小寫不敏感，瀏覽器解析後就是 `datetime`，功能正常）。為避免驗證工具誤判，`prerender.tsx` 在輸出時正規化為小寫。
 
 ## 五、P2 — 內容與文案優化
 
