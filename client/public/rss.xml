@@ -67,7 +67,7 @@
       <link>https://nickzhuang.com/posts/zsh-debug/</link>
       <guid isPermaLink="true">https://nickzhuang.com/posts/zsh-debug/</guid>
       <pubDate>Fri, 03 Apr 2026 00:00:00 GMT</pubDate>
-      <description>分享 zsh shell 的 debug 技巧，協助追蹤與排查 zsh 腳本問題。</description>
+      <description>某天晚上發現自己的 Mac 開終端機要等 15 秒以上，於是回頭查 zprofile 與 zshrc 到底在做什麼。這篇記錄用 zprof 找出拖慢啟動元凶的過程，以及 debug zsh 腳本時真正有用的幾個技巧。</description>
       <category>Shell</category>
       <category>zsh</category>
       <category>Debug</category>
@@ -88,7 +88,7 @@
       <link>https://nickzhuang.com/posts/about-ai-cloud/</link>
       <guid isPermaLink="true">https://nickzhuang.com/posts/about-ai-cloud/</guid>
       <pubDate>Sun, 14 Sep 2025 00:00:00 GMT</pubDate>
-      <description>從軟體工程師到 CTO，超過十年的技術職涯歷程。分享在 AI 軟體開發與系統架構設計中的成長與蛻變。</description>
+      <description>從純數與機械背景出發，畢業先當兵、再進入軟體業，一路走到 CTO，累計 12 年的完整職涯介紹。寫給每次見面都要重講一次經歷的新朋友，也寫給正在考慮轉進軟體與雲端的人。</description>
       <category>職涯</category>
       <category>人生探索</category>
     </item>
@@ -185,7 +185,7 @@
       <link>https://nickzhuang.com/posts/why-blog/</link>
       <guid isPermaLink="true">https://nickzhuang.com/posts/why-blog/</guid>
       <pubDate>Sun, 28 Apr 2024 00:00:00 GMT</pubDate>
-      <description>分享創建這個部落格的初衷，以及為什麼選擇用文字記錄技術旅程與人生探索。</description>
+      <description>從 2013 年入行至今，從工程師、技術主管到合夥創業，這個部落格是這些年技術與職涯軌跡的沉澱。這篇說明我為什麼開始寫、想寫哪些主題，以及你可以在這裡期待看到什麼。</description>
       <category>AI</category>
       <category>人生探索</category>
     </item>
@@ -249,7 +249,7 @@
       <link>https://nickzhuang.com/posts/controlnet/</link>
       <guid isPermaLink="true">https://nickzhuang.com/posts/controlnet/</guid>
       <pubDate>Mon, 09 Oct 2023 00:00:00 GMT</pubDate>
-      <description>探索 ControlNet 如何實現精確的圖像生成控制。</description>
+      <description>ControlNet 讓圖像生成從「抽卡」變成「指定」：只要給一張骨架圖、深度圖或線稿，就能控制畫面構圖。這篇說明它的原理、演算法與實際特色，最後再補幾個同場加映的應用場合。</description>
       <category>Gen AI</category>
       <category>Stable Diffusion</category>
     </item>
