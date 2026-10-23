@@ -9,7 +9,7 @@
 > - `client/public/_headers`：`/assets/*` 與 `/articles/*` 長快取
 > - `script/optimize-images.ts` + `build.ts`：建置時轉 WebP、補 `width/height`、首圖 eager
 > - `client/src/pages/PostDetail.tsx`：相關文章、系列導覽、alt fallback
-> - 建置驗證：85/85 頁預渲染成功、sitemap 85 筆全部為斜線 URL、文章內文完整、0 壞圖
+> - 建置驗證：90/90 頁預渲染成功、sitemap 90 筆全部為斜線 URL、文章內文完整、0 壞圖
 >
 > **注意**：圖片原檔仍留在 repo（134 MB），只有上傳量變小。若要連 repo 都瘦身，需要另外決定是否把原檔移出或改用 Git LFS。
 > 新增的 `client/src/lib/imageMeta.json`（31 KB）是建置產物但**需要進版控**，否則 `pnpm dev` 無法啟動。
@@ -22,7 +22,7 @@
 |------|------|
 | 預渲染 | `script/prerender.tsx` 把 79 篇 + 6 頁輸出成含完整內文的靜態 HTML，爬蟲不用執行 JS ✅ |
 | 逐頁 meta | title / description / canonical / og / twitter 皆逐頁注入 ✅ |
-| Sitemap | 85 個 URL（6 靜態 + 79 文章），由建置腳本自動產生 ✅ |
+| Sitemap | 90 個 URL（6 靜態 + 5 聚合 + 79 文章），由建置腳本自動產生 ✅ |
 | robots.txt | 允許全站 + 指向 sitemap ✅ |
 | 結構化資料 | 文章頁有 `BlogPosting` ✅ |
 | 未知路徑 | 生產站回 404（非 soft 404）✅ |
@@ -205,14 +205,14 @@ c) 補 alt：可以先用「文章標題 + 圖序」自動補齊，再由你人�
 
 | 項目 | 狀態 |
 |---|---|
-| P1-1 主題聚合頁 / 系列頁 | ⬜ 待做（目前最大的結構缺口） |
+| P1-1 主題聚合頁 / 系列頁 | ✅ 已完成（5 頁） |
 | P1-2 結構化資料 | ✅ 已完成 |
 | P1-3 每篇獨立 OG 圖 | ⬜ 待做（`og:image:width/height/alt` 已補） |
 | P1-4 H1 重複 | ✅ 已完成 |
 | P1-5 日期與作者語意 | ✅ 已完成 |
 | P1-6 RSS / Atom | ✅ 已完成 |
 
-### P1-1 缺少可索引的「主題聚合頁 / 系列頁」
+### P1-1 缺少可索引的「主題聚合頁 / 系列頁」✅
 
 目前分類與系列都是查詢字串：`/posts?filter=K8S`、`/posts?series=ironman-2023`，
 而 `/posts` 的 canonical 一律指向 `/posts`，所以**這些聚合頁永遠不會被獨立索引**。
@@ -280,6 +280,26 @@ const lv = Math.min(Math.max((line.match(/^(#{1,4}) /) ?? ["", ""])[1].length, 2
 | P1-3 | `index.html` 補 `og:image:width/height/alt`（2072×1036） | 已輸出，但 79 篇仍共用同一張圖 |
 
 踩到的坑：React 18 的 `renderToString` 會把 `dateTime` 序列化成 `dateTime="…"`（HTML 屬性名大小寫不敏感，瀏覽器解析後就是 `datetime`，功能正常）。為避免驗證工具誤判，`prerender.tsx` 在輸出時正規化為小寫。
+
+### Batch B 實作記錄（2026-08-15）
+
+新增 5 個可被獨立索引的主題落地頁，每頁都有 150–250 字的獨立導讀（旁觀者視角）與 `CollectionPage` + `ItemList` + `BreadcrumbList` 結構化資料：
+
+| URL | 篇數 | 為什麼是這幾個 |
+|---|---|---|
+| `/series/ironman-2023/` | 30 | 生成式 AI 完整系列，最大的內容資產 |
+| `/series/ironman-2019/` | 30 | Kubernetes 完整系列 |
+| `/category/ai/` | 12 | 唯一 100% 獨立於系列的聚落（12 篇全部不在任何系列內） |
+| `/tag/nvidia/` | 6 | 全部獨立，且對應「NVIDIA 認證怎麼考」這類高意圖查詢 |
+| `/tag/deep-learning/` | 15 | 含 6 篇系列外的深度學習內容 |
+
+**刻意不做的頁面**：`gen-ai`（31 篇中 30 篇在 2023 系列內）、`k8s-docker`（30 篇全在 2019 系列內）、`Stable Diffusion`（15 篇全在系列內）、`K8S`／`Gen AI`／`AWS`／`EKS` 等標籤同理 —— 與系列頁近乎重複，獨立建頁只會互搶排名。`life`（3 篇）、`career`（2 篇）、`deep-learning` 分類（1 篇）則太薄。
+
+**內部連結**：文章頁的系列徽章與「系列目錄」連到系列頁；標籤徽章若有對應聚合頁就變成連結；footer 新增「主題」導覽（5 頁 + RSS），讓這些頁面從全站每一頁都有一條爬取路徑，不成為孤島。已驗證沒有任何 `/series|/category|/tag` 連結指向不存在的頁面。
+
+驗證：90/90 頁預渲染、5 頁 H1 各 1 個、canonical 皆結尾斜線、sitemap 90 筆、`ItemList` 篇數與卡片數一致（30/30/12/6/15）。
+
+---
 
 ## 五、P2 — 內容與文案優化
 
@@ -361,7 +381,7 @@ Google 對「有明確更新紀錄」的技術文章評價通常較高。
 | 2 | ✅ P0-2 圖片快取 `_headers`（已完成，待上線驗證） | 30 分鐘 | 重複瀏覽不再重新驗證每張圖 |
 | 3 | ✅ P0-2 圖片壓縮成 WebP ＋ 首圖 eager ＋ width/height（已完成） | 2–3 小時 | 132.8 MB → 20.4 MB、上傳 140 MB → 38 MB |
 | 4 | ✅ P0-3 相關文章 + 系列導覽（已完成） | 2 小時 | 內鏈 0 → 平均 4.1 條 |
-| 5 | P1-1 系列頁 / 分類頁 | 半天 | 新增 8–10 個可排名落地頁 |
+| 5 | P1-1 系列頁 / 分類頁 | 半天 | ✅ 已新增 5 個落地頁（sitemap 90 筆） |
 | 6 | P1-2 ~ P1-6 結構化資料、OG、H1、time、RSS | 半天 | Rich results 與 CTR |
 | 7 | 平台：關閉 workers.dev 路由、檢查預覽 URL | 10 分鐘 | 避免重複內容 |
 | 8 | P2 標題 / description 文案 | 分批進行 | CTR 與內容品質 |
