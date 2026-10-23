@@ -2,9 +2,6 @@
 
 # [Day17] k8s管理篇（三）：User Management、RBAC、Node Ｍaintenance
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 今天是管理篇的最後一篇，我們最後要介紹User Management和RBAC，就是使用者的權限操作，如：新增使用者、設置對應權限，以及Node Maintenance，也就是相對應的集群節點管理方式，底下詳細介紹。

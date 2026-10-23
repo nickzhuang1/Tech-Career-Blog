@@ -2,9 +2,6 @@
 
 # [Day10] Transformer，就決定是你了
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

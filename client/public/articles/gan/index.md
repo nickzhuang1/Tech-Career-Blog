@@ -2,9 +2,6 @@
 
 # [Day6] GAN，聽說你最強，參數很難調
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

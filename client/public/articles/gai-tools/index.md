@@ -2,9 +2,6 @@
 
 # [Day13] 常見的圖像生成工具
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

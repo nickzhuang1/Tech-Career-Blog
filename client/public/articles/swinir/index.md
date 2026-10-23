@@ -2,9 +2,6 @@
 
 # [Day25] SwinIR，圖像重建的突破
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

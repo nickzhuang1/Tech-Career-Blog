@@ -2,9 +2,6 @@
 
 # [Day22] Stable Diffusion 基礎插件
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

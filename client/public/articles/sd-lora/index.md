@@ -2,9 +2,6 @@
 
 # [Day28] SD訓練LoRA
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

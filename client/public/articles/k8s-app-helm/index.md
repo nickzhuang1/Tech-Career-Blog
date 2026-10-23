@@ -2,9 +2,6 @@
 
 # [Day27] k8s應用篇（一）：Helm部署apps、HPA和CA
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 今天開始我們會提些在AWS上可以做k8s的應用，應用篇的部分分為上下兩篇。

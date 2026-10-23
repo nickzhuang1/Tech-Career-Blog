@@ -2,9 +2,6 @@
 
 # [Day16] Stable Diffusion的基礎使用
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

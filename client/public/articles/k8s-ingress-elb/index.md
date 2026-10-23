@@ -2,9 +2,6 @@
 
 # [Day23] k8s進階篇延伸與EKS（一）：Ingress、ELB、Service
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 昨天我們看完了基礎篇的內容，今天開始我們要來瀏覽在進階篇的範疇內，minikube與EKS不同的地方，關於進階篇的內容分為兩篇，第一篇主要著重於Ingress及Service的部分，我們將著重於在AWS上實做一個traefik的Ingress，之前在minikube上實做的是nginx的Ingress，可以比較一下差異。第二篇是講述Affinity and Anti-Affinity、Taints and Tolerations、Cordon and Uncordon and Drain結合應用的內容。我們不會再檢視StatefulSet和DaemonSet的內容，因為他們的操作方法與Deployment類似，回顧可以參考 [這裡](https://nickzhuang.com/posts/k8s-ingress-vol)。

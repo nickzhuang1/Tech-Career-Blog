@@ -2,9 +2,6 @@
 
 # [Day1] 緣起
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ![](./images/img_002.png)
 
 這是一張利用Stable Diffusion生成的圖片，賽博龐克的風格，歡迎大家進入AIGC的世界。

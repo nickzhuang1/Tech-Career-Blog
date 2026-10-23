@@ -2,9 +2,6 @@
 
 # [Day7] Pixel RNN，簡單，卻不失優雅
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

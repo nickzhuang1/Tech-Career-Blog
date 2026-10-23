@@ -2,9 +2,6 @@
 
 # [Day23] Stable Diffusion 進階插件
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

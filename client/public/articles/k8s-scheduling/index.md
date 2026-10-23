@@ -2,9 +2,6 @@
 
 # [Day24] k8s進階篇延伸與EKS（二）：Scheduling
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 今天我們主要來探討關於“排程”，也就是所謂的Scheduling這件事情，牽涉到這類的功能有：Affinity and Anti-Affinity、Taints and Tolerations、Cordon and Uncordon、Drain等等，接下來的時間，我們就來綜合運用操作一下，體驗下在AWS上集群操作和minikube有何不同。

@@ -2,9 +2,6 @@
 
 # [Day29] k8s集群篇：HA、Federation
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 今天我們要來探討一下群集相關的操作，在前些時候有提到過HA的觀念，這邊會對比minikube與AWS做個整合性的說明。再來就是跨集群的溝通部分了，這裡將會實作一個Federation，並將一個Deployment部署到兩個不同的cluster上。

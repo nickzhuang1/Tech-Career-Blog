@@ -2,9 +2,6 @@
 
 # [Day19] LoRA，微調方法的新突破
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

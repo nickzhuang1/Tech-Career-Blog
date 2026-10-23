@@ -2,9 +2,6 @@
 
 # [Day27] SD訓練Checkpoint
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

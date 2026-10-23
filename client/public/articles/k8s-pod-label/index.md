@@ -2,9 +2,6 @@
 
 # [Day8] k8s基礎篇（一）：Pod、Label、Health check、Scaling
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 前幾天我們已經大致理解k8s上的架構，我們也從幾個不同的面向去理解k8s，那麼從今天開始，我們就來仔細看看k8s架構中的所有細節，基礎篇的部分，我將它切成兩塊，透過引導對話的方式去介紹，這樣會比較好理解。那我們就開始吧！

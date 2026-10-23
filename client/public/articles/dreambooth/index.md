@@ -2,9 +2,6 @@
 
 # [Day18] Dreambooth，夢幻般的驚嘆調
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

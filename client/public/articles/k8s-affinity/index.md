@@ -2,9 +2,6 @@
 
 # [Day13] k8s進階篇（四）：Affinity and Anti-Affinity、Taints and Tolerations
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 今天我們要來談談一些管理k8s群集的時候，有可能會用到的設定，這部分我把它放在進階篇最後，主要是因為它算是一種過渡，這兩個topic，橫跨了進階篇和管理篇的內容，首先我們看到affinity和Anti-Affinity，所謂的Affinity是親和性的意思，在k8s中講到Affinity就是在指親和性調度，意思就是當滿足了某些條件，就把Pod調度到集群上，Anti-Affinity則是相反的邏輯，也就是當也就是當滿足了某些條件，就不要把Pod調度到集群上。再來我們要看的是Taint（污點）和Toleration（容忍），Taint提供了Node一項標記，但注意，這個標記不是Label，當設置好Taint後，滿足Toleration的Pod將可以部署到該Node上。

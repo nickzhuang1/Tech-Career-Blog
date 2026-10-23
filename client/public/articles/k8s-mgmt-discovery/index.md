@@ -2,9 +2,6 @@
 
 # [Day25] k8s管理篇延伸與EKS（一）：Service Discovery、Dashboard、Monitoring
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 昨天我們已經將進階篇的延伸做了一個結束，那麼今天我們要開始來看看管理篇的內容，比較一下在AWS上的操作與minikube有何差異。

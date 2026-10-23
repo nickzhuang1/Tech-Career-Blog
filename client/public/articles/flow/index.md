@@ -2,9 +2,6 @@
 
 ## [Day8] Flow，神秘的流派
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

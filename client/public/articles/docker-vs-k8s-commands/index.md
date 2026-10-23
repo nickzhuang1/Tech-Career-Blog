@@ -2,9 +2,6 @@
 
 # [Day4] 碼頭工的日常與舵手的逆襲：Docker與k8s常用指令集比較
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 既然第二天我們已經快速瀏覽過Docker的基本指令，那我們就應該要知道在k8s中我們有哪些Docker用到的指令可以沿用，同時透過這樣的方式用另外一個面向去了解k8s。

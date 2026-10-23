@@ -2,9 +2,6 @@
 
 # [Day4] AIGC的演進
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

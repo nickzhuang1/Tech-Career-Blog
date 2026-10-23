@@ -2,9 +2,6 @@
 
 # [Day26] k8s管理篇延伸與EKS（二）：Resource Quota、Namespace、RBAC
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 昨天我們看完了管理篇的上卷，今天我們要接續昨天的進度，繼續朝下卷邁進。

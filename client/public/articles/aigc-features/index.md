@@ -2,9 +2,6 @@
 
 # [Day3] AIGC的特色與應用
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

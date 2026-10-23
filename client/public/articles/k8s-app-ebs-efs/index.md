@@ -2,9 +2,6 @@
 
 # [Day28] k8s應用篇（二）：EBS和EFS的使用
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 今天我們來看個整合性例子，講述了Wordpress與MySQL的結合，同樣的做法分為兩種，第一種是透過EBS去實作它，第二種方法是透過EFS去實作它，那麼接下來我們就開始吧！

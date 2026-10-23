@@ -2,9 +2,6 @@
 
 # [Day26] SD的進階使用技巧
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

@@ -2,9 +2,6 @@
 
 # [Day6] 淺談k8s架構之二：什麼是Object？什麼是Abstraction？有何不同？
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 昨天我們介紹了節點的架構，以及一些相關的簡易操作，我們來統整下昨天的觀念，也方便和今天的介紹作些比較，透過不同的面相來了解k8s，相信會比較輕鬆些。

@@ -2,9 +2,6 @@
 
 # [Day11] k8s進階篇（二）：Ingress、Volume、PodPreset
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 今天是非常重要的一天，這個章節所介紹的內容，會與整個集群的規劃與建置息息相關，尤其是Volume，我們已經在前面幾個章節有用到它，另外，Ingress的部分是設計給外部連接群集服務用的，PodPreset是在Pod創建時，透過API的方式，動態增加它所能使用的資源，下面詳細介紹。

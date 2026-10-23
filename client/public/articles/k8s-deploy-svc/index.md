@@ -2,9 +2,6 @@
 
 # [Day9] k8s基礎篇（二）：Deployment、ReplicaSet、Service、Secrets
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 昨天我們看了一些基礎篇的架構，今天讓我們延續，繼續將基礎篇的部分做個結束，今天的章節內容會用到昨天的部分元件功能，沒印象的務必複習一下，那我們就開始吧！

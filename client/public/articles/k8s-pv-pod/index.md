@@ -2,9 +2,6 @@
 
 # [Day16] k8s之PV小整合：Pod、Deployment、Service、Job與PersistentVolume
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 昨天我們看過了Resource Quota和Namespace的使用，今天我們再延伸介紹之前約定要探討的主題：PersistentVolume，之前在 [Volume](https://nickzhuang.com/posts/k8s-ingress-vol) 有提過要介紹，所謂的Persistent Volume要運作，就必須要藉由Persistent Volume Claim去與其binding才行。另外，這邊也會介紹ephemeral-storage的用法，這我們之前提過是限制空間用的，當然這用法有不同模式，底下詳細介紹。

@@ -2,9 +2,6 @@
 
 # [Day17] 來看看文本倒置是要倒轉什麼: Embedding
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

@@ -2,9 +2,6 @@
 
 # [Day14] k8s管理篇（一）：Monitoring、Job、CronJob
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 今天是管理篇的第一篇，從今天的內容開始，我們會從集群中的功能使用轉換到管理集群的部分，直到目前為止，還有些元件沒有介紹完畢，主要是因為有些元件是歸類到管理篇的。

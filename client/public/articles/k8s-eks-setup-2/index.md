@@ -2,9 +2,6 @@
 
 # [Day21] k8s實務篇（二）：EKS架設k8s（下）
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 上篇的部分：AWS的基礎設置、創建k8s的控制介面（Yesterday）

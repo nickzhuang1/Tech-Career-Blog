@@ -2,9 +2,6 @@
 
 # [Day24] ControlNet，控制狂人？
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

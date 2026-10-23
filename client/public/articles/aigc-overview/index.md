@@ -2,9 +2,6 @@
 
 # [Day30] 全文總結：AIGC的前世今生
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

@@ -2,9 +2,6 @@
 
 # [Day11] NeRF，聽說你是建模達人
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

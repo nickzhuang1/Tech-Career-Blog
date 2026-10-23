@@ -2,9 +2,6 @@
 
 # [Day20] HyperNetwork，感覺很高級
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

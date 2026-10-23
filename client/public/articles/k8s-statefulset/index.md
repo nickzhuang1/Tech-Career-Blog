@@ -2,9 +2,6 @@
 
 # [Day12] k8s進階篇（三）：StatefulSet、DaemonSet
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 今天我們要來聊聊關於一些排程的東西，簡單來說，所謂的StatefulSet就是一組有編號的Pod集合，每一個Pod都會有對應的獨立編號。再來是DaemonSet，這也是關於Pod的進階管控元件，它可以維持Pod運行的狀態，提供一個自動重啟的保證。

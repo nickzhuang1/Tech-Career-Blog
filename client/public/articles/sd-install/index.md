@@ -2,9 +2,6 @@
 
 # [Day15] Stable Diffusion的安裝
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

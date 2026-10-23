@@ -2,9 +2,6 @@
 
 # [Day5] 淺談k8s架構之一：Node是什麼？Master與Slave有何不同？
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 今天我們來談一下關於k8s的架構，這個觀點是從節點的角度去觀察的，也就是Node，當然早在前面我們有先提過一些， [小複習：k8s的基礎架構](https://nickzhuang.com/posts/k8s-intro)，在這個章節，我們來詳細說下Node的架構。

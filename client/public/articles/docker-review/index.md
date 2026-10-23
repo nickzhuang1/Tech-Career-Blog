@@ -2,9 +2,6 @@
 
 # [Day2] 一日碼頭工：快速Docker複習
 
-Author: Nick Zhuang
-Type: docker
-
 ## 前言
 
 為了幫助大家了解k8s的究竟好用在哪邊，我想我們今天就來稍微複習一下Docker的功能

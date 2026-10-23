@@ -2,9 +2,6 @@
 
 # [Day2] 哎呀!? AIGC是什麼東東
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

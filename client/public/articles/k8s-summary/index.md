@@ -2,9 +2,6 @@
 
 # [Day30] k8s總結：架構整合、圖表整理
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 今天我們來詳細回顧一下之前的內容，整理一些圖表及架構方便記憶。

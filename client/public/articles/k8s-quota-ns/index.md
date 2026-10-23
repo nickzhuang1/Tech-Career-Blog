@@ -2,9 +2,6 @@
 
 # [Day15] k8s管理篇（二）：Resource Quota、Namespaces
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 今天我們要來了解關於Resource Quota，也就是資源配額、資源分配的設定方式，在限制使用的設定上，我們可以利用這個元件去限制CPU、記憶體、GPU、磁碟空間等等。再來是Namespace的部分，命名空間，我們可以自行定義，並結合Resource Quota，藉以達到將集群的資源分群的效果，會先一併介紹兩個概念，並套用整合的例子。

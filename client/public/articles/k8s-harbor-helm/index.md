@@ -2,9 +2,6 @@
 
 # [Day18] k8s之管理篇延伸：兩個H的小故事：Harbor與Helm
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 今天我們要來介紹下在k8s系統底下的一些設置，因為k8s是基於Docker的管理系統，有些Docker相關的管理工具，也能夠應用到k8s上。這邊主要要介紹兩個套件：Harbor和Helm。Harbor是基於Docker底下的私有鏡像庫的管理工具，而Helm是k8s底下的Package管理工具，底下詳細介紹安裝與使用。

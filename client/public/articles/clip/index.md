@@ -2,9 +2,6 @@
 
 # [Day12] CLIP，文字圖像你都會？
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

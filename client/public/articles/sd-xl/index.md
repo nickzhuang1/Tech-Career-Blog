@@ -2,9 +2,6 @@
 
 # [Day29] SD XL：SD的限界突破
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)

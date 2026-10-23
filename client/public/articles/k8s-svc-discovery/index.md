@@ -2,9 +2,6 @@
 
 # [Day10] k8s進階篇（一）：Service Discovery、ConfigMap
 
-Author: Nick Zhuang
-Type: kubernetes
-
 ## 前言
 
 昨天我們已經將基礎篇的部分做個結束，今天開始我們會介紹進階篇的內容，若是中途亂入的朋友，請務必複習前兩天的內容，再來看這邊的會比較清楚喔！今天會進一步介紹Service，以及ConfigMap的部分，那我們就開始吧～

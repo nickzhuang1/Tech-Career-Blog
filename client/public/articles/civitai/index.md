@@ -2,9 +2,6 @@
 
 # [Day21] 歡樂下載站：Civitai及HuggingFace
 
-Author: Nick Zhuang
-Type: AI & Data
-
 ## 提要
 
 - [前言](#前言)
