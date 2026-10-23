@@ -241,6 +241,17 @@ const homeJsonLd = () => ({
       },
       sameAs: [aboutData.links.github, aboutData.links.linkedin],
       knowsAbout: aboutData.expertise,
+      // 憑證與獲獎是 E-E-A-T 裡「可驗證的專業」那一段。
+      // 只列 NVIDIA 體系的認證（五張 Certified），課程結業證明對外意義不大。
+      hasCredential: aboutData.certifications
+        .filter((c) => c.category === "NVIDIA" && c.name.includes("NVIDIA Certified"))
+        .map((c) => ({
+          "@type": "EducationalOccupationalCredential",
+          name: c.name,
+          credentialCategory: "certification",
+          recognizedBy: { "@type": "Organization", name: "NVIDIA" },
+        })),
+      award: aboutData.honors,
       alumniOf: [
         { "@type": "CollegeOrUniversity", name: "國立中央大學" },
         { "@type": "CollegeOrUniversity", name: "國立中興大學" },
