@@ -415,7 +415,7 @@ export const aboutData = {
  * 注意「曾任 NVIDIA DLI 認證講師」——這是過去身分，不能用現在式。
  */
 export const shortBio =
-  "中央大學資工所畢，現任承羽智慧技術長。曾任 NVIDIA DLI 認證講師，著有《圖像生成式 AI 的生存指南》，兩度完成 iThome 鐵人賽。";
+  "中央大學資工所畢，現任承羽智慧技術長。持有 NVIDIA Certified Professional 認證，曾任 DLI 認證講師，著有《圖像生成式 AI 的生存指南》，兩度完成 iThome 鐵人賽。";
 
 /**
  * 可驗證的外部身分頁面，供 JSON-LD 的 Person.sameAs 使用。
