@@ -31,7 +31,7 @@ import Timeline from "../client/src/pages/Timeline";
 import Certificates from "../client/src/pages/Certificates";
 import Contact from "../client/src/pages/Contact";
 import Collection from "../client/src/pages/Collection";
-import { blogPosts, aboutData } from "../client/src/lib/blogData";
+import { blogPosts, aboutData, series } from "../client/src/lib/blogData";
 import { collections, collectionPath } from "../client/src/lib/collections";
 import { ogFileForPost, ogFileForCollection } from "./generate-og";
 import { buildTitle } from "../client/src/lib/seoTitle";
@@ -204,6 +204,22 @@ function loadMarkdown(id: string): string | undefined {
   return existsSync(f) ? readFileSync(f, "utf8") : undefined;
 }
 
+/**
+ * 粗估文章字數，只為了填 JSON-LD 的 wordCount（Google 不在意精確值，
+ * 但這個欄位能幫它判斷文章規模）。中日韓字元逐字計，其餘以詞計，
+ * 程式碼區塊與圖片語法不列入。
+ */
+function wordCountOf(markdown: string | undefined): number {
+  if (!markdown) return 0;
+  const body = markdown
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1");
+  const cjk = body.match(/[\u3400-\u9fff]/g)?.length ?? 0;
+  const words = body.match(/[A-Za-z][A-Za-z0-9'’\-]*/g)?.length ?? 0;
+  return cjk + words;
+}
+
 const PERSON_ID = `${SITE}/#person`;
 const WEBSITE_ID = `${SITE}/#website`;
 const HOME_DESCRIPTION = homeDescription();
@@ -260,7 +276,7 @@ const homeJsonLd = () => ({
   ],
 });
 
-function articleJsonLd(post: (typeof blogPosts)[number]): object {
+function articleJsonLd(post: (typeof blogPosts)[number], wordCount: number): object {
   // 與 canonical 相同：一律使用平台實際回 200 的結尾斜線 URL
   const url = `${SITE}/posts/${post.id}/`;
   // 沒有實質更新就沿用發佈日，不憑空造 dateModified
@@ -291,6 +307,20 @@ function articleJsonLd(post: (typeof blogPosts)[number]): object {
         mainEntityOfPage: { "@type": "WebPage", "@id": url },
         articleSection: post.category,
         keywords: post.tags.join(", "),
+        wordCount,
+        // 系列文標明所屬的集合，讓 Google 知道這篇是三十篇裡的其中一篇，
+        // 而不是一篇孤立的文章（也讓系列頁的 CollectionPage 有反向連結）
+        ...(post.series
+          ? {
+              isPartOf: {
+                "@type": "Blog",
+                "@id": `${SITE}${collectionPath(
+                  collections.find((c) => c.kind === "series" && c.source === post.series)!,
+                )}/`,
+                name: series.find((s) => s.id === post.series)?.name ?? post.series,
+              },
+            }
+          : {}),
       },
       {
         "@type": "BreadcrumbList",
@@ -422,7 +452,7 @@ export async function prerenderRoutes(): Promise<number> {
         description: post.excerpt,
         path: `/posts/${post.id}`,
         ogType: "article" as const,
-        jsonLd: articleJsonLd(post),
+        jsonLd: articleJsonLd(post, wordCountOf(loadMarkdown(post.id))),
         article: {
           published: post.date,
           modified: post.updated ?? post.date,
