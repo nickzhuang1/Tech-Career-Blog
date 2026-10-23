@@ -1,9 +1,11 @@
 # Nick's Blog — AI 異想封印 | CTO 的爐邊雜談
 
-Nick Zhuang 的個人技術部落格，紫色到青色漸層美學，搭配玻璃擬態與 Bento 風格排版。73 篇文章來自 Notion，全部內嵌於前端渲染。
+Nick Zhuang 的個人技術部落格。React SPA + 建置時靜態預渲染（SSG），79 篇文章以手寫 Markdown 保存，
+每一頁都輸出完整的 title / description / canonical / OG / JSON-LD 靜態 HTML。
 
 - 專案首頁：https://nickzhuang.com
 - 文章列表：https://nickzhuang.com/posts
+- RSS：https://nickzhuang.com/rss.xml
 
 ---
 
@@ -11,11 +13,16 @@ Nick Zhuang 的個人技術部落格，紫色到青色漸層美學，搭配玻�
 
 | 層面 | 技術 |
 |------|------|
-| Frontend | React + Vite + TypeScript + TailwindCSS + shadcn/ui |
-| Backend | Express.js（最小化，提供靜態內容） |
+| Frontend | React 18 + Vite 7 + TypeScript + TailwindCSS + shadcn/ui |
 | Routing | wouter（client-side SPA） |
-| 部署 | Cloudflare Pages |
-| 字型 | Plus Jakarta Sans / Inter（sans）、Lora（serif）、JetBrains Mono（mono） |
+| 預渲染 | `script/prerender.tsx`，建置時以 `react-dom/server` 輸出 90 個靜態頁 |
+| 圖片 | 建置時用 sharp 轉 WebP（寬度上限 1600）並產生尺寸表 |
+| OG 圖 | 建置時用 sharp 合成 1200×630 標題卡（每篇專屬） |
+| 伺服器 | Express 僅供本機預覽；正式站是純靜態 |
+| 部署 | Cloudflare Workers Static Assets（手動上傳 `dist/public`） |
+| 字型 | Plus Jakarta Sans（sans）、JetBrains Mono（mono） |
+
+SEO 健檢報告與待辦分級見 [`docs/seo-audit.md`](docs/seo-audit.md)。
 
 ---
 
@@ -23,25 +30,132 @@ Nick Zhuang 的個人技術部落格，紫色到青色漸層美學，搭配玻�
 
 | 路徑 | 說明 |
 |------|------|
-| `/` | 首頁：Hero、Stats、精選文章、近期文章、分類標籤 |
-| `/posts` | 所有文章：搜尋 + 分類篩選（URL 驅動） |
-| `/posts/:id` | 文章詳細頁：完整 Markdown 渲染 |
-| `/about` | 關於 Nick Zhuang |
-| `/contact` | 聯絡資訊 |
-| `404` | 找不到頁面 |
+| `/` | 首頁：Hero、Stats、精選文章、近期文章 |
+| `/posts` | 所有文章：搜尋 + 分類／標籤篩選（URL 驅動） |
+| `/posts/:id` | 文章詳細頁，含自訂 Markdown 渲染器 |
+| `/series/:slug` | 系列聚合頁（30 篇的 2019 / 2023 鐵人賽） |
+| `/category/:slug` | 分類聚合頁 |
+| `/tag/:slug` | 標籤聚合頁 |
+| `/about` `/timeline` `/certificates` `/contact` | 靜態頁 |
+| 404 | 找不到頁面（`404.html`） |
+
+聚合頁由 `client/src/lib/collections.ts` 定義，目前 5 頁；只有「排除系列後仍有獨立內容」的聚落才會建頁。
 
 ---
 
-## 文章分類
+## 內容現況
 
 | 分類 | 篇數 |
 |------|------|
-| AI | 10 |
-| 職涯 / Career | 2 |
-| 人生探索 / Life | 3 |
-| 深度學習 / Deep Learning | 1 |
-| Gen AI（2023 鐵人賽） | 31 |
-| K8S & Docker（2019 鐵人賽） | 30 |
+| Gen AI | 31（其中 30 篇屬 2023 鐵人賽系列） |
+| K8S & Docker | 30（其中 30 篇屬 2019 鐵人賽系列） |
+| AI | 12 |
+| 人生探索 | 3 |
+| 職涯 | 2 |
+| 深度學習 | 1 |
+
+系列：`ironman-2023`（30 篇）、`ironman-2019`（30 篇）。
+Sitemap 共 90 筆 = 6 靜態頁 + 5 聚合頁 + 79 篇文章。
+
+---
+
+## 新增文章
+
+一篇文章由**三個部分**組成，sitemap／RSS／OG 圖／預渲染／JSON-LD 全部由 blogData 自動推導：
+
+| 部分 | 位置 |
+|------|------|
+| 內文 | `client/public/articles/<id>/index.md` |
+| 圖片 | `client/public/articles/<id>/images/*.png`（Markdown 用 `./images/xxx.png` 引用） |
+| metadata | `client/src/lib/blogData.ts` 的 `blogPosts` 陣列 |
+
+### 建議流程
+
+```bash
+# 1) 建立目錄、images/ 與 Markdown 範本，並寫入 metadata
+pnpm new:post --id my-new-post --title "文章標題" --date 2026-09-01 \
+  --category ai --tags "NVIDIA,AI" --read 8 --excerpt "60–155 字的摘要" --scaffold
+
+# 2) 寫內容、把圖片放進 images/，然後檢查
+pnpm check:posts my-new-post
+
+# 3) 建置並上傳 dist/public
+pnpm build
+```
+
+已有 Markdown、只想補 metadata 時，去掉 `--scaffold` 即可。
+系列文加上 `--series ironman-2023`，工具會自動插在該系列最後一篇之後
+（系列導覽的「第 N 篇」是照陣列順序算的）。
+
+### 六條必守規則
+
+| 規則 | 為什麼 |
+|------|--------|
+| `id` 用英文 kebab-case，**上線後不要改** | 網址就是 `/posts/<id>/`，改了等於換網址 |
+| `date` 用 `YYYY-MM-DD` | sitemap `lastmod`、JSON-LD、RSS 都吃這個格式 |
+| `excerpt` 寫 60–155 字 | 直接當 meta description；太短 Google 會自行拼貼 |
+| `title` ≤ 60 字元 | 超過會被 SERP 截斷 |
+| `category` 只能用那 6 個 id | 填別的值不會出現在任何分類篩選 |
+| 系列文的 `series` 要存在且順序正確 | 否則「上一篇／下一篇」會跳錯 |
+
+### 常見地雷
+
+- 圖片用**相對路徑**（`./images/x.png`）：webp 轉檔、`width`/`height`、首圖 eager 都靠這個對應。
+  外部圖片網址不會被最佳化，會影響 CLS。
+- **不要寫 `Author:` / `Type:` 這種行**：沒有程式解析，會被當純文字渲染在內文裡。
+- `readTime` 是手寫的欄位，可用 `--read` 指定。
+- 修訂既有文章時在 blogData 該篇加 `updated: "2026-09-01"`，頁面與 JSON-LD 會顯示更新時間。
+
+---
+
+## 建置流程
+
+`pnpm build` 依序執行：
+
+| 步驟 | 腳本 | 產出 |
+|------|------|------|
+| 1 | `script/generate-sitemap.ts` | `client/public/sitemap.xml`（90 筆，全部結尾斜線） |
+| 2 | `script/generate-feed.ts` | `client/public/rss.xml`（最新 30 篇） |
+| 3 | `script/optimize-images.ts` | 337 張 WebP + `client/src/lib/imageMeta.json`（132.8 MB → 20.4 MB） |
+| 4 | `vite build` | `dist/public`（前端 bundle 與靜態資源） |
+| 5 | `optimize-images（apply）` | 以 WebP 取代原圖並移除原檔 |
+| 6 | `script/generate-og.ts` | 84 張 1200×630 標題卡 → `dist/public/og/` |
+| 7 | esbuild | `dist/index.cjs`（本機預覽用，**不需上傳**） |
+| 8 | `script/prerender.tsx` | 90 個含完整 meta 的靜態 HTML |
+
+最終 `dist/public` 約 46 MB、703 個檔案。
+
+---
+
+## 部署
+
+正式站是 Cloudflare Workers Static Assets，**手動**把 `dist/public` 的內容上傳到資源根目錄
+（讓 `_headers`、`_redirects`、`404.html`、`robots.txt`、`sitemap.xml`、`rss.xml` 落在根層）。
+
+不要上傳 `dist/index.cjs`。上傳後可快速驗證：
+
+```bash
+curl -sI https://nickzhuang.com/posts/<id>/ | head -1                        # 200
+curl -s https://nickzhuang.com/posts/<id>/ | grep -o '<link rel="canonical"[^>]*>'
+curl -s https://nickzhuang.com/sitemap.xml | grep -c '<loc>'                  # 90
+curl -sI https://nickzhuang.com/articles/<id>/images/<file>.webp | grep -i cache-control
+```
+
+`client/public/_headers` 控制快取（`/assets/*` immutable、`/articles/*` 30 天）。
+
+---
+
+## 開發指令
+
+| 指令 | 說明 |
+|------|------|
+| `pnpm dev` | 開發伺服器（http://localhost:3000） |
+| `pnpm build` | 完整建置（含 sitemap、RSS、圖片、OG 圖、預渲染） |
+| `pnpm check` | TypeScript 型別檢查 |
+| `pnpm check:posts [id]` | 文章健檢（metadata、Markdown、圖片引用） |
+| `pnpm new:post ...` | 建立新文章並寫入 metadata |
+| `pnpm sitemap` | 只重跑 sitemap |
+| `pnpm start` | 以 `dist/index.cjs` 起本機正式版伺服器 |
 
 ---
 
@@ -49,21 +163,18 @@ Nick Zhuang 的個人技術部落格，紫色到青色漸層美學，搭配玻�
 
 | 檔案 | 說明 |
 |------|------|
-| `client/src/lib/blogData.ts` | 73 篇文章的 metadata、6 個分類、about 資料 |
-| `client/src/content/articles.json` | 完整文章 Markdown 內容（~1MB），以 article ID 為 key |
-| `client/src/pages/PostDetail.tsx` | 文章詳細頁，含自訂 Markdown 渲染器（sanitized） |
-| `client/src/components/ThemeProvider.tsx` | 深色/淺色主題切換（localStorage 持久化） |
-| `client/src/components/Header.tsx` | 導覽列（玻璃擬態效果） |
-| `client/src/components/BlogCard.tsx` | 文章卡片元件（wouter Link） |
-| `client/src/pages/Home.tsx` | 首頁：Hero、Bento 排版、精選文章、Stats |
-| `client/src/pages/Posts.tsx` | 文章列表：分類篩選 + 搜尋 |
-| `client/src/pages/About.tsx` | 關於頁：簡介、技能、著作 |
-| `client/src/pages/Contact.tsx` | 聯絡頁 |
-| `client/src/hooks/usePageTitle.ts` | SEO 頁面標題 hook |
-| `script/build.ts` | 建置腳本（Vite + esbuild，並複製 404.html） |
-| `script/generate-sitemap.ts` | 產生 sitemap.xml |
-| `client/public/robots.txt` | 搜尋引擎爬蟲規則 |
-| `client/public/sitemap.xml` | Sitemap（4 靜態頁 + 73 文章） |
+| `client/src/lib/blogData.ts` | 79 篇文章 metadata、6 分類、2 系列、about 資料 |
+| `client/src/lib/collections.ts` | 聚合頁定義與導讀文案 |
+| `client/src/lib/imageMeta.json` | 圖片尺寸對照表（建置產物，**需進版控**，否則 `pnpm dev` 會失敗） |
+| `client/src/pages/PostDetail.tsx` | 文章頁與自訂 Markdown 渲染器（圖片改寫、alt fallback、H1 降階） |
+| `client/src/pages/Collection.tsx` | 系列／分類／標籤聚合頁 |
+| `client/src/hooks/usePageTitle.ts` | 頁面級 meta（title/description/canonical/og:url） |
+| `script/prerender.tsx` | SSG 預渲染與 JSON-LD（BlogPosting / BreadcrumbList / CollectionPage / WebSite / Person） |
+| `script/optimize-images.ts` | 圖片轉 WebP 與尺寸表 |
+| `script/generate-og.ts` | OG 標題卡合成 |
+| `script/generate-sitemap.ts` / `generate-feed.ts` | sitemap 與 RSS |
+| `script/new-post.ts` | 文章健檢與 metadata 寫入 |
+| `client/public/_headers` / `_redirects` | Cloudflare 快取標頭與轉址 |
 
 ---
 
@@ -71,106 +182,31 @@ Nick Zhuang 的個人技術部落格，紫色到青色漸層美學，搭配玻�
 
 - **主色**：Purple（hue 262），呼應 AI/科技感
 - **漸層**：紫色 → 青色
-- **深色背景**：Deep Navy（hue 240，5% lightness）
+- **深色背景**：Deep Navy（hue 240）
 - **CSS 工具類**：`.gradient-text`、`.gradient-border`、`.glass`、`.hero-glow`、`.dot-grid`
 
 ---
 
-## 設定與執行
-
-### 安裝 nvs
+## 環境安裝
 
 ```bash
-export NVS_HOME="$HOME/.nvs"
-git clone https://github.com/jasongin/nvs "$NVS_HOME"
-. "$NVS_HOME/nvs.sh" install
-```
+# Node（透過 nvs）
+curl -fsSL https://raw.githubusercontent.com/jasongin/nvs/master/nvs.sh | bash
+nvs add lts && nvs link lts
 
-### 確認安裝（若未生效請重啟終端機）：
+# pnpm
+npm install -g pnpm
 
-```bash
-
-nvs --version
-
-```
-
-### 安裝 Node.js LTS
-
-```bash
-
-nvs use lts
-
-nvs link lts
-
-```
-
-### 確認版本：
-
-```bash
-
-nvs current
-
-node -v
-
-npm -v
-
-```
-
-| package | version |
-|---------|---------|
-| nvs     | 1.7.1   |
-| node    | v24.13.0 |
-| npm     | 11.6.2  |
-| pnpm    | 10.28.1 |
-
-### 安裝 pnpm
-
-```bash
-
-npm install -g pnpm && pnpm -v
-
-```
-
-### 安裝依賴
-
-```bash
-
+# 依賴
 pnpm install
-
 ```
 
-### 啟動開發伺服器
-
-```bash
-
-pnpm run dev
-
-```
-
-### 開啟 http://localhost:3000
-
-### 建置正式版
-
-```bash
-
-pnpm build
-
-```
-
-### 產生 Sitemap
-
-```tsx
-
-npx tsx script/generate-sitemap.ts
-
-```
-
-### 建置完成後，將 dist 上傳至 Cloudflare Pages（單一目錄）。
-
-```
-注意：build 腳本會自動將 index.html 複製為 404.html，以解決 Cloudflare Pages 的 SPA 路由重新整理問題。
-
-```
+| 套件 | 版本 |
+|------|------|
+| node | v24.x |
+| pnpm | 10.x |
+| react | 18.3 |
+| vite | 7.x |
 
 ---
 
@@ -179,4 +215,3 @@ npx tsx script/generate-sitemap.ts
 - Vite: https://vitejs.dev/
 - React: https://reactjs.org/
 - Tailwind CSS: https://tailwindcss.com/
-- Why pnpm & Vite?: https://reurl.cc/gnX7kb
