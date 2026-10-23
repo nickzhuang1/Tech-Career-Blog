@@ -2,9 +2,10 @@ import { Mail, MessageSquare } from "lucide-react";
 import { FaLinkedin, FaFacebook, FaGithub } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import { buildTitle } from "@/lib/seoTitle";
 
 export default function Contact() {
-  usePageTitle("聯繫我 | Nick's Blog", "如有任何技術合作、演講邀約或交流，歡迎聯繫。", "/contact");
+  usePageTitle(buildTitle("聯繫我"), "如有任何技術合作、演講邀約或交流，歡迎聯繫。", "/contact");
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">

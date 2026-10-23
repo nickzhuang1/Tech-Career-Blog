@@ -1,6 +1,12 @@
 export interface BlogPost {
   id: string;
   title: string;
+  /**
+   * 選填：只用在 <title>／og:title／JSON-LD headline 的短版本。
+   * 給標題太長、在搜尋結果會被截斷的文章用；未填時一律使用 title。
+   * 頁面 H1、卡片、麵包屑、RSS、OG 圖仍使用 title。
+   */
+  seoTitle?: string;
   date: string;
   category: string;
   tags: string[];
@@ -122,6 +128,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: "nvidia-rag",
     title: "完課取證！史上體感難度最高的 NVIDIA DLI 課程：Building RAG Agents with LLMs",
+    seoTitle: "史上最難的 NVIDIA DLI 課程：RAG Agents with LLMs 完課取證",
     date: "2025-04-21",
     category: "ai",
     tags: ["AI", "RAG", "LLM", "NVIDIA"],
@@ -253,11 +260,11 @@ export const blogPosts: BlogPost[] = [
   { id: "k8s-svc-discovery", title: "k8s 進階篇（一）：Service Discovery、ConfigMap", date: "2019-09-25", category: "k8s-docker", tags: ["K8S"], excerpt: "進入進階篇：同一個 Pod 內的容器用 localhost 就能互通，但跨 Pod 就得靠 Service Discovery。這篇說明這機制怎麼運作、ConfigMap 怎麼把設定抽出來，並附上兩個實際範例。", readTime: "18 min", series: "ironman-2019" },
   { id: "k8s-ingress-vol", title: "k8s 進階篇（二）：Ingress、Volume、PodPreset", date: "2019-09-26", category: "k8s-docker", tags: ["K8S"], excerpt: "這篇講兩件影響整個叢集規劃的事：Ingress 負責把外部流量導進叢集，Volume 則決定資料要放在哪裡。文中示範降低負載與完美分流兩種情境，也補上 PodPreset 的用法。", readTime: "12 min", series: "ironman-2019" },
   { id: "k8s-statefulset", title: "k8s 進階篇（三）：StatefulSet、DaemonSet", date: "2019-09-27", category: "k8s-docker", tags: ["K8S"], excerpt: "有狀態的服務不能隨便重啟，這就是 StatefulSet 存在的理由：每個 Pod 都有固定編號與身分。這篇說明它跟 Deployment 的差別、怎麼擴縮與更新，也介紹跑在每台節點的 DaemonSet。", readTime: "12 min", series: "ironman-2019" },
-  { id: "k8s-affinity", title: "k8s 進階篇（四）：Affinity and Anti-Affinity、Taints and Tolerations", date: "2019-09-28", category: "k8s-docker", tags: ["K8S"], excerpt: "調度器預設會自己挑節點，但真實場景常需要指定：哪些服務該靠近、哪些絕對不能放一起。這篇說明 Node 與 Pod 的親和／反親和性怎麼設定，以及 Taints 與 Tolerations 的搭配。", readTime: "15 min", series: "ironman-2019" },
+  { id: "k8s-affinity", title: "k8s 進階篇（四）：Affinity and Anti-Affinity、Taints and Tolerations", seoTitle: "k8s 進階篇（四）：親和性與污點容忍（Affinity、Taints）", date: "2019-09-28", category: "k8s-docker", tags: ["K8S"], excerpt: "調度器預設會自己挑節點，但真實場景常需要指定：哪些服務該靠近、哪些絕對不能放一起。這篇說明 Node 與 Pod 的親和／反親和性怎麼設定，以及 Taints 與 Tolerations 的搭配。", readTime: "15 min", series: "ironman-2019" },
   { id: "k8s-monitoring-job", title: "k8s 管理篇（一）：Monitoring、Job、CronJob", date: "2019-09-29", category: "k8s-docker", tags: ["K8S"], excerpt: "管理篇第一篇，從怎麼「用」叢集轉到怎麼「管」叢集。這篇介紹監控的做法（從舊版 heapster 到 Weave Scope 的安裝），以及 Job 與 CronJob 這種跑完就結束的工作怎麼定義。", readTime: "12 min", series: "ironman-2019" },
   { id: "k8s-quota-ns", title: "k8s 管理篇（二）：Resource Quota、Namespaces", date: "2019-09-30", category: "k8s-docker", tags: ["K8S"], excerpt: "Resource Quota 限制的是一個叢集能分配多少 CPU、記憶體、GPU 與磁碟空間；Namespace 則是把同一個實體叢集切成多個虛擬叢集。這篇說明兩者的設定方式，以及怎麼把配額綁在命名空間上做資源分群。", readTime: "18 min", series: "ironman-2019" },
   { id: "k8s-user-mgmt", title: "k8s 管理篇（三）：User Management、RBAC、Node Maintenance", date: "2019-10-01", category: "k8s-docker", tags: ["K8S", "RBAC"], excerpt: "管理篇最後一篇，處理的是「誰可以做什麼」：怎麼新增一個使用者、用 Role 與 RoleBinding 給對應權限、綁定 RBAC 的實際操作，最後補上節點維護（Node Maintenance）的做法。", readTime: "15 min", series: "ironman-2019" },
-  { id: "k8s-pv-pod", title: "k8s 之 PV 小整合：Pod、Deployment、Service、Job 與 PersistentVolume", date: "2019-10-02", category: "k8s-docker", tags: ["K8S"], excerpt: "把前面學過的元件串起來：Pod、Deployment、Service、Job 搭配新的 PersistentVolume 與 PVC 做一次整合演練。這篇也談臨時儲存與驅逐策略在資源不足時怎麼運作。", readTime: "18 min", series: "ironman-2019" },
+  { id: "k8s-pv-pod", title: "k8s 之 PV 小整合：Pod、Deployment、Service、Job 與 PersistentVolume", seoTitle: "k8s 之 PV 小整合：Pod、Deployment、Service 與 PV／PVC", date: "2019-10-02", category: "k8s-docker", tags: ["K8S"], excerpt: "把前面學過的元件串起來：Pod、Deployment、Service、Job 搭配新的 PersistentVolume 與 PVC 做一次整合演練。這篇也談臨時儲存與驅逐策略在資源不足時怎麼運作。", readTime: "18 min", series: "ironman-2019" },
   { id: "k8s-harbor-helm", title: "k8s 之管理篇延伸：Harbor 與 Helm", date: "2019-10-03", category: "k8s-docker", tags: ["K8S", "Helm"], excerpt: "k8s 是架在 Docker 之上的，所以不少 Docker 時代的管理工具也能沿用或改造。這篇介紹兩個關鍵套件：Harbor 當私有容器倉庫、Helm 當套件管理器，都以 Ubuntu 為例示範。", readTime: "15 min", series: "ironman-2019" },
   { id: "k8s-aws-eoo", title: "k8s 上雲端之路：AWS 之蓄勢待發：EOO", date: "2019-10-04", category: "k8s-docker", tags: ["K8S", "AWS"], excerpt: "上雲端之前得先認識 CCM（Cloud Controller Manager）：它讓各家雲端的實作與 k8s 核心脫鉤。這篇介紹 AWS 上會用到的元件（EC2、EBS、ELB、EFS、EKS 等），並實際操作 EC2。", readTime: "15 min", series: "ironman-2019" },
   { id: "k8s-eks-setup-1", title: "k8s 實務篇（一）：EKS 架設 k8s（上）", date: "2019-10-05", category: "k8s-docker", tags: ["K8S", "AWS", "EKS"], excerpt: "實務篇上篇，把 k8s 叢集真的架到 AWS 上。內容包含 AWS 的基礎設置（IAM、網路與權限），以及建立 EKS 的控制介面；因為步驟偏多，整個流程拆成上下兩篇。", readTime: "12 min", series: "ironman-2019" },
@@ -265,7 +272,7 @@ export const blogPosts: BlogPost[] = [
   { id: "k8s-pod-basics", title: "k8s 基礎篇延伸與 EKS：Pod、Label、Probe、Scaling", date: "2019-10-07", category: "k8s-docker", tags: ["K8S", "AWS", "EKS"], excerpt: "叢集架好之後，把基礎篇的內容搬到 EKS 上重做一次：先看多了三個計算節點後差別在哪，再實作有標籤與狀態的 Pod、探針設定、Scaling 與版本更新，對照 minikube 的差異。", readTime: "18 min", series: "ironman-2019" },
   { id: "k8s-ingress-elb", title: "k8s 進階篇延伸與 EKS（一）：Ingress、ELB、Service", date: "2019-10-08", category: "k8s-docker", tags: ["K8S", "AWS", "EKS"], excerpt: "進階篇延伸到 AWS，先看 minikube 與 EKS 差在哪。這篇在既有叢集上實作 traefik Ingress，目標是透過 Ingress 拿到 AWS 的 ALB，順帶把 Service 一起串起來。", readTime: "18 min", series: "ironman-2019" },
   { id: "k8s-scheduling", title: "k8s 進階篇延伸與 EKS（二）：Scheduling", date: "2019-10-09", category: "k8s-docker", tags: ["K8S", "AWS", "EKS"], excerpt: "排程看起來只是「丟給調度器決定」，實際上 Affinity、Taints 與 Tolerations、Cordon 等設定都會左右結果。這篇用日常維運會遇到的例子，模擬 Pod 該怎麼被安排到正確節點。", readTime: "20 min", series: "ironman-2019" },
-  { id: "k8s-mgmt-discovery", title: "k8s 管理篇延伸與 EKS（一）：Service Discovery、Dashboard、Monitoring", date: "2019-10-10", category: "k8s-docker", tags: ["K8S", "AWS", "EKS"], excerpt: "管理篇延伸到 EKS，比較同樣的操作在 AWS 與 minikube 上的差異。這篇處理服務發現、把 k8s Dashboard 架起來，以及安裝 Weave Scope 來看叢集的即時狀態。", readTime: "18 min", series: "ironman-2019" },
+  { id: "k8s-mgmt-discovery", title: "k8s 管理篇延伸與 EKS（一）：Service Discovery、Dashboard、Monitoring", seoTitle: "k8s 管理篇延伸與 EKS（一）：服務發現、Dashboard 與監控", date: "2019-10-10", category: "k8s-docker", tags: ["K8S", "AWS", "EKS"], excerpt: "管理篇延伸到 EKS，比較同樣的操作在 AWS 與 minikube 上的差異。這篇處理服務發現、把 k8s Dashboard 架起來，以及安裝 Weave Scope 來看叢集的即時狀態。", readTime: "18 min", series: "ironman-2019" },
   { id: "k8s-mgmt-rbac", title: "k8s 管理篇延伸與 EKS（二）：Resource Quota、Namespace、RBAC", date: "2019-10-11", category: "k8s-docker", tags: ["K8S", "AWS", "EKS"], excerpt: "延續管理篇上卷，這篇把鏡頭拉到 EKS：資源配額怎麼設、命名空間怎麼切、使用者與 Service Account 怎麼管，以及 RBAC 的角色與綁定規則，補齊多人共用同一個叢集時最常缺的那一塊。", readTime: "10 min", series: "ironman-2019" },
   { id: "k8s-app-helm", title: "k8s 應用篇（一）：Helm 部署 apps、HPA 和 CA", date: "2019-10-12", category: "k8s-docker", tags: ["K8S", "Helm"], excerpt: "應用篇上篇：用 Helm 把應用部署到叢集上，再設定 HPA（水平自動擴縮）與 Cluster Autoscaler 讓資源跟著流量調整，最後把 Istio 也部署進 k8s。", readTime: "18 min", series: "ironman-2019" },
   { id: "k8s-app-ebs-efs", title: "k8s 應用篇（二）：EBS 和 EFS 的使用", date: "2019-10-13", category: "k8s-docker", tags: ["K8S", "AWS"], excerpt: "一個整合案例：把 WordPress 與 MySQL 一起跑在 k8s 上，資料要能持久化與共享。這篇分別用 EBS 與 EFS 兩種方式實作，比較它們在儲存特性與適用情境上的差別。", readTime: "18 min", series: "ironman-2019" },

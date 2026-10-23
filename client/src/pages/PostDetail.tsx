@@ -34,6 +34,7 @@ function seriesName(id: string) {
   return series.find((s) => s.id === id)?.name ?? id;
 }
 import { usePageTitle } from "@/hooks/usePageTitle";
+import { buildTitle } from "@/lib/seoTitle";
 import { useTheme } from "@/components/ThemeProvider";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Calendar, Clock, ExternalLink } from "lucide-react";
@@ -468,7 +469,7 @@ export default function PostDetail(
   }, [theme]);
 
   usePageTitle(
-    post ? `${post.title} | Nick's Blog` : "文章未找到 | Nick's Blog",
+    post ? buildTitle(post.seoTitle ?? post.title) : buildTitle("文章未找到"),
     post?.excerpt,
     post ? `/posts/${post.id}` : "/posts"
   );

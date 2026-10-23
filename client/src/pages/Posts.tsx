@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { Search, LayoutGrid } from "lucide-react";
+import { buildTitle } from "@/lib/seoTitle";
 
 // 分類列用紫色系，標籤列用青色系，兩者顏色區隔
 // 標籤列採用 Badge 的 "tag" 變體（青色系，全站文章標籤統一）；這裡只覆寫分類列的紫色
@@ -43,7 +44,7 @@ function buildTagList(posts: typeof blogPosts) {
 }
 
 export default function Posts() {
-  usePageTitle("所有文章 | Nick's Blog", "瀏覽所有技術文章與職涯分享。", "/posts");
+  usePageTitle(buildTitle("所有文章"), "瀏覽所有技術文章與職涯分享。", "/posts");
 
   const search = useSearch();
   const [, setLocation] = useLocation();

@@ -34,6 +34,7 @@ import Collection from "../client/src/pages/Collection";
 import { blogPosts, aboutData } from "../client/src/lib/blogData";
 import { collections, collectionPath } from "../client/src/lib/collections";
 import { ogFileForPost, ogFileForCollection } from "./generate-og";
+import { buildTitle } from "../client/src/lib/seoTitle";
 
 const SITE = "https://nickzhuang.com";
 const OUT_DIR = path.resolve(process.cwd(), "dist/public");
@@ -248,7 +249,7 @@ function articleJsonLd(post: (typeof blogPosts)[number]): object {
       {
         "@type": "BlogPosting",
         "@id": `${url}#article`,
-        headline: post.title,
+        headline: post.seoTitle ?? post.title,
         description: post.excerpt,
         inLanguage: "zh-TW",
         datePublished: post.date,
@@ -340,7 +341,7 @@ export async function prerenderRoutes(): Promise<number> {
     },
     {
       meta: {
-        title: "所有文章 | Nick's Blog",
+        title: buildTitle("所有文章"),
         description: "瀏覽所有技術文章與職涯分享。",
         path: "/posts",
       },
@@ -348,7 +349,7 @@ export async function prerenderRoutes(): Promise<number> {
     },
     {
       meta: {
-        title: "關於我 | Nick's Blog",
+        title: buildTitle("關於我"),
         description: "AI 與雲端的技術探索之路 — Nick Zhuang 的職涯介紹。",
         path: "/about",
       },
@@ -356,7 +357,7 @@ export async function prerenderRoutes(): Promise<number> {
     },
     {
       meta: {
-        title: "大事記 | Nick's Blog",
+        title: buildTitle("大事記"),
         description: "Nick Zhuang 的職涯大事記時間線",
         path: "/timeline",
       },
@@ -364,7 +365,7 @@ export async function prerenderRoutes(): Promise<number> {
     },
     {
       meta: {
-        title: "證書牆 | Nick's Blog",
+        title: buildTitle("證書牆"),
         description: "Nick Zhuang 所獲得的所有專業證書展示。",
         path: "/certificates",
       },
@@ -372,7 +373,7 @@ export async function prerenderRoutes(): Promise<number> {
     },
     {
       meta: {
-        title: "聯繫我 | Nick's Blog",
+        title: buildTitle("聯繫我"),
         description: "如有任何技術合作、演講邀約或交流，歡迎聯繫。",
         path: "/contact",
       },
@@ -380,7 +381,7 @@ export async function prerenderRoutes(): Promise<number> {
     },
     ...collections.map((c) => ({
       meta: {
-        title: `${c.seoTitle} | Nick's Blog`,
+        title: buildTitle(c.seoTitle),
         description: c.description,
         path: collectionPath(c),
         jsonLd: collectionJsonLd(c),
@@ -395,7 +396,7 @@ export async function prerenderRoutes(): Promise<number> {
     })),
     ...blogPosts.map((post) => ({
       meta: {
-        title: `${post.title} | Nick's Blog`,
+        title: buildTitle(post.seoTitle ?? post.title),
         description: post.excerpt,
         path: `/posts/${post.id}`,
         ogType: "article" as const,

@@ -3,8 +3,9 @@ import { aboutData } from "@/lib/blogData";
 import { ShieldCheck, X, ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react";
 import { useLocation } from "wouter";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import { buildTitle } from "@/lib/seoTitle";
 export default function Certificates() {
-  usePageTitle("證書牆 | Nick's Blog", "Nick Zhuang 所獲得的所有專業證書展示。", "/certificates");
+  usePageTitle(buildTitle("證書牆"), "Nick Zhuang 所獲得的所有專業證書展示。", "/certificates");
   const [, navigate] = useLocation();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const certs = aboutData.certifications;

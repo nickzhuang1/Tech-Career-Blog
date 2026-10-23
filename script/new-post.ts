@@ -16,6 +16,7 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "fs";
 import path from "path";
 import { blogPosts, categories, series } from "../client/src/lib/blogData";
+import { titleWidth, buildTitle, TITLE_MAX_WIDTH } from "../client/src/lib/seoTitle";
 import type { BlogPost } from "../client/src/lib/blogData";
 
 const ROOT = process.cwd();
@@ -67,6 +68,21 @@ function validateOne(post: BlogPost): Issue[] {
   const titleLen = charCount(post.title);
   if (titleLen > TITLE_MAX) {
     add("warn", "title", `${titleLen} 字元，超過 ${TITLE_MAX}（SERP 會截斷）`);
+  }
+
+  // ── seoTitle：只影響 <title>，長度要能被 SERP 完整顯示
+  if (post.seoTitle) {
+    if (post.seoTitle === post.title) {
+      add("warn", "seoTitle", "與 title 完全相同，可直接移除");
+    }
+    const built = buildTitle(post.seoTitle);
+    if (titleWidth(built) > TITLE_MAX_WIDTH) {
+      add("error", "seoTitle", `組出的 <title> 寬度 ${titleWidth(built)} 超過 ${TITLE_MAX_WIDTH}：${built}`);
+    }
+  }
+  // 沒有 seoTitle 時，title 本身也不該超過 SERP 寬度
+  if (!post.seoTitle && titleWidth(buildTitle(post.title)) > TITLE_MAX_WIDTH) {
+    add("warn", "title", `SERP 標題寬度 ${titleWidth(buildTitle(post.title))} 超過 ${TITLE_MAX_WIDTH}，建議補 seoTitle`);
   }
 
   // ── excerpt 會直接當 meta description

@@ -8,6 +8,7 @@ import {
   type CollectionKind,
 } from "@/lib/collections";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import { buildTitle } from "@/lib/seoTitle";
 
 /**
  * 主題聚合頁（系列 / 分類 / 標籤）。
@@ -30,7 +31,7 @@ export default function Collection({
   const data = findCollection(kind, slug);
 
   usePageTitle(
-    data ? `${data.seoTitle} | Nick's Blog` : "找不到主題 | Nick's Blog",
+    data ? buildTitle(data.seoTitle) : buildTitle("找不到主題"),
     data?.description,
     data ? collectionPath(data) : "/posts",
   );

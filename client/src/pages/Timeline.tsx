@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { History, ArrowLeft, X } from "lucide-react";
 import { useLocation } from "wouter";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import { buildTitle } from "@/lib/seoTitle";
 
 type TimelineEntry = { year: number; items: string[]; highlights?: number[]; current?: boolean };
 // 最新在最上方
@@ -36,7 +37,7 @@ function buildPath(entries: TimelineEntry[]) {
 type CardPos = { top: number; left?: number; right?: number };
 
 export default function Timeline() {
-  usePageTitle("大事記 | Nick's Blog", "Nick Zhuang 的職涯大事記時間線", "/timeline");
+  usePageTitle(buildTitle("大事記"), "Nick Zhuang 的職涯大事記時間線", "/timeline");
   const [, navigate] = useLocation();
   const [expanded, setExpanded] = useState<number | null>(null);
   const [cardPos, setCardPos] = useState<CardPos | null>(null);

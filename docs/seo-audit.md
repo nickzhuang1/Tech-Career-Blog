@@ -319,21 +319,44 @@ const lv = Math.min(Math.max((line.match(/^(#{1,4}) /) ?? ["", ""])[1].length, 2
 
 ## 五、P2 — 內容與文案優化
 
-### P2-1 標題過長（8 篇超過 60 字元）
+### P2-1 標題過長 ✅（2026-08-15 完成）
 
-SERP 會被截斷，例如：
+**初版判斷有誤**：原本寫「8 篇超過 60 字元」，實際用字元數量出來是 **0 篇** ——
+但字元數不是對的指標。中文（全形）一個字佔兩倍寬，Google 的標題空間約 600px ≈
+**寬度 60**（全形算 2、半形算 1）。用寬度量，渲染後的 `<title>` 有 **21 / 79 篇超過 60**。
 
-- `k8s 進階篇（四）：Affinity and Anti-Affinity、Taints and Tolerations`（74 字元）
-- `完課取證！史上體感難度最高的 NVIDIA DLI 課程：Building RAG Agents with LLMs`（72 字元）
+兩個成因：
 
-**原則**：`主關鍵字 + 具體主題 | 品牌`，控制在 30–40 個中文字內；
-把「NVIDIA DLI」「K8S」這類關鍵字放前面，`| Nick's Blog` 這種品牌尾巴佔了 12 字元，
-可在長標題時省略品牌（首頁/文章列表保留即可）。
+1. 文章標題本身偏長（`nvidia-rag` 寬度 75、`k8s-affinity` / `k8s-mgmt-discovery` 68、`k8s-pv-pod` 67）
+2. **品牌後綴 `| Nick's Blog` 固定佔 14 寬度**，等於還沒開始就花掉 23% 的預算
 
-### P2-2 Description 偏短（72 篇低於 60 字元）
+**修正方式**
 
-目前 `description` 直接沿用 `excerpt`，最短 30 字。短不是扣分項，但 Google 很可能自己改寫摘要，
-你就失去控制 SERP 文案的機會。建議 70–110 字，並把「這篇解決什麼問題」寫進去。
+| 項目 | 做法 |
+|---|---|
+| 後綴 | 改成 `\| Nick`（寬度 7），且只在「標題 + 後綴 ≤ 60」時才加；加不下就省略（品牌在網址列仍看得到） |
+| 長標題 | 新增選填欄位 `seoTitle`，只給 4 篇用：`<title>`／`og:title`／`twitter:title`／JSON-LD `headline` 用短版，**H1、卡片、麵包屑、RSS、OG 圖仍用原 `title`** |
+| 共用邏輯 | `client/src/lib/seoTitle.ts`（`titleWidth` / `buildTitle`），建置期 `prerender` 與執行期 `usePageTitle` 共用同一套規則，避免靜態 HTML 與 SPA 導覽不一致 |
+| 驗證器 | `pnpm check:posts` 現在會檢查 `seoTitle` 組出的寬度，並警告沒有 `seoTitle` 又超寬的標題 |
+
+**結果**：90 個頁面的 `<title>` 寬度全部 ≤ 60（範圍 11–60、中位數 37），
+其中 58 篇仍帶品牌後綴。4 篇的兩種標題並存：
+
+| 文章 | 頁面 H1（原文） | `<title>`（SERP） |
+|---|---|---|
+| `nvidia-rag` | 完課取證！史上體感難度最高的 NVIDIA DLI 課程：Building RAG Agents with LLMs（寬 75） | 史上最難的 NVIDIA DLI 課程：RAG Agents with LLMs 完課取證（寬 57） |
+| `k8s-affinity` | k8s 進階篇（四）：Affinity and Anti-Affinity、Taints and Tolerations（寬 68） | k8s 進階篇（四）：親和性與污點容忍（Affinity、Taints）（寬 54） |
+| `k8s-mgmt-discovery` | k8s 管理篇延伸與 EKS（一）：Service Discovery、Dashboard、Monitoring（寬 68） | k8s 管理篇延伸與 EKS（一）：服務發現、Dashboard 與監控（寬 54） |
+| `k8s-pv-pod` | k8s 之 PV 小整合：Pod、Deployment、Service、Job 與 PersistentVolume（寬 67） | k8s 之 PV 小整合：Pod、Deployment、Service 與 PV／PVC（寬 60） |
+
+### P2-2 Description 偏短 ✅（2026-08-15 完成）
+
+`description` 直接沿用 `excerpt`，原本 **72 篇低於 60 字**（最短 22 字），另有 5 篇在 62–124 字。
+短不是扣分項，但 Google 很可能自己改寫摘要，等於失去控制 SERP 文案的機會。
+
+79 篇全部改寫為 **80–110 字**（平均 95、79 篇互不重複），並確認 `excerpt` 會流向
+卡片摘要、meta description、`og:description` 與 RSS 描述四個位置。
+逐篇「原 → 新」對照見 `docs/excerpts-review.md`。
 
 ### P2-3 首頁 H1 是品牌標語，不含關鍵字
 

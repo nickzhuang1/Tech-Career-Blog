@@ -20,9 +20,10 @@ import { FaLinkedin } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa";
 import { usePageTitle } from "@/hooks/usePageTitle";
+import { buildTitle } from "@/lib/seoTitle";
 
 export default function About() {
-  usePageTitle("關於我 | Nick's Blog", "AI 與雲端的技術探索之路 — Nick Zhuang 的職涯介紹。", "/about");
+  usePageTitle(buildTitle("關於我"), "AI 與雲端的技術探索之路 — Nick Zhuang 的職涯介紹。", "/about");
   const [, navigate] = useLocation();
 
   return (
