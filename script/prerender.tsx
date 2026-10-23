@@ -30,7 +30,7 @@ import About from "../client/src/pages/About";
 import Timeline from "../client/src/pages/Timeline";
 import Certificates from "../client/src/pages/Certificates";
 import Contact from "../client/src/pages/Contact";
-import { blogPosts } from "../client/src/lib/blogData";
+import { blogPosts, aboutData } from "../client/src/lib/blogData";
 
 const SITE = "https://nickzhuang.com";
 const OUT_DIR = path.resolve(process.cwd(), "dist/public");
@@ -42,6 +42,8 @@ interface PageMeta {
   path: string;
   ogType?: "website" | "article";
   jsonLd?: object;
+  /** 文章頁專用：時間與分類語意（對應 article:published_time 等 meta） */
+  article?: { published: string; modified: string; section: string };
 }
 
 interface PageDef {
@@ -106,6 +108,18 @@ function injectMeta(template: string, meta: PageMeta): string {
     /<meta name="twitter:description" content="[^"]*"/,
     `<meta name="twitter:description" content="${escAttr(meta.description)}"`,
   );
+  // 語意標記：每頁都標註作者（E-E-A-T）；文章頁再加上發佈／更新時間與分類，
+  // 讓搜尋結果有機會顯示時間戳，也讓 JSON-LD 與 meta 兩邊說法一致。
+  const semanticTags = [`<meta name="author" content="${escAttr(aboutData.name)}">`];
+  if (meta.article) {
+    semanticTags.push(
+      `<meta property="article:published_time" content="${meta.article.published}">`,
+      `<meta property="article:modified_time" content="${meta.article.modified}">`,
+      `<meta property="article:section" content="${escAttr(meta.article.section)}">`,
+    );
+  }
+  out = out.replace("</head>", `  ${semanticTags.join("\n  ")}\n</head>`);
+
   if (meta.jsonLd) {
     const json = JSON.stringify(meta.jsonLd).replace(/</g, "\\u003c");
     out = out.replace("</head>", `  <script type="application/ld+json">${json}</script>\n</head>`);
@@ -144,23 +158,93 @@ function loadMarkdown(id: string): string | undefined {
   return existsSync(f) ? readFileSync(f, "utf8") : undefined;
 }
 
+const PERSON_ID = `${SITE}/#person`;
+const WEBSITE_ID = `${SITE}/#website`;
+const HOME_DESCRIPTION =
+  "CTO的爐邊雜談 — 分享 AI 技術、系統架構、與職涯探索的深度觀點。十年軟體開發經驗，從前端到後端，從雲端到人工智慧。";
+
+/**
+ * 首頁的實體資訊（WebSite + Person）。
+ * 目的是讓 Google 把「nickzhuang.com」與「Nick Zhuang / 莊翔甯」這個人綁在一起，
+ * sameAs 指向 GitHub / LinkedIn 作為身分佐證（E-E-A-T 的基礎）。
+ */
+const homeJsonLd = () => ({
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": WEBSITE_ID,
+      url: `${SITE}/`,
+      name: "Nick's Blog - AI異想封印",
+      description: HOME_DESCRIPTION,
+      inLanguage: "zh-TW",
+      author: { "@id": PERSON_ID },
+      publisher: { "@id": PERSON_ID },
+    },
+    {
+      "@type": "Person",
+      "@id": PERSON_ID,
+      name: aboutData.name,
+      alternateName: aboutData.nameZh,
+      url: `${SITE}/about/`,
+      jobTitle: aboutData.title,
+      description: aboutData.bio,
+      worksFor: {
+        "@type": "Organization",
+        name: "C.Y. Intelligence",
+        alternateName: "承羽智慧",
+      },
+      sameAs: [aboutData.links.github, aboutData.links.linkedin],
+      knowsAbout: aboutData.expertise,
+      alumniOf: [
+        { "@type": "CollegeOrUniversity", name: "國立中央大學" },
+        { "@type": "CollegeOrUniversity", name: "國立中興大學" },
+      ],
+    },
+  ],
+});
+
 function articleJsonLd(post: (typeof blogPosts)[number]): object {
   // 與 canonical 相同：一律使用平台實際回 200 的結尾斜線 URL
   const url = `${SITE}/posts/${post.id}/`;
+  // 沒有實質更新就沿用發佈日，不憑空造 dateModified
+  const modified = post.updated ?? post.date;
   return {
     "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: post.title,
-    description: post.excerpt,
-    inLanguage: "zh-TW",
-    datePublished: post.date,
-    dateModified: post.date,
-    author: { "@type": "Person", name: "Nick Zhuang", url: `${SITE}/about/` },
-    publisher: { "@type": "Person", name: "Nick Zhuang" },
-    image: [`${SITE}/og-image.png`],
-    mainEntityOfPage: { "@type": "WebPage", "@id": url },
-    articleSection: post.category,
-    keywords: post.tags.join(", "),
+    "@graph": [
+      {
+        "@type": "BlogPosting",
+        "@id": `${url}#article`,
+        headline: post.title,
+        description: post.excerpt,
+        inLanguage: "zh-TW",
+        datePublished: post.date,
+        dateModified: modified,
+        author: {
+          "@type": "Person",
+          name: aboutData.name,
+          url: `${SITE}/about/`,
+          sameAs: [aboutData.links.github, aboutData.links.linkedin],
+        },
+        publisher: {
+          "@type": "Person",
+          name: aboutData.name,
+          url: `${SITE}/about/`,
+        },
+        image: [`${SITE}/og-image.png`],
+        mainEntityOfPage: { "@type": "WebPage", "@id": url },
+        articleSection: post.category,
+        keywords: post.tags.join(", "),
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "首頁", item: `${SITE}/` },
+          { "@type": "ListItem", position: 2, name: "所有文章", item: `${SITE}/posts/` },
+          { "@type": "ListItem", position: 3, name: post.title, item: url },
+        ],
+      },
+    ],
   };
 }
 
@@ -171,9 +255,9 @@ export async function prerenderRoutes(): Promise<number> {
     {
       meta: {
         title: "Nick's Blog - AI異想封印 | CTO的爐邊雜談",
-        description:
-          "CTO的爐邊雜談 — 分享 AI 技術、系統架構、與職涯探索的深度觀點。十年軟體開發經驗，從前端到後端，從雲端到人工智慧。",
+        description: HOME_DESCRIPTION,
         path: "/",
+        jsonLd: homeJsonLd(),
       },
       el: <Home />,
     },
@@ -224,6 +308,11 @@ export async function prerenderRoutes(): Promise<number> {
         path: `/posts/${post.id}`,
         ogType: "article" as const,
         jsonLd: articleJsonLd(post),
+        article: {
+          published: post.date,
+          modified: post.updated ?? post.date,
+          section: post.category,
+        },
       },
       el: <PostDetail postId={post.id} initialContent={loadMarkdown(post.id)} />,
     })),
@@ -234,10 +323,11 @@ export async function prerenderRoutes(): Promise<number> {
   for (const { meta, el } of pages) {
     try {
       const appHtml = renderApp(meta.path, el);
-      const finalHtml = injectMeta(template, meta).replace(
-        '<div id="root"></div>',
-        () => `<div id="root">${appHtml}</div>`,
-      );
+      const finalHtml = injectMeta(template, meta)
+        .replace('<div id="root"></div>', () => `<div id="root">${appHtml}</div>`)
+        // React 18 會把 dateTime 原樣序列化成 dateTime="…"（HTML 屬性名大小寫不敏感，
+        // 瀏覽器解析後就是 datetime，功能正常）。輸出成小寫讓驗證工具與人眼都不困惑。
+        .replace(/dateTime="/g, 'datetime="');
       const rel = meta.path === "/" ? "index.html" : path.join(meta.path.slice(1), "index.html");
       const file = path.join(OUT_DIR, rel);
       mkdirSync(path.dirname(file), { recursive: true });

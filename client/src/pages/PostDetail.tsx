@@ -515,7 +515,14 @@ export default function PostDetail(
           <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
             <div className="flex items-center gap-1.5">
               <Calendar className="w-3.5 h-3.5" />
-              <span data-testid="text-post-date">{formatDate(post.date)}</span>
+              <time dateTime={post.date} data-testid="text-post-date">
+                {formatDate(post.date)}
+              </time>
+              {post.updated && post.updated !== post.date && (
+                <span className="text-muted-foreground/70">
+                  ｜更新於 <time dateTime={post.updated}>{formatDate(post.updated)}</time>
+                </span>
+              )}
             </div>
             <div className="flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5" />

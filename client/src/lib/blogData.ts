@@ -7,6 +7,8 @@ export interface BlogPost {
   excerpt: string;
   readTime: string;
   series?: string;
+  /** 內容有實質更新時填入（YYYY-MM-DD）。未填時 dateModified 以 date 為準 */
+  updated?: string;
 }
 
 export interface Category {
@@ -274,6 +276,11 @@ export const blogPosts: BlogPost[] = [
 export const aboutData = {
   name: "Nick Zhuang",
   nameZh: "莊翔甯",
+  /** 對外身分連結：JSON-LD sameAs 用（集中一處，避免多份真相） */
+  links: {
+    github: "https://github.com/nickzhuang1",
+    linkedin: "https://www.linkedin.com/in/nick-zhuang/",
+  },
   title: "CTO @ C.Y. Intelligence",
   titleZh: "承羽智慧 技術長",
   bio: "中央大學資工所畢，現任承羽智慧技術長，曾任上市公司部門 Tech Lead。NVIDIA DLI 認證講師，曾與 NVIDIA 共同發表公開課；持有 NVIDIA Certified Professional（AI Infrastructure）等共五張 NVIDIA Certified 認證。曾獲 113 年度 AIGO 潛力新星盃 特優獎（Top 1）。著有「圖像生成式 AI 的生存指南」，為繁體中文第一本講述圖像生成式 AI 理論與實務的書籍。",
