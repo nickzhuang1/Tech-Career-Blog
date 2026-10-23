@@ -54,7 +54,7 @@ export const blogPosts: BlogPost[] = [
     readTime: "4 min",
   },
   {
-    id: "glm-5.2-rd-leader-reflections",
+    id: "glm-rd-leader-reflections",
     title: "研發主管的真情告白：開源最強大語言模型的能力與反思",
     date: "2026-07-25",
     category: "ai",

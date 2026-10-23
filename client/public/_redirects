@@ -1,6 +1,10 @@
 # 舊路徑修正（301 給搜尋引擎與外部連結）
 /certifications /certificates 301
 
+# 文章 id 改名（原 id 含小數點，不符 slug 規範）
+/posts/glm-5.2-rd-leader-reflections/ /posts/glm-rd-leader-reflections/ 301
+/posts/glm-5.2-rd-leader-reflections /posts/glm-rd-leader-reflections/ 301
+
 # 注意：不要加 `/* /index.html 200` 萬用回退——
 # Cloudflare Pages 驗證器會因 destination 自我匹配而報 100324 無限循環錯誤。
 # SPA 回退由 404.html（build.ts 複製自 index.html）負責，
