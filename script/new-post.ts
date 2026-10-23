@@ -112,9 +112,19 @@ function validateOne(post: BlogPost): Issue[] {
     return out;
   }
 
-  const authorLines = md.match(/^(Author|Type):/gm);
-  if (authorLines) {
-    add("warn", "markdown", `含 ${authorLines.length} 行 Author:/Type:（會被當純文字渲染在內文裡）`);
+  // 只看程式碼區塊以外的行：kubectl describe 之類的輸出本身就有 "Type:  kubernetes.io/..."，
+  // 那是內容不是 metadata 殘留
+  let inFence = false;
+  let authorLines = 0;
+  for (const line of md.split("\n")) {
+    if (line.startsWith("```")) {
+      inFence = !inFence;
+      continue;
+    }
+    if (!inFence && /^(Author|Type):/.test(line)) authorLines++;
+  }
+  if (authorLines > 0) {
+    add("warn", "markdown", `含 ${authorLines} 行 Author:/Type:（會被當純文字渲染在內文裡）`);
   }
 
   const imageRefs = [...md.matchAll(/!\[([^\]]*)\]\(([^)\s]+)/g)];
