@@ -10,6 +10,7 @@
 > |---|---|
 > | 一、主機與子網域 | www 的 403／526、泛用子網域在服務整份部落格 |
 > | 二、郵件冒用防護 | SPF `-all`、DMARC `p=reject`、刪除舊 DKIM 公鑰 |
+> | 三、`workers.dev` 確認 | `error code: 1042` 怎麼判讀 |
 
 ---
 
@@ -221,3 +222,79 @@ dig +short default._domainkey.nickzhuang.com TXT # 應為空
 
 DMARC 建議的調校節奏：先用 `p=none` 觀察 1–2 週的報告，確認沒有正常信件被誤擋，
 再改成 `p=quarantine`、最後 `p=reject`。
+
+---
+
+## 三、`workers.dev` 確認
+
+Worker 部署後預設會開一個 `<worker>.<帳號>.workers.dev` 的公開網址。那是**獨立的
+hostname**，會被搜尋引擎當成另一個站 —— 同一份內容出現在兩個網域上，是需要關掉的
+重複內容來源。
+
+### 關閉後的驗證
+
+```bash
+$ curl -s -o /dev/null -w '%{http_code}\n' https://broken-paper-0b6f.andy345694.workers.dev/
+404
+
+$ curl -s https://broken-paper-0b6f.andy345694.workers.dev/
+error code: 1042
+```
+
+### 判讀：`error code: 1042` 是什麼
+
+它是 Cloudflare 的「**這個 hostname 上沒有綁定任何 Worker**」。
+
+關鍵是它**不是**網站回的 404 頁 —— 回應是 17 bytes 的純文字，沒有 HTML、沒有 `title`：
+
+| 檢查 | 結果 |
+|---|---|
+| 首頁本文 | `error code: 1042`（純文字，17 bytes） |
+| 含站名特徵 | 0 次 |
+| `<title>` 標籤 | 不存在 |
+
+所以內容完全沒有被送出，Google 就算拿到這個網址也只會看到 404，不會索引。
+**這是理想的關閉狀態。**
+
+### 兩個容易誤判的點
+
+**1. DNS 會解析 ≠ Worker 有開**
+
+```bash
+$ dig +short broken-paper-0b6f.andy345694.workers.dev
+172.67.212.187
+104.21.23.183
+```
+
+`*.workers.dev` 是泛用記錄，**任何**亂打的名稱都會解析成功、也都會回 1042。
+判斷是否關閉要看**回應本文**，不是看解析結果。
+
+**2. `workers.dev` 上的 `/robots.txt` 不是你的**
+
+```bash
+$ curl -s https://broken-paper-0b6f.andy345694.workers.dev/robots.txt
+# As a condition of accessing this website, you agree to abide by the following
+# content signals:
+```
+
+那是 Cloudflare `workers.dev` 自己的 robots.txt（content signals 聲明），跟本站無關。
+本站的 robots.txt 只有一行 Sitemap：
+
+```bash
+$ curl -s https://nickzhuang.com/robots.txt
+User-agent: *
+Allow: /
+Sitemap: https://nickzhuang.com/sitemap.xml
+```
+
+### 若日後重新部署後失效
+
+用 `wrangler` 部署時要明確保留：
+
+```toml
+# wrangler.toml
+workers_dev = false
+```
+
+用 Dashboard 手動上傳則在該 Worker 的 **Settings → Domains & Routes** 確認
+沒有 `<name>.workers.dev` 這一項；沒列出來就是關閉狀態。
