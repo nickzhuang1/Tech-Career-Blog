@@ -420,12 +420,12 @@ export const aboutData = {
 };
 
 /**
- * 文章頁「關於作者」卡片用的短版自我介紹（約 60 字）。
+ * 文章頁「關於作者」卡片用的短版自我介紹（約 112 字元）。
  * bio 是給 About 頁的完整版，卡片塞不下；兩者都放這裡，避免文案分岔。
  * 注意「曾任 NVIDIA DLI 認證講師」——這是過去身分，不能用現在式。
  */
 export const shortBio =
-  "中央大學資工所畢，現任承羽智慧技術長。持有 NVIDIA Certified Professional 認證，曾任 DLI 認證講師，著有《圖像生成式 AI 的生存指南》，兩度完成 iThome 鐵人賽。";
+  "中央大學資工所畢，現任承羽智慧技術長。持有 NVIDIA AI Infra 專業認證，著有《圖像生成式 AI 的生存指南：以 Stable Diffusion 為例》，曾任 DLI 認證講師，兩度完成 iThome 鐵人賽。";
 
 /**
  * 可驗證的外部身分頁面，供 JSON-LD 的 Person.sameAs 使用。
