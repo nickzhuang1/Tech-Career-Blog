@@ -431,10 +431,29 @@ const lv = Math.min(Math.max((line.match(/^(#{1,4}) /) ?? ["", ""])[1].length, 2
 做法：About 補上可驗證的履歷節點（職稱、年資、著作、演講、認證），並在 `Person` schema 用 `sameAs`
 串起 GitHub / LinkedIn / iThome / 書籍頁；文章底部加「關於作者」卡片（同時是轉換點）。
 
-### P3-2 內容新鮮度（`updated` 欄位）
-2019 鐵人賽的 K8S 內容、2023 的 Gen AI 內容都有時效性。`blogData` 目前只有 `date`，
-`dateModified` 永遠等於發佈日。建議加 `updated?: string`，改稿時填寫，渲染成 `<time>` 並反映到 `dateModified`。
-Google 對「有明確更新紀錄」的技術文章評價通常較高。
+### P3-2 內容新鮮度（`updated` 欄位）— ✅ 管線完成，欄位依慣例維持空白（2026-10 結案）
+
+**管線早就做完了**，`updated` 會同步反映到四個出口：
+
+| 出口 | 位置 |
+|---|---|
+| JSON-LD `dateModified` | `script/prerender.tsx` |
+| 文章頁「｜更新於 `<time>`」 | `client/src/pages/PostDetail.tsx` |
+| sitemap `lastmod` | `script/generate-sitemap.ts` |
+| RSS `pubDate` / `lastBuildDate` | `script/generate-feed.ts` |
+
+**但 79 篇一篇都沒填，而且不該硬填。** 實際查過 git 歷史：文章在 2026-03 從
+Notion／iThome 匯入，之後的 commit 全是遷移與整理（標題層級、錨點、程式碼區塊轉換、
+移除 `Author:` 殘留行、改 id、補 alt），**沒有一篇有「發佈後內容修訂」的紀錄**。
+站長也確認：「這些文章發佈之後基本上不會再動。」
+
+所以現況 `dateModified = datePublished` 是**誠實的陳述**。反過來說，
+把例行整理當成更新日期會讓 `lastmod` 變成雜訊，Google 判定不可靠後就永久忽略它 ——
+那才是真正的損失。
+
+**做了什麼保護**：`script/new-post.ts --check` 現在會驗證 `updated`
+（格式、不可早於 `date`、不可晚於今天、與 `date` 相同則警告沒必要填），
+以後真的要修訂時不會填錯。這幾條規則的註解也寫在 `blogData.ts` 的型別上。
 
 ### P3-3 目錄（TOC）與標題錨點
 文章頁已有 heading id，但沒有目錄。加入 TOC 有兩個好處：長文可讀性（間接影響停留時間）

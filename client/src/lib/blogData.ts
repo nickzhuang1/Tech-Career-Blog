@@ -13,7 +13,17 @@ export interface BlogPost {
   excerpt: string;
   readTime: string;
   series?: string;
-  /** 內容有實質更新時填入（YYYY-MM-DD）。未填時 dateModified 以 date 為準 */
+  /**
+   * 選填：內容有「實質修訂」時才填（YYYY-MM-DD）。未填時 dateModified 沿用 date。
+   *
+   * 本站慣例是發佈後不再修訂，所以正常情況這個欄位是空的 ——
+   * 空著代表「這篇文章的內容從發佈日至今沒變過」，那是誠實的陳述。
+   * 不要為了讓欄位有值而填：把改錯字、換圖、調格式當成更新日期，
+   * 會讓 sitemap 的 lastmod 變成不可靠訊號，Google 會直接忽略這個欄位。
+   *
+   * 填了會同步反映到：JSON-LD dateModified、文章頁「更新於」、
+   * sitemap lastmod、RSS pubDate。驗證規則見 script/new-post.ts。
+   */
   updated?: string;
 }
 

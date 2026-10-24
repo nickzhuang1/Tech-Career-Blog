@@ -95,11 +95,32 @@ function validateOne(post: BlogPost): Issue[] {
   }
 
   // ── date / updated
+  //
+  // updated 會流到四個地方：JSON-LD 的 dateModified、文章頁的「更新於」、
+  // sitemap 的 lastmod、RSS 的 pubDate。沒填時全部沿用 date（誠實的陳述）。
+  //
+  // 本站慣例是「發佈後不再修訂」，所以這個欄位正常應該是空的 ——
+  // 這幾條規則的目的不是鼓勵填，而是「真的要填時不會填錯」，
+  // 以及避免把例行整理（改錯字、換圖片、調整格式）當成更新日期，
+  // 那會讓 sitemap 的 lastmod 變成不可靠訊號，Google 直接忽略它。
   const isDate = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(Date.parse(s));
+  const today = new Date().toISOString().slice(0, 10);
   if (!isDate(post.date)) add("error", "date", `格式應為 YYYY-MM-DD：${post.date}`);
+  else if (post.date > today) add("warn", "date", `晚於今天（${today}）：${post.date}，排程文章可忽略`);
   if (post.updated) {
-    if (!isDate(post.updated)) add("error", "updated", `格式應為 YYYY-MM-DD：${post.updated}`);
-    else if (post.updated < post.date) add("error", "updated", `updated(${post.updated}) 早於 date(${post.date})`);
+    if (!isDate(post.updated)) {
+      add("error", "updated", `格式應為 YYYY-MM-DD：${post.updated}`);
+    } else {
+      if (post.updated < post.date) {
+        add("error", "updated", `updated(${post.updated}) 早於 date(${post.date})`);
+      }
+      if (post.updated === post.date) {
+        add("warn", "updated", "與 date 相同，直接刪掉這一欄即可（未填時 dateModified 本來就沿用 date）");
+      }
+      if (post.updated > today) {
+        add("error", "updated", `晚於今天（${today}）：${post.updated}，等於宣稱內容在未來更新過`);
+      }
+    }
   }
 
   // ── category 必須在 categories 清單內，否則不會出現在任何分類篩選
