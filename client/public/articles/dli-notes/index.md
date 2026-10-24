@@ -1,4 +1,4 @@
-![](./images/img_001.png)
+![DLI 講師整理的深度學習基礎教材架構心智圖](./images/img_001.png)
 
 ## Lecture 1 - Introduction
 

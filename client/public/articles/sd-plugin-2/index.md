@@ -66,7 +66,7 @@ git lfs clone https://huggingface.co/lllyasviel/ControlNet-v1-1
 
 所有設定完成，就按生圖。
 
-![生成結果對照圖，左邊是原圖、右邊是重繪後的新圖，兩張並排呈現。](./images/img_006.png)
+![圖生圖前後對照：左邊是原圖，右邊是 SD WebUI 用不同參數重繪的結果，明顯較模糊](./images/img_006.png)
 
 原圖在左，新圖在右，多了一股朦朧美，可能模糊條太多了囧。
 

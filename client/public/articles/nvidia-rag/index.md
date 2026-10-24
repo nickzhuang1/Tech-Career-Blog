@@ -1,4 +1,4 @@
-![](./images/img_001.png)
+![Building RAG Agents with LLMs 課程完課證書](./images/img_001.png)
 
 ## 前言
 

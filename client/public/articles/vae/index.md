@@ -17,7 +17,7 @@
 
 自編碼器（Autoencoder）是一種常見的無監督學習模型，用於學習數據的壓縮表示和特徵提取。
 
-![圖中標出 European Community、Interbank markets、Energy markets、Legal/judicial 等多個新聞主題詞彙](./images/img_002.png)
+![auto clustering 效果示意圖：European Community、Interbank markets 等新聞主題詞彙自動聚類的結果](./images/img_002.png)
 
 其中的思想最早來自於2006年的一篇論文，這篇是AI大神之一Hinton寫的，它主要是比較了主成份分析法(principal components analysis, PCA)，PCA是一種將數據降低維度的技術，這樣的好處是可以更容易地分析資料、及做好統計分析的優點，自編碼器的優勢在於它受惠於硬體算力的提升，使得它可以實現，經mnist數據集的實驗表示它的效果相較於PCA來說更好，以下是有關自編碼器的簡要介紹：
 

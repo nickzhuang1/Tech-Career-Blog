@@ -1,4 +1,4 @@
-![](./images/img_001.png)
+![本論文的心智圖：以膠囊網路（Capsule Network）進行印刷電路板的瑕疵檢測](./images/img_001.png)
 
 # Revolutionizing PCB Quality Control with Advanced Capsule Networks
 

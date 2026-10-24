@@ -59,7 +59,7 @@ Tag Complete：
 
 最後將技巧合併一起，能生成高品質二次元圖：
 
-![合併 OpenPose、Depth Library 等技巧後，用下方 prompt 生成的二次元人物插畫](./images/img_006.png)
+![套用上述所有技巧後，用下方 prompt 連續生成三次的二次元人物插畫，三張並排呈現](./images/img_006.png)
 
 使用的Prompt：
 
