@@ -43,7 +43,10 @@ export default function Home() {
               <span className="text-foreground">技術實戰與職涯思索</span>
             </h1>
 
-            <p className="text-base sm:text-lg text-muted-foreground max-w-xl mb-10 leading-relaxed">
+            {/* 這段文字疊在 hero-glow 上，glow 會把局部底色提亮到 #23324e，
+                12pt 的 muted-foreground 在那裡只有 3.47:1（門檻 4.5）。
+                改用 foreground/80 → 7.42:1，視覺上仍比 h1 略淡 */}
+            <p className="text-base sm:text-lg text-foreground/80 max-w-xl mb-10 leading-relaxed">
               {yearsOfExperience()} 年軟體開發，從前端到後端、從雲端到 AI。
               分享技術洞察、架構設計、與職涯成長的深度觀點。
             </p>

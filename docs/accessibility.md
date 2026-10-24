@@ -34,6 +34,11 @@ curl -s -o /tmp/axe.min.js https://cdn.jsdelivr.net/npm/axe-core@4.13.0/axe.min.
 **只看首頁沒用**：這次的四類問題裡有三類是首頁掃不到的
 （內文連結、列表頁徽章、標題層級）。
 
+**用桌機寬度掃也不夠**：`sm:` 斷點會同時改變**字級**與顏色
+（例如首屏導言是 `text-base sm:text-lg`），
+16px 需要 4.5:1、18px 只要 3:1，所以同一個元素在桌機過、手機不過。
+驗證時一定要設 `Emulation.setDeviceMetricsOverride`（412×823, mobile: true）。
+
 ---
 
 ## 二、色票的兩條規則
@@ -56,6 +61,20 @@ curl -s -o /tmp/axe.min.js https://cdn.jsdelivr.net/npm/axe-core@4.13.0/axe.min.
 
 **新元件要用主色寫字請用 `text-primary-strong`**；`text-primary` 只留給
 圖示、邊框這類非文字用途。
+
+### 規則 3：疊在 hero-glow 上的文字要調亮，不能只看色票
+
+首頁 hero 有一段 `hero-glow`（紫色與青色模糊光暈）鋪在標題後面。
+它會把**局部底色**從 `#0b0b0f` 提亮到 `#23324e`，
+於是 `--muted-foreground`（#848490）在那裡只剩 **3.47:1**，其他地方都是 5 以上。
+
+```
+❌ text-muted-foreground          → 在 glow 上 3.47 : 1
+✅ text-foreground/80             → 7.42 : 1（視覺上仍比 h1 略淡）
+```
+
+判斷方式：對比要看**元素實際背後的顏色**，不是主題的背景色。
+有 glow、漸層、半透明卡片的地方都要實測。
 
 ### 規則 2：`text-muted-foreground/NN` 不要用在資訊性文字
 
