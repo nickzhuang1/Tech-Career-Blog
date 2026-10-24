@@ -5,6 +5,11 @@
 >
 > 這份檔案記錄**發現過程**與**現況**，方便日後調整 DNS 或加子網域時對照。
 > 純 SEO 面的內容在 [`seo-audit.md`](./seo-audit.md)，這裡只談 DNS 與主機。
+>
+> | 章節 | 內容 |
+> |---|---|
+> | 一、主機與子網域 | www 的 403／526、泛用子網域在服務整份部落格 |
+> | 二、郵件冒用防護 | SPF `-all`、DMARC `p=reject`、刪除舊 DKIM 公鑰 |
 
 ---
 
@@ -111,3 +116,108 @@ curl -s https://nickzhuang.com/      | grep -o 'rel="canonical" href="[^"]*'
 任何解析得到的子網域都會直接服務整份部落格 —— 對訪客是混淆，對釣魚也是現成的載體。
 
 要新子網域就一筆一筆明確加，並在 Workers 的 Domains & Routes 對應設定。
+
+---
+
+## 二、郵件冒用防護
+
+### 問題：沒有信箱，不代表不會被冒用
+
+清理主機時站長問了一個關鍵問題：「沒寫郵件記錄，會不會有人冒用我的網域寄信？」
+
+**會，而且原本的設定幾乎沒有抵抗力。** 冒用（spoofing）防的是「有人拿你的網域當
+寄件人」，這件事跟有沒有 MX（收信）無關，只跟 **SPF / DKIM / DMARC** 三種 TXT 記錄有關。
+
+清理前的狀態：
+
+| 記錄 | 值 | 問題 |
+|---|---|---|
+| SPF | `v=spf1 ip4:162.241.218.148 a mx include:websitewelcome.com ~all` | `~all` 是 **softfail** —— 收件端通常「標記可疑但照樣收下」。而 `include:websitewelcome.com` 與那組 IP 都是 **HostGator** 的，早就不用了 |
+| DMARC | （無） | 完全沒有政策，Gmail／Outlook 想擋也沒有依據 |
+| DKIM | `default._domainkey`（有記錄） | **最危險的一項**：DNS 裡留著 HostGator 時代的**公鑰**，對應的**私鑰在舊主機上**。誰能存取那台舊機，就能簽出「通過 DKIM 驗證」的信 |
+| MX | （無） | 從來沒有收信服務 |
+
+### 修復：SPF 硬拒絕 + DMARC reject + 刪除舊公鑰
+
+```
+# ① 取代原本的 SPF（DNS → Records，編輯現有 TXT）
+v=spf1 -all
+```
+
+`-all` 的意思是「**沒有任何伺服器**被授權用這個網域寄信」。既然沒有郵件服務，
+這是最乾淨的姿態。
+
+```
+# ② 新增 DMARC（DNS → Records → Add）
+Type:    TXT
+Name:    _dmarc
+Content: v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s; pct=100; rua=mailto:nickzhuang1@gmail.com; fo=1
+```
+
+| 參數 | 作用 |
+|---|---|
+| `p=reject` | 驗證失敗的信**直接拒收**（不只是標記） |
+| `sp=reject` | 子網域也套用同一政策 |
+| `adkim=s; aspf=s` | 嚴格對齊，冒用者更難繞過 |
+| `pct=100` | 100% 套用（不是抽樣） |
+| `rua=mailto:…` | 每週收到聚合報告，**看得到誰在冒用** |
+| `fo=1` | 任一驗證失敗就發報告 |
+
+```
+# ③ 刪除舊的 DKIM 公鑰（DNS → Records）
+default._domainkey    TXT    （刪除）
+```
+
+**判斷依據**：沒有 MX（不收信）、`mail.nickzhuang.com` 已是 NXDOMAIN（郵件主機不存在）、
+SPF 裡的授權全是舊主機商 —— 確認沒有在用，才刪得下去。
+若日後真的要用信箱，屆時由新的服務商提供新的 DKIM 記錄。
+
+### 現況（2026-10 驗證）
+
+```bash
+$ dig +short nickzhuang.com TXT @8.8.8.8
+"v=spf1 -all"
+"google-site-verification=IY92lITr28uu7v63NZx9p10HrswpRuEwi0xDqtJK2yw"
+
+$ dig +short _dmarc.nickzhuang.com TXT @8.8.8.8
+"v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s; pct=100; rua=mailto:nickzhuang1@gmail.com; fo=1"
+
+$ dig +short default._domainkey.nickzhuang.com TXT @8.8.8.8
+（空）
+
+$ dig +short nickzhuang.com MX @8.8.8.8
+（空）
+```
+
+`google-site-verification` 是 Search Console 的驗證記錄，**保留不動**。
+
+### 驗證與監測
+
+```bash
+dig +short nickzhuang.com TXT @8.8.8.8           # 應只剩 v=spf1 -all
+dig +short _dmarc.nickzhuang.com TXT @8.8.8.8    # 應為 p=reject
+dig +short default._domainkey.nickzhuang.com TXT # 應為空
+```
+
+24–48 小時後可用外部工具確認實際生效：
+
+- MXToolbox DMARC checker — <https://mxtoolbox.com/DMARC.aspx>
+- dmarcian DMARC Inspector — <https://dmarcian.com/dmarc-inspector/>
+
+之後每週會收到 `rua` 指定的信箱寄來的聚合報告。**如果報告裡出現你不認識的寄件來源，
+那就是有人在冒用**，可以在 Cloudflare 的 Email Security 或信件來源 IP 上進一步封鎖。
+
+### 若未來要開信箱（重要）
+
+`v=spf1 -all` + `p=reject` 是「這個網域完全不寄信」的設定。
+一旦要用 Gmail 的「以此地址寄信」、Google Workspace、或任何主機商的信箱，
+**必須先改這兩筆**，否則你自己寄出的信會被收件端直接退件。
+
+| 服務 | SPF 需要加 | DKIM |
+|---|---|---|
+| Google Workspace / Gmail 轉寄 | `include:_spf.google.com` | 由 Google 提供 `google._domainkey` |
+| 主機商（如 HostGator） | 該主機商提供的 `include:` | 由主機商提供 |
+| 自架 SMTP | `ip4:<你的 IP>` | 自行產生金鑰並發布公鑰 |
+
+DMARC 建議的調校節奏：先用 `p=none` 觀察 1–2 週的報告，確認沒有正常信件被誤擋，
+再改成 `p=quarantine`、最後 `p=reject`。
