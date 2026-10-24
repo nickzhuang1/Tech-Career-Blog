@@ -498,25 +498,14 @@ https://www.nickzhuang.com/post-sitemap.xml
 另外，GSC 一開始建立的就是**網域資源**（domain property），已同時涵蓋 apex 與 www，
 不需要再建第二個資源。
 
-#### 順帶查到的另一個問題（未處理，待站長決定）
+#### 順帶查到的問題（✅ 已修復，2026-10）
 
-`www.nickzhuang.com` 這台主機**仍然存在於 Cloudflare**，而且回應是壞的：
+清理時發現 `www.nickzhuang.com` 仍是舊主機的殘留設定，回應是壞的：
+`/` 是 403 `cf-mitigated: challenge`、`/robots.txt` 是 526，
+而且**任何子網域**（`random-sub-xyz.nickzhuang.com`）都在服務整份部落格。
 
-| 路徑 | 回應 | 判讀 |
-|---|---|---|
-| `/`、`/posts/`、`/sitemap.xml` | 403 `cf-mitigated: challenge` | Cloudflare 對 www 發人機驗證（Googlebot UA 也一樣） |
-| `/robots.txt` | 526 | robots.txt 會繞過 challenge 直達 origin，而 www 的 origin 仍是已下線的舊主機 |
-
-DNS 的 A 記錄與 apex 相同（Cloudflare 代理 IP），所以 www 沒有消失，只是壞了。
-影響：任何指向 www 的舊連結、書籤、外部引用都會撞上 403/526；Google 對這個主機得到的訊號是「無法存取」。
-
-建議修法（Cloudflare 後台，約 2 分鐘）：
-
-1. **Redirect Rule**：`hostname equals "www.nickzhuang.com"` →
-   `concat("https://nickzhuang.com", http.request.uri.path)`，狀態 301，保留 query。
-   Redirect Rules 比 WAF 規則先執行，建完用 `curl -sI https://www.nickzhuang.com/` 驗證是否變成 301。
-2. **刪掉 www 的舊 origin DNS 記錄**（那個 526 的來源）。
-3. **GSC 改用「網域資源」**（涵蓋 apex 與 www），才看得到 www 的流量與錯誤。
+已透過「www 改為 Worker 自訂網域 + 刪除泛用 DNS 記錄與泛用 Worker route」修復。
+完整診斷過程、證據表格與驗證指令見 [`dns-and-hosting-cleanup.md`](./dns-and-hosting-cleanup.md)。
 
 **舊網址 301 對照表：已排除。** 站長回報舊 sitemap 的網址清單已不可考（舊機下線後
 無備份），因此無法建立「舊文章網址 → 新站 `/posts/<id>/`」的對照。
