@@ -30,6 +30,8 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    // 明確指定現代目標，避免為了老瀏覽器多轉譯一層（PSI 的 legacy-javascript 稽核）
+    target: "es2020",
     rollupOptions: {
       output: {
         manualChunks: {
