@@ -476,6 +476,47 @@ Google 對「有明確更新紀錄」的技術文章評價通常較高。
 ### P3-8（選）多語系
 若未來要出英文版，才需要 `hreflang` 與 `/en/` 路徑規劃。現階段 79 篇全中文，不需要。
 
+### 舊 WordPress sitemap ✅（判定：不需處理，2026-10-23）
+
+搜尋結果與 GSC 裡還看得到五個舊 sitemap：
+
+```
+https://www.nickzhuang.com/author-sitemap.xml
+https://www.nickzhuang.com/post_tag-sitemap.xml
+https://www.nickzhuang.com/category-sitemap.xml
+https://www.nickzhuang.com/page-sitemap.xml
+https://www.nickzhuang.com/post-sitemap.xml
+```
+
+這套命名是 **WordPress + Yoast SEO** 的固定格式，來自舊站，站長已確認舊機全數下線。
+現站是單一 `https://nickzhuang.com/sitemap.xml`（90 筆），**沒有任何檔案需要更新或重建** ——
+這五個路徑在 apex 一律回 404（由 `404.html` 接手），Google 會自行移除索引。
+
+唯一要做的 housekeeping：到 GSC 的 Sitemaps 報表把這五筆刪掉，避免每次看到錯誤都要重新判斷一次。
+
+#### 順帶查到的另一個問題（未處理，待站長決定）
+
+`www.nickzhuang.com` 這台主機**仍然存在於 Cloudflare**，而且回應是壞的：
+
+| 路徑 | 回應 | 判讀 |
+|---|---|---|
+| `/`、`/posts/`、`/sitemap.xml` | 403 `cf-mitigated: challenge` | Cloudflare 對 www 發人機驗證（Googlebot UA 也一樣） |
+| `/robots.txt` | 526 | robots.txt 會繞過 challenge 直達 origin，而 www 的 origin 仍是已下線的舊主機 |
+
+DNS 的 A 記錄與 apex 相同（Cloudflare 代理 IP），所以 www 沒有消失，只是壞了。
+影響：任何指向 www 的舊連結、書籤、外部引用都會撞上 403/526；Google 對這個主機得到的訊號是「無法存取」。
+
+建議修法（Cloudflare 後台，約 2 分鐘）：
+
+1. **Redirect Rule**：`hostname equals "www.nickzhuang.com"` →
+   `concat("https://nickzhuang.com", http.request.uri.path)`，狀態 301，保留 query。
+   Redirect Rules 比 WAF 規則先執行，建完用 `curl -sI https://www.nickzhuang.com/` 驗證是否變成 301。
+2. **刪掉 www 的舊 origin DNS 記錄**（那個 526 的來源）。
+3. **GSC 改用「網域資源」**（涵蓋 apex 與 www），才看得到 www 的流量與錯誤。
+
+若日後拿到舊 `post-sitemap.xml` 的網址清單，可再做 `_redirects` 301 對照表，
+把舊文章網址導到新站的 `/posts/<id>/`，承接舊站累積的外鏈。
+
 ---
 
 ## 七、建議執行順序
