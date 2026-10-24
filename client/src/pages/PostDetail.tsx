@@ -113,6 +113,41 @@ function renderMarkdown(md: string, articleId?: string, fallbackAlt?: string): J
   let keyIdx = 0;
   const nk = () => `md-${keyIdx++}`;
 
+  // ── 標題錨點：先把整篇的 id 算好 ─────────────────────────────────
+  // 為什麼要先掃一遍而不是邊渲染邊算：「提要」清單的錨點連結出現在所有標題之前，
+  // 等渲染到它時後面的標題都還沒登記，只能靠預掃才對得上。
+  // 重複標題（6 篇文章有）依出現順序加上 -2、-3，避免重複 id 讓第二個錨點永遠跳到第一個。
+  const headingIdBySlug = new Map<string, string>();
+  {
+    let inFence = false;
+    for (const line of rawLines) {
+      if (line.replace(/^[\u200B\uFEFF\u00A0\u180E\u2060]+/, "").startsWith("```")) {
+        inFence = !inFence;
+        continue;
+      }
+      if (inFence) continue;
+      const m = line.match(/^#{1,4} (.*)$/);
+      if (!m) continue;
+      const slug = slugifyHeading(m[1]) || "section";
+      // 只記每個 slug 的第一次出現：內文的 `#錨點` 一律指向第一個同名標題，
+      // 後面的重複標題會拿到 -2、-3 後綴（見下面的渲染計數）。
+      if (!headingIdBySlug.has(slug)) headingIdBySlug.set(slug, slug);
+    }
+  }
+  // 重複標題必須拿到不同 id，否則第二個以後的錨點永遠跳到第一個
+  const usedHeadingIds = new Map<string, number>();
+  const headingId = (text: string) => {
+    const base = slugifyHeading(text) || "section";
+    const n = (usedHeadingIds.get(base) ?? 0) + 1;
+    usedHeadingIds.set(base, n);
+    return n === 1 ? base : `${base}-${n}`;
+  };
+  /** 內文寫的 `#錨點` 也走同一套轉換，才不會因為大小寫或標點全形半形而斷鏈 */
+  const anchorHref = (frag: string) => {
+    const slug = slugifyHeading(frag);
+    return `#${headingIdBySlug.get(slug) ?? slug}`;
+  };
+
   // ── 圖片處理（SEO / CWV）──────────────────────────────────────────
   // 1) 第一章圖 eager + fetchpriority=high：它通常是 LCP 元素，原本被 lazy 延後
   // 2) 其餘 lazy
@@ -150,7 +185,8 @@ function renderMarkdown(md: string, articleId?: string, fallbackAlt?: string): J
       // image-as-link: [![alt](imgSrc)extraText](linkUrl)
       .replace(/\[!\[([^\]]*)\]\(([^)]+)\)([^\]]*)\]\(([^)]+)\)/g, (_, alt, imgSrc, extraText, url) => {
         const resolvedSrc = resolveArticleImage(imgSrc, articleId).src;
-        const safe = url.startsWith("http") || url.startsWith("/") || url.startsWith("#") ? url : "#";
+        const safe = url.startsWith("#") ? anchorHref(url.slice(1))
+          : url.startsWith("http") || url.startsWith("/") ? url : "#";
         const ext = !url.startsWith("#") ? ` target="_blank" rel="noopener noreferrer"` : "";
         return `<a href="${safe}"${ext} class="inline-flex items-center gap-1.5 text-primary-strong underline underline-offset-2">`
           + `<img src="${resolvedSrc}" alt="${alt}" class="inline-block h-5 w-5 object-contain align-middle" />`
@@ -158,7 +194,8 @@ function renderMarkdown(md: string, articleId?: string, fallbackAlt?: string): J
           + `</a>`;
       })
       .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, t, url) => {
-        const safe = url.startsWith("http") || url.startsWith("/") || url.startsWith("#") ? url : "#";
+        const safe = url.startsWith("#") ? anchorHref(url.slice(1))
+          : url.startsWith("http") || url.startsWith("/") ? url : "#";
         const ext = !url.startsWith("#") ? ` target="_blank" rel="noopener noreferrer"` : "";
         return `<a href="${safe}"${ext} class="text-primary-strong underline underline-offset-2">${t}</a>`;
       });
@@ -313,7 +350,7 @@ function renderMarkdown(md: string, articleId?: string, fallbackAlt?: string): J
       // 79 篇裡有 60 篇原本會出現兩個 h1，爬蟲難以判斷頁面主題。
       const lv = mdLevel === 1 ? 2 : mdLevel;
       const txt = line.replace(/^#{1,4} /, "");
-      lastHeading = slugId(txt);
+      lastHeading = plainHeading(txt);
       const Tag = `h${lv}` as "h2" | "h3" | "h4";
       const hcls = [
         "text-2xl font-bold mt-10 mb-4 scroll-mt-20",
@@ -321,7 +358,7 @@ function renderMarkdown(md: string, articleId?: string, fallbackAlt?: string): J
         "text-lg font-bold mt-8 mb-3 scroll-mt-20",
         "text-base font-bold mt-6 mb-2 scroll-mt-20",
       ][lv - 1];
-      out.push(<Tag key={nk()} id={slugId(txt)} className={hcls} dangerouslySetInnerHTML={{ __html: inline(txt) }} />);
+      out.push(<Tag key={nk()} id={headingId(txt)} className={hcls} dangerouslySetInnerHTML={{ __html: inline(txt) }} />);
     } else if (line.startsWith("![")) {
       const m = line.match(/!\[([^\]]*)\]\(([^)]+)\)/);
       if (m) {
@@ -422,13 +459,34 @@ function renderMarkdown(md: string, articleId?: string, fallbackAlt?: string): J
   return out;
 }
 
-function slugId(text: string): string {
+/**
+ * 標題的純文字（去掉 Markdown 標記），用於圖片缺 alt 時的備援描述。
+ */
+function plainHeading(text: string): string {
   return text
     .replace(/\*\*(.+?)\*\*/g, "$1")
     .replace(/\*(.+?)\*/g, "$1")
     .replace(/`([^`]+)`/g, "$1")
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
     .trim();
+}
+
+/**
+ * 標題 → 錨點 id。
+ *
+ * 舊版直接把原始中文標題當 id，於是 675 個標題裡有 219 個帶著空白、標點或全形括號
+ * （例如 `3. 部署MySQL後端`、`Update（更新，升版）`），在網址裡會變成一大串
+ * percent-encoding；同一篇出現重複標題時還會產生重複 id（6 篇文章有這個問題）。
+ *
+ * 規則：小寫、只留文字與數字（含中文），其餘字元一律收斂成單一連字號。
+ * 全形／半形標點都在這一步被吃掉，所以 `#什麼是AIGC?` 這種半形問號的連結
+ * 也能對到 `## 什麼是AIGC？` 這個全形問號的標題。
+ */
+function slugifyHeading(text: string): string {
+  return plainHeading(text)
+    .toLowerCase()
+    .replace(/[^\p{Letter}\p{Number}]+/gu, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 export default function PostDetail(

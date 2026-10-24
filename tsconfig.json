@@ -6,6 +6,9 @@
     "tsBuildInfoFile": "./node_modules/typescript/tsbuildinfo",
     "noEmit": true,
     "module": "ESNext",
+    // 與 vite.config.ts 的 build.target 一致（es2020）。沒有指定時 tsc 預設 ES5，
+    // 會擋下 Unicode property escape（/\p{Letter}/u）這類現代語法。
+    "target": "ES2020",
     "strict": true,
     "lib": ["esnext", "dom", "dom.iterable"],
     "jsx": "react-jsx",
