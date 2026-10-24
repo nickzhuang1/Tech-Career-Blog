@@ -168,6 +168,24 @@ curl -sI https://nickzhuang.com/articles/<id>/images/<file>.webp | grep -i cache
 | `pnpm sitemap` | 只重跑 sitemap |
 | `pnpm start` | 以 `dist/index.cjs` 起本機正式版伺服器 |
 
+### 提交前檢查（husky）
+
+`git commit` 時會自動跑 `.husky/pre-commit`：
+
+```
+▸ typecheck            pnpm typecheck（tsc + tsconfig.script.json）
+▸ check:posts          文章健檢，0 個錯誤才放行（警告不擋）
+```
+
+擋的是「不會讓建置失敗、但會在 Google 那邊靜默扣分」的錯誤：`excerpt` 太短、
+`id` 不是合法 slug、標題超過 SERP 寬度、`updated` 早於 `date`、`category` 不在清單內。
+
+沒放進 hook 的三件事與理由寫在 `.husky/pre-commit` 的註解：Prettier／lint-staged
+（這個 repo 從未用過，硬加會把 79 篇 Markdown 整批重排）、`pnpm build`（40 秒以上，
+且 `dist` 是手動上傳的）、測試（repo 沒有測試套件，`check:posts` 就是這個站的測試）。
+
+急用時可 `git commit --no-verify` 跳過；`pnpm install` 會透過 `prepare` 自動裝回 hook。
+
 ---
 
 ## 主要檔案

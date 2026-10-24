@@ -1,0 +1,31 @@
+# 提交前檢查：型別 + 文章 metadata。
+#
+# 為什麼是這兩項：這個站是靜態建置（pnpm build → 手動上傳 dist/public），
+# 有些錯誤不會讓建置失敗，只會在 Google 那邊靜默扣分 ——
+# 例如 excerpt 太短、id 不是合法 slug、標題太寬、updated 早於 date。
+# 這些都由 check:posts 驗證，所以放在提交前擋。
+#
+# 沒放進來的：
+#   - Prettier／lint-staged：這個 repo 從未用過 Prettier，硬加會把 79 篇
+#     Markdown 與手動排版的程式碼整批重排，diff 會蓋掉真正的改動。
+#   - pnpm build：要 40 秒以上，而且 dist 是手動上傳的，不適合每次提交都跑。
+#   - 測試：repo 沒有測試套件（check:posts 就是這個站的測試）。
+
+set -e
+
+echo "▸ typecheck"
+pnpm -s typecheck
+
+# 不用管線：husky 用 sh 執行，POSIX sh 沒有 pipefail，
+# `cmd | tail` 會把 cmd 的失敗碼吃掉，錯誤就擋不住了。
+echo "▸ check:posts（有錯誤才擋，警告不擋）"
+LOG="$(mktemp -t check-posts)"
+if pnpm -s check:posts >"$LOG" 2>&1; then
+  grep '檢查' "$LOG" || true
+  rm -f "$LOG"
+else
+  echo "✗ 文章 metadata 檢查失敗（修好再提交；急用可 git commit --no-verify）："
+  grep '✗' "$LOG" | head -20 || tail -30 "$LOG"
+  rm -f "$LOG"
+  exit 1
+fi
