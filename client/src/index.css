@@ -26,6 +26,9 @@
   --popover-foreground: 240 10% 8%;
   --popover-border: 240 8% 90%;
   --primary: 262 83% 58%;
+  /* 文字用的主色：實心填色（--primary）在深底上只有 4.11:1，
+     文字改用這個亮度才過 WCAG AA（淺色 8.55:1 / 深色 7.31:1） */
+  --primary-strong: 262 83% 45%;
   --primary-foreground: 0 0% 100%;
   --secondary: 240 8% 92%;
   --secondary-foreground: 240 10% 15%;
@@ -96,11 +99,14 @@
   --popover-foreground: 240 5% 92%;
   --popover-border: 240 12% 16%;
   --primary: 262 83% 62%;
+  --primary-strong: 262 83% 75%;
   --primary-foreground: 0 0% 100%;
   --secondary: 240 12% 14%;
   --secondary-foreground: 240 5% 85%;
   --muted: 240 12% 12%;
-  --muted-foreground: 240 5% 50%;
+  /* 50% 在卡片底（240 14% 8%）只有 4.35:1，未達 WCAG AA 的 4.5；
+     54% 為 5.05:1，順帶讓整站次要文字一起合格 */
+  --muted-foreground: 240 5% 54%;
   --accent: 262 30% 15%;
   --accent-foreground: 262 83% 75%;
   --destructive: 0 84% 50%;

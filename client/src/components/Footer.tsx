@@ -8,7 +8,8 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* 主題導覽：讓系列／分類／標籤聚合頁從每一頁都有一條爬取路徑 */}
         <nav aria-label="主題導覽" className="mb-8">
-          <p className="text-xs font-medium text-muted-foreground/60 mb-2">主題</p>
+          {/* 60% 透明度的 muted 疊在近黑底上只有 2.34:1；這裡是標籤文字不是裝飾 */}
+          <p className="text-xs font-medium text-muted-foreground mb-2">主題</p>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
             {collectionLinks.map((link) => (
               <Link key={link.href} href={link.href}>

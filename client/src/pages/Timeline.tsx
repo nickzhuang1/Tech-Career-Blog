@@ -104,8 +104,8 @@ export default function Timeline() {
             返回關於我
           </button>
           <div className="flex items-center gap-2 mb-3">
-            <History className="w-4 h-4 text-primary" />
-            <span className="font-mono text-xs text-primary tracking-wider uppercase">Timeline</span>
+            <History className="w-4 h-4 text-primary-strong" />
+            <span className="font-mono text-xs text-primary-strong tracking-wider uppercase">Timeline</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-1">
             職涯 <span className="gradient-text">大事記</span>
@@ -164,13 +164,13 @@ export default function Timeline() {
                   >
                     <div className={`text-lg leading-relaxed px-1 transition-opacity duration-150 ${isActive ? "opacity-20" : "opacity-100"} ${isLeft ? "" : "text-right"}`}>
                       {/* 優先顯示第一個重點項目，否則顯示 items[0] */}
-                      <div className="line-clamp-2 text-muted-foreground/80">
+                      <div className="line-clamp-2 text-muted-foreground">
                         {entry.highlights && entry.highlights.length > 0
                           ? entry.items[entry.highlights[0]]
                           : entry.items[0]}
                       </div>
                       {entry.items.length > 1 && (
-                        <div className="text-primary/60">{`+${entry.items.length - 1} 項`}</div>
+                        <div className="text-primary-strong/60">{`+${entry.items.length - 1} 項`}</div>
                       )}
                     </div>
                   </foreignObject>
@@ -192,14 +192,15 @@ export default function Timeline() {
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-1.5 min-w-0">
-                  <span className="font-mono text-xs sm:text-sm font-bold text-primary shrink-0">{expandedEntry.year}</span>
+                  <span className="font-mono text-xs sm:text-sm font-bold text-primary-strong shrink-0">{expandedEntry.year}</span>
                   {expandedEntry.current && (
-                    <span className="text-[9px] sm:text-[11px] font-mono bg-primary/10 text-primary rounded px-1.5 py-0.5 shrink-0">進行中</span>
+                    <span className="text-[9px] sm:text-[11px] font-mono bg-primary/10 text-primary-strong rounded px-1.5 py-0.5 shrink-0">進行中</span>
                   )}
                 </div>
                 <button
                   onClick={(e) => { e.stopPropagation(); setExpanded(null); setCardPos(null); }}
-                  className="text-muted-foreground/50 hover:text-foreground transition-colors ml-1 shrink-0"
+                  aria-label="關閉"
+                  className="text-muted-foreground hover:text-foreground transition-colors ml-1 shrink-0"
                 >
                   <X className="w-3 h-3" />
                 </button>
@@ -211,7 +212,7 @@ export default function Timeline() {
                     <li key={idx} className={`flex items-start gap-1.5 text-xs sm:text-sm leading-snug ${
                       isHighlight ? "text-foreground font-medium" : "text-muted-foreground"
                     }`}>
-                      <span className={`shrink-0 mt-0.5 ${isHighlight ? "text-primary" : "text-primary/50"}`}>
+                      <span className={`shrink-0 mt-0.5 ${isHighlight ? "text-primary-strong" : "text-primary-strong/50"}`}>
                         {isHighlight ? "★" : "›"}
                       </span>
                       <span>{item}</span>

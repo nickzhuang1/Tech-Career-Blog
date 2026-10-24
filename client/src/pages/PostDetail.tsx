@@ -151,7 +151,7 @@ function renderMarkdown(md: string, articleId?: string, fallbackAlt?: string): J
         const resolvedSrc = resolveArticleImage(imgSrc, articleId).src;
         const safe = url.startsWith("http") || url.startsWith("/") || url.startsWith("#") ? url : "#";
         const ext = !url.startsWith("#") ? ` target="_blank" rel="noopener noreferrer"` : "";
-        return `<a href="${safe}"${ext} class="inline-flex items-center gap-1.5 text-primary underline underline-offset-2">`
+        return `<a href="${safe}"${ext} class="inline-flex items-center gap-1.5 text-primary-strong underline underline-offset-2">`
           + `<img src="${resolvedSrc}" alt="${alt}" class="inline-block h-5 w-5 object-contain align-middle" />`
           + (extraText.trim() ? `<span>${extraText.trim()}</span>` : "")
           + `</a>`;
@@ -159,7 +159,7 @@ function renderMarkdown(md: string, articleId?: string, fallbackAlt?: string): J
       .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, t, url) => {
         const safe = url.startsWith("http") || url.startsWith("/") || url.startsWith("#") ? url : "#";
         const ext = !url.startsWith("#") ? ` target="_blank" rel="noopener noreferrer"` : "";
-        return `<a href="${safe}"${ext} class="text-primary underline underline-offset-2">${t}</a>`;
+        return `<a href="${safe}"${ext} class="text-primary-strong underline underline-offset-2">${t}</a>`;
       });
     return s;
   }
@@ -494,7 +494,7 @@ export default function PostDetail(
         <div className="text-center">
           <p className="text-muted-foreground mb-4">找不到這篇文章</p>
           <Link href="/posts">
-            <span className="text-primary text-sm cursor-pointer" data-testid="link-back-to-posts">返回文章列表</span>
+            <span className="text-primary-strong text-sm cursor-pointer" data-testid="link-back-to-posts">返回文章列表</span>
           </Link>
         </div>
       </div>
@@ -542,7 +542,7 @@ export default function PostDetail(
                 {formatDate(post.date)}
               </time>
               {post.updated && post.updated !== post.date && (
-                <span className="text-muted-foreground/70">
+                <span className="text-muted-foreground">
                   ｜更新於 <time dateTime={post.updated}>{formatDate(post.updated)}</time>
                 </span>
               )}
@@ -578,7 +578,7 @@ export default function PostDetail(
                   <span className="cursor-pointer" data-testid="link-series-hub">
                     <Badge
                       variant="outline"
-                      className="text-xs font-normal py-0.5 px-2 border-primary/30 text-primary"
+                      className="text-xs font-normal py-0.5 px-2 border-primary/30 text-primary-strong"
                     >
                       {seriesName(post.series)}
                     </Badge>
@@ -587,7 +587,7 @@ export default function PostDetail(
               ) : (
                 <Badge
                   variant="outline"
-                  className="text-xs font-normal py-0.5 px-2 border-primary/30 text-primary"
+                  className="text-xs font-normal py-0.5 px-2 border-primary/30 text-primary-strong"
                 >
                   {seriesName(post.series)}
                 </Badge>
@@ -617,7 +617,7 @@ export default function PostDetail(
         <div className="rounded-md border border-border/40 bg-card p-5 gradient-border">
           <div className="flex items-start gap-3.5">
             <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
-              <span className="text-sm font-semibold text-primary">NZ</span>
+              <span className="text-sm font-semibold text-primary-strong">NZ</span>
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 mb-1.5">
@@ -627,7 +627,7 @@ export default function PostDetail(
               <p className="text-xs text-muted-foreground leading-relaxed mb-3">{shortBio}</p>
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
                 <Link href="/about">
-                  <span className="text-primary cursor-pointer hover:underline" data-testid="link-author-about">
+                  <span className="text-primary-strong cursor-pointer hover:underline" data-testid="link-author-about">
                     關於我 →
                   </span>
                 </Link>
@@ -656,7 +656,7 @@ export default function PostDetail(
         <div className="max-w-3xl mx-auto px-4 sm:px-6 pb-8">
           <div className="rounded-md border border-primary/20 bg-primary/5 p-4">
             <div className="flex items-center justify-between gap-3 mb-2">
-              <p className="text-sm font-medium text-primary">{seriesName(post.series)}</p>
+              <p className="text-sm font-medium text-primary-strong">{seriesName(post.series)}</p>
               <span className="text-xs font-mono text-muted-foreground">
                 {posInSeries + 1} / {seriesIds.length}
               </span>
@@ -670,7 +670,7 @@ export default function PostDetail(
                   </span>
                 </Link>
               ) : (
-                <span className="text-xs text-muted-foreground/60">系列首篇</span>
+                <span className="text-xs text-muted-foreground">系列首篇</span>
               )}
               <Link
                 href={
@@ -679,7 +679,7 @@ export default function PostDetail(
                     : `/posts?series=${post.series}`
                 }
               >
-                <span className="text-primary cursor-pointer" data-testid="link-series-index">系列目錄</span>
+                <span className="text-primary-strong cursor-pointer" data-testid="link-series-index">系列目錄</span>
               </Link>
               {nextInSeries ? (
                 <Link href={`/posts/${nextInSeries}`}>
@@ -689,7 +689,7 @@ export default function PostDetail(
                   </span>
                 </Link>
               ) : (
-                <span className="text-xs text-muted-foreground/60">系列完結</span>
+                <span className="text-xs text-muted-foreground">系列完結</span>
               )}
             </div>
           </div>

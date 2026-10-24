@@ -43,8 +43,8 @@ export default function Certificates() {
             返回關於我
           </button>
           <div className="flex items-center gap-2 mb-3">
-            <ShieldCheck className="w-4 h-4 text-primary" />
-            <span className="font-mono text-xs text-primary tracking-wider uppercase">Certificates</span>
+            <ShieldCheck className="w-4 h-4 text-primary-strong" />
+            <span className="font-mono text-xs text-primary-strong tracking-wider uppercase">Certificates</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-1">
             我的 <span className="gradient-text">證書牆</span>
@@ -56,7 +56,7 @@ export default function Certificates() {
       <div className="max-w-4xl mx-auto px-4 py-10 sm:py-14">
         {grouped.map((group, groupIdx) => (
           <div key={group.name} className="mb-10">
-            <h2 className="text-lg font-semibold mb-4 text-primary/80 border-l-4 border-primary pl-2">{group.name}</h2>
+            <h2 className="text-lg font-semibold mb-4 text-primary-strong/80 border-l-4 border-primary pl-2">{group.name}</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
               {group.certs.map((cert, i) => {
                 // 全域 index
@@ -77,7 +77,7 @@ export default function Certificates() {
                       />
                     ) : (
                       <div className="w-full aspect-[4/3] flex items-center justify-center bg-muted/30 rounded border border-dashed border-border/30">
-                        <ShieldCheck className="w-10 h-10 text-primary/30" />
+                        <ShieldCheck className="w-10 h-10 text-primary-strong/30" />
                       </div>
                     )}
                   </button>
@@ -108,7 +108,7 @@ export default function Certificates() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-2 md:px-12">
           <div className="relative bg-card rounded-lg shadow-xl p-4 sm:p-6 w-full max-w-lg md:max-w-4xl flex flex-col items-center overflow-auto max-h-[90vh]">
             <button
-              className="absolute top-2 right-2 text-muted-foreground hover:text-primary"
+              className="absolute top-2 right-2 text-muted-foreground hover:text-primary-strong"
               onClick={() => setOpenIndex(null)}
               aria-label="關閉"
             >
@@ -131,7 +131,7 @@ export default function Certificates() {
                 />
               ) : (
                 <div className="w-64 h-48 md:w-96 md:h-72 flex items-center justify-center bg-muted/30 rounded border border-dashed border-border/30">
-                  <ShieldCheck className="w-12 h-12 text-primary/30" />
+                  <ShieldCheck className="w-12 h-12 text-primary-strong/30" />
                 </div>
               )}
               <button

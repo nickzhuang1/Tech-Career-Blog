@@ -67,6 +67,10 @@ export function Header() {
               variant="ghost"
               className="md:hidden"
               onClick={() => setMobileOpen(!mobileOpen)}
+              /* 只有圖示沒有文字，沒有 aria-label 時螢幕閱讀器只會唸「按鈕」；
+                 aria-expanded 讓開關狀態也能被讀出（axe: button-name） */
+              aria-label={mobileOpen ? "關閉選單" : "開啟選單"}
+              aria-expanded={mobileOpen}
               data-testid="button-mobile-menu"
             >
               {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}

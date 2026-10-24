@@ -46,8 +46,8 @@ export default function About() {
         <div className="hero-glow bg-purple-500 -top-40 -right-40" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <div className="flex items-center gap-2 mb-4">
-            <User className="w-4 h-4 text-primary" />
-            <span className="font-mono text-xs text-primary tracking-wider uppercase">About</span>
+            <User className="w-4 h-4 text-primary-strong" />
+            <span className="font-mono text-xs text-primary-strong tracking-wider uppercase">About</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-2">
             {aboutData.nameZh}{" "}
@@ -65,7 +65,7 @@ export default function About() {
             {/* 簡介 */}
             <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
               <div className="flex items-center gap-2 mb-3">
-                <User className="w-4 h-4 text-primary" />
+                <User className="w-4 h-4 text-primary-strong" />
                 <h2 className="font-semibold text-sm">關於我</h2>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed" data-testid="text-bio">
@@ -76,7 +76,7 @@ export default function About() {
             {/* 專業領域 */}
             <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
               <div className="flex items-center gap-2 mb-4">
-                <Briefcase className="w-4 h-4 text-primary" />
+                <Briefcase className="w-4 h-4 text-primary-strong" />
                 <h2 className="font-semibold text-sm">專業領域</h2>
               </div>
               <div className="flex flex-wrap gap-2" data-testid="text-expertise">
@@ -91,7 +91,7 @@ export default function About() {
             {/* 著作 */}
             <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
               <div className="flex items-center gap-2 mb-4">
-                <BookOpen className="w-4 h-4 text-primary" />
+                <BookOpen className="w-4 h-4 text-primary-strong" />
                 <h2 className="font-semibold text-sm">著作出版</h2>
               </div>
               <div className="space-y-3">
@@ -107,13 +107,13 @@ export default function About() {
             {/* 認證 */}
             <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
               <div className="flex items-center gap-2 mb-4">
-                <ShieldCheck className="w-4 h-4 text-primary" />
+                <ShieldCheck className="w-4 h-4 text-primary-strong" />
                 <h2 className="font-semibold text-sm">認證</h2>
               </div>
               <ul className="space-y-2">
                 {aboutData.certifications.filter((cert) => cert.name.startsWith("NVIDIA Certified")).map((cert, i) => (
                   <li key={i} className="text-sm text-muted-foreground flex gap-2">
-                    <span className="text-primary mt-0.5">›</span>
+                    <span className="text-primary-strong mt-0.5">›</span>
                     <span>{cert.name}</span>
                   </li>
                 ))}
@@ -123,13 +123,13 @@ export default function About() {
             {/* 榮譽 */}
             <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
               <div className="flex items-center gap-2 mb-4">
-                <Award className="w-4 h-4 text-primary" />
+                <Award className="w-4 h-4 text-primary-strong" />
                 <h2 className="font-semibold text-sm">榮譽</h2>
               </div>
               <ul className="space-y-2">
                 {aboutData.honors.map((honor, i) => (
                   <li key={i} className="text-sm text-muted-foreground flex gap-2">
-                    <span className="text-primary mt-0.5">›</span>
+                    <span className="text-primary-strong mt-0.5">›</span>
                     <span>{honor}</span>
                   </li>
                 ))}
@@ -139,13 +139,13 @@ export default function About() {
             {/* 演講 */}
             <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
               <div className="flex items-center gap-2 mb-4">
-                <Mic className="w-4 h-4 text-primary" />
+                <Mic className="w-4 h-4 text-primary-strong" />
                 <h2 className="font-semibold text-sm">演講</h2>
               </div>
               <ul className="space-y-2">
                 {aboutData.talks.map((talk, i) => (
                   <li key={i} className="text-sm text-muted-foreground flex gap-2">
-                    <span className="text-primary mt-0.5">›</span>
+                    <span className="text-primary-strong mt-0.5">›</span>
                     <span>{talk}</span>
                   </li>
                 ))}
@@ -164,7 +164,7 @@ export default function About() {
                 className="float-right ml-4 mb-3 w-32 h-32 rounded-md object-cover object-top border border-border/40"
               />
               <div className="flex items-center gap-2 mb-4">
-                <GraduationCap className="w-4 h-4 text-primary" />
+                <GraduationCap className="w-4 h-4 text-primary-strong" />
                 <h2 className="font-semibold text-sm">背景</h2>
               </div>
               <div className="space-y-4 text-sm">
@@ -192,7 +192,7 @@ export default function About() {
                   <button
                     onClick={() => navigate("/timeline")}
                     title="查看職涯大事記"
-                    className="flex-shrink-0 flex items-center gap-1 text-[10px] font-mono text-primary/70 hover:text-primary border border-primary/20 hover:border-primary/50 rounded-md px-2 py-1 transition-colors"
+                    className="flex-shrink-0 flex items-center gap-1 text-[10px] font-mono text-primary-strong/70 hover:text-primary-strong border border-primary/20 hover:border-primary/50 rounded-md px-2 py-1 transition-colors"
                   >
                     <History className="w-3 h-3" />
                     大事記
@@ -200,7 +200,7 @@ export default function About() {
                   <button
                     onClick={() => navigate("/certificates")}
                     title="查看證書牆"
-                    className="flex-shrink-0 flex items-center gap-1 text-[10px] font-mono text-primary/70 hover:text-primary border border-primary/20 hover:border-primary/50 rounded-md px-2 py-1 transition-colors"
+                    className="flex-shrink-0 flex items-center gap-1 text-[10px] font-mono text-primary-strong/70 hover:text-primary-strong border border-primary/20 hover:border-primary/50 rounded-md px-2 py-1 transition-colors"
                   >
                     <ShieldCheck className="w-3 h-3" />
                     證書牆
@@ -226,7 +226,7 @@ export default function About() {
             {/* 連結 */}
             <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
               <div className="flex items-center gap-2 mb-4">
-                <Link2 className="w-4 h-4 text-primary" />
+                <Link2 className="w-4 h-4 text-primary-strong" />
                 <h2 className="font-semibold text-sm">連結</h2>
               </div>
               <div className="space-y-2">
@@ -254,7 +254,7 @@ export default function About() {
             {/* 興趣 */}
             <div className="flex-1 rounded-md border border-border/40 bg-card p-6 gradient-border">
               <div className="flex items-center gap-2 mb-4">
-                <Heart className="w-4 h-4 text-primary" />
+                <Heart className="w-4 h-4 text-primary-strong" />
                 <h2 className="font-semibold text-sm">興趣</h2>
               </div>
               <div className="flex flex-wrap gap-2">

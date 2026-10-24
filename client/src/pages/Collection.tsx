@@ -41,7 +41,7 @@ export default function Collection({
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-20 text-center">
         <p className="text-muted-foreground mb-4">找不到這個主題</p>
         <Link href="/posts">
-          <span className="text-primary text-sm cursor-pointer" data-testid="link-back-to-posts">
+          <span className="text-primary-strong text-sm cursor-pointer" data-testid="link-back-to-posts">
             返回文章列表
           </span>
         </Link>

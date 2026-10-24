@@ -16,7 +16,14 @@ function formatDate(dateStr: string) {
   });
 }
 
-export function BlogCard({ post }: { post: BlogPost }) {
+/**
+ * headingLevel：卡片標題的層級。
+ * 首頁的卡片掛在 `<h2>` 區塊標題底下，所以預設 h3；
+ * 文章列表頁（/posts/）沒有中間層，卡片就是 h1 的直接子節點，要傳 2，
+ * 否則會出現 h1 → h3 的跳階（axe: heading-order）。
+ */
+export function BlogCard({ post, headingLevel = 3 }: { post: BlogPost; headingLevel?: 2 | 3 }) {
+  const Heading = `h${headingLevel}` as "h2" | "h3";
   return (
     <Link
       href={`/posts/${post.id}`}
@@ -28,15 +35,16 @@ export function BlogCard({ post }: { post: BlogPost }) {
           <ArrowUpRight className="w-4 h-4 text-muted-foreground/40" />
         </div>
 
-        <h3 className="text-[15px] font-semibold mb-2.5 leading-snug pr-6" data-testid={`text-title-${post.id}`}>
+        <Heading className="text-[15px] font-semibold mb-2.5 leading-snug pr-6" data-testid={`text-title-${post.id}`}>
           {post.title}
-        </h3>
+        </Heading>
 
         <p className="text-sm text-muted-foreground leading-relaxed mb-4 line-clamp-2">
           {post.excerpt}
         </p>
 
-        <div className="flex items-center gap-3 text-xs text-muted-foreground/70 mb-3">
+        {/* 日期／閱讀時間是資訊不是裝飾，70% 透明度在深色底上只有約 3.5:1 */}
+        <div className="flex items-center gap-3 text-xs text-muted-foreground mb-3">
           <div className="flex items-center gap-1">
             <Calendar className="w-3 h-3" />
             <span>{formatDate(post.date)}</span>
@@ -54,7 +62,7 @@ export function BlogCard({ post }: { post: BlogPost }) {
             </Badge>
           ))}
           {post.series && (
-            <Badge variant="outline" className="text-[11px] font-normal py-0.5 px-2 border-primary/30 text-primary">
+            <Badge variant="outline" className="text-[11px] font-normal py-0.5 px-2 border-primary/30 text-primary-strong">
               {seriesName(post.series)}
             </Badge>
           )}
@@ -73,7 +81,7 @@ export function HeroBlogCard({ post }: { post: BlogPost }) {
     >
       <article className="relative rounded-md p-6 sm:p-8 h-full bg-gradient-to-br from-purple-500/10 via-card to-cyan-400/5 border border-purple-500/20 gradient-border">
         <div className="absolute top-5 right-5">
-          <ArrowUpRight className="w-5 h-5 text-primary/40" />
+          <ArrowUpRight className="w-5 h-5 text-primary-strong/40" />
         </div>
 
         <Badge variant="default" className="text-[11px] mb-3">Latest</Badge>
@@ -86,7 +94,8 @@ export function HeroBlogCard({ post }: { post: BlogPost }) {
           {post.excerpt}
         </p>
 
-        <div className="flex items-center gap-3 text-xs text-muted-foreground/70 mb-3">
+        {/* 日期／閱讀時間是資訊不是裝飾，70% 透明度在深色底上只有約 3.5:1 */}
+        <div className="flex items-center gap-3 text-xs text-muted-foreground mb-3">
           <div className="flex items-center gap-1">
             <Calendar className="w-3 h-3" />
             <span>{formatDate(post.date)}</span>

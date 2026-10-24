@@ -30,8 +30,8 @@ export default function Contact() {
       <section className="border-b border-border/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <div className="flex items-center gap-2 mb-4">
-            <MessageSquare className="w-4 h-4 text-primary" />
-            <span className="font-mono text-xs text-primary tracking-wider uppercase">Contact</span>
+            <MessageSquare className="w-4 h-4 text-primary-strong" />
+            <span className="font-mono text-xs text-primary-strong tracking-wider uppercase">Contact</span>
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-3">聯繫我</h1>
@@ -71,7 +71,7 @@ export default function Contact() {
                 <div className="rounded-md border border-border/40 bg-card p-6 gradient-border">
                   <div className="flex items-center gap-4">
                     <div className={`w-10 h-10 rounded-md bg-gradient-to-br ${style.gradient} flex items-center justify-center`}>
-                      <Icon className="w-5 h-5 text-primary" />
+                      <Icon className="w-5 h-5 text-primary-strong" />
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-medium">{channel.label}</p>
@@ -92,7 +92,7 @@ export default function Contact() {
           })}
 
           <div className="rounded-md border border-primary/20 bg-gradient-to-br from-card to-primary/5 p-6 text-center">
-            <p className="font-mono text-xs text-primary/70 mb-3">// open to</p>
+            <p className="font-mono text-xs text-primary-strong/70 mb-3">// open to</p>
             <div className="flex flex-wrap justify-center gap-2 text-sm text-muted-foreground">
               <span className="px-3 py-1.5 rounded-md bg-muted text-xs">技術演講</span>
               <span className="px-3 py-1.5 rounded-md bg-muted text-xs">企業顧問</span>

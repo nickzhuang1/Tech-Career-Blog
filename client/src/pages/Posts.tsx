@@ -12,11 +12,13 @@ import { buildTitle } from "@/lib/seoTitle";
 // 標籤列採用 Badge 的 "tag" 變體（青色系，全站文章標籤統一）；這裡只覆寫分類列的紫色
 const tagBadgeClass = (active: boolean) =>
   active
-    ? "border-transparent bg-cyan-500 text-white shadow-xs"
+    // Badge 的 tag 變體自帶 dark:text-cyan-300，權重比 text-white 高（.dark 選擇器），
+    // 所以這裡必須用 !text-white；底色同時壓深到 cyan-700 才有 5.9:1
+    ? "border-transparent bg-cyan-700 !text-white shadow-xs"
     : "";
 const categoryBadgeClass = (active: boolean) =>
   active
-    ? "border-transparent bg-purple-500 text-white shadow-xs"
+    ? "border-transparent bg-purple-600 text-white shadow-xs"
     : "border-purple-500/25 bg-purple-500/10 text-purple-700 dark:text-purple-300 hover:bg-purple-500/15";
 
 const TAG_ORDER = [
@@ -109,8 +111,8 @@ export default function Posts() {
       <section className="border-b border-border/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <div className="flex items-center gap-2 mb-4">
-            <LayoutGrid className="w-4 h-4 text-primary" />
-            <span className="font-mono text-xs text-primary tracking-wider uppercase">
+            <LayoutGrid className="w-4 h-4 text-primary-strong" />
+            <span className="font-mono text-xs text-primary-strong tracking-wider uppercase">
               All Posts
             </span>
           </div>
@@ -161,7 +163,7 @@ export default function Posts() {
             data-testid="badge-category-all"
           >
             全部分類
-            <span className="ml-1.5 opacity-60 font-mono text-xs">{blogPosts.length}</span>
+            <span className="ml-1.5 font-mono text-xs">{blogPosts.length}</span>
           </Badge>
           {categories.map((cat) => (
             <Badge
@@ -172,7 +174,7 @@ export default function Posts() {
               data-testid={`badge-category-${cat.id}`}
             >
               {cat.name}
-              <span className="ml-1.5 opacity-60 font-mono text-xs">{categoryCounts.get(cat.id) ?? 0}</span>
+              <span className="ml-1.5 font-mono text-xs">{categoryCounts.get(cat.id) ?? 0}</span>
             </Badge>
           ))}
         </div>
@@ -186,7 +188,7 @@ export default function Posts() {
             data-testid="badge-filter-all"
           >
             全部標籤
-            <span className="ml-1.5 opacity-60 font-mono text-xs">{blogPosts.length}</span>
+            <span className="ml-1.5 font-mono text-xs">{blogPosts.length}</span>
           </Badge>
           {tagList.map(({ tag, count }) => (
             <Badge
@@ -197,14 +199,14 @@ export default function Posts() {
               data-testid={`badge-filter-${tag.toLowerCase().replace(/\s+/g, "-")}`}
             >
               {tag}
-              <span className="ml-1.5 opacity-60 font-mono text-xs">{count}</span>
+              <span className="ml-1.5 font-mono text-xs">{count}</span>
             </Badge>
           ))}
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filteredPosts.map((post) => (
-            <BlogCard key={post.id} post={post} />
+            <BlogCard key={post.id} post={post} headingLevel={2} />
           ))}
         </div>
 

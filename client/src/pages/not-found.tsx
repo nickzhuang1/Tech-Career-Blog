@@ -6,7 +6,7 @@ export default function NotFound() {
   return (
     <div className="min-h-[60vh] flex items-center justify-center">
       <div className="text-center px-4">
-        <p className="font-mono text-6xl font-bold text-primary/30 mb-4">404</p>
+        <p className="font-mono text-6xl font-bold text-primary-strong/30 mb-4">404</p>
         <h1 className="text-xl font-semibold mb-2">頁面不存在</h1>
         <p className="text-sm text-muted-foreground mb-6">
           你所尋找的頁面已經移動或不存在。

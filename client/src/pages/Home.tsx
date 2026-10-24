@@ -29,8 +29,10 @@ export default function Home() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-12 sm:pb-16">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-3 py-1 mb-6">
-              <Sparkles className="w-3 h-3 text-primary" />
-              <span className="text-xs font-medium text-primary">Tech Blog</span>
+              {/* text-primary-strong 在 primary/10 的深紫底上只有 3.22:1（深色模式），
+                  改用 purple-300 後為 9.7:1，仍在紫→青主色系內 */}
+              <Sparkles className="w-3 h-3 text-primary-strong dark:text-purple-300" />
+              <span className="text-xs font-medium text-primary-strong dark:text-purple-300">Tech Blog</span>
             </div>
 
             {/* 冒號留在第一行結尾，讓 <h1> 的文字內容是完整的一句
@@ -74,7 +76,7 @@ export default function Home() {
             <div className="rounded-md border border-border/40 bg-card p-5 gradient-border">
               <div className="flex items-center gap-2.5 mb-3">
                 <div className="w-8 h-8 rounded-md bg-gradient-to-br from-purple-500/20 to-cyan-400/20 flex items-center justify-center">
-                  <BookOpen className="w-4 h-4 text-primary" />
+                  <BookOpen className="w-4 h-4 text-primary-strong" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold">著作出版</p>
@@ -91,7 +93,7 @@ export default function Home() {
             <div className="rounded-md border border-border/40 bg-card p-5 gradient-border">
               <div className="flex items-center gap-2.5 mb-3">
                 <div className="w-8 h-8 rounded-md bg-gradient-to-br from-purple-500/20 to-cyan-400/20 flex items-center justify-center">
-                  <Layers className="w-4 h-4 text-primary" />
+                  <Layers className="w-4 h-4 text-primary-strong" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold">系列文章</p>
@@ -101,13 +103,13 @@ export default function Home() {
                 <Link href="/posts?series=ironman-2023">
                   <span className="flex items-center justify-between text-xs text-muted-foreground cursor-pointer hover-elevate rounded p-1 -mx-1" data-testid="link-series-2023">
                     <span>2023 鐵人賽 - Gen AI</span>
-                    <span className="text-primary font-mono">30</span>
+                    <span className="text-primary-strong font-mono">30</span>
                   </span>
                 </Link>
                 <Link href="/posts?series=ironman-2019">
                   <span className="flex items-center justify-between text-xs text-muted-foreground cursor-pointer hover-elevate rounded p-1 -mx-1" data-testid="link-series-2019">
                     <span>2019 鐵人賽 - K8S</span>
-                    <span className="text-primary font-mono">30</span>
+                    <span className="text-primary-strong font-mono">30</span>
                   </span>
                 </Link>
               </div>
@@ -119,7 +121,7 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
         <div className="flex items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-2.5">
-            <Code2 className="w-4 h-4 text-primary" />
+            <Code2 className="w-4 h-4 text-primary-strong" />
             <h2 className="text-lg font-semibold" data-testid="text-all-posts">最新文章</h2>
           </div>
           <Link href="/posts">
@@ -139,7 +141,7 @@ export default function Home() {
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <div className="flex items-center gap-2.5 mb-5">
-          <Layers className="w-4 h-4 text-primary" />
+          <Layers className="w-4 h-4 text-primary-strong" />
           <h2 className="text-lg font-semibold" data-testid="text-categories">探索主題</h2>
         </div>
 
