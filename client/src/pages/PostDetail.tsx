@@ -116,7 +116,8 @@ function renderMarkdown(md: string, articleId?: string, fallbackAlt?: string): J
   // ── 圖片處理（SEO / CWV）──────────────────────────────────────────
   // 1) 第一章圖 eager + fetchpriority=high：它通常是 LCP 元素，原本被 lazy 延後
   // 2) 其餘 lazy
-  // 3) 缺 alt 時（337 張有 321 張是空的）用最近的標題當描述，至少有上下文而不是空字串
+  // 3) 缺 alt 時用最近的標題當描述，至少有上下文而不是空字串
+  //    （2026-10 已為 247 張補上人工撰寫的 alt；剩下 74 張是各篇封面與裝飾圖，刻意留空）
   let imgSeq = 0;
   let lastHeading = "";
   const altOf = (alt: string): string => {
