@@ -342,7 +342,7 @@ Hello World v2!
 
 ## 比較示例一和示例二：
 
-![](./images/img_002.png)
+![Ingress 示例對照圖：示例一經 myCluster.com 導向 SVC1／SVC2，示例二依 host 名稱分流](./images/img_002.png)
 
 第一個例子是把一個連線，按照他所需要的集群內去選擇要使用哪一個Service。
 

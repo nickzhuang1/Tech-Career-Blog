@@ -102,7 +102,7 @@ $kubectl set image deploy/nginx nginx=openresty/openresty:alpine
 
 #### 瀏覽器測試
 
-![](./images/img_002.png)
+![瀏覽器透過 ELB 的 DNS 開啟頁面，顯示 nginx 的預設歡迎頁 Welcome to nginx!](./images/img_002.png)
 
 #### Scale down Deployment
 
@@ -129,7 +129,7 @@ deployment.apps "nginx" image updated
 
 #### 刷新頁面
 
-![](./images/img_003.png)
+![重新整理頁面後改顯示 OpenResty 的預設頁，標題為 Welcome to OpenResty!](./images/img_003.png)
 
 有變成新的頁面囉！
 
@@ -145,19 +145,19 @@ $kubectl edit deploy/nginx
 deployment.extensions/nginx edited
 ```
 
-![](./images/img_004.png)
+![kubectl edit 後的 Deployment YAML，image 為 abiosoft/caddy:php、containerPort 2015、restartPolicy Always](./images/img_004.png)
 
 Service的設定：
 
 - 將targetPort改成`2015`
 
-![](./images/img_005.png)
+![Service YAML 內容，port 80、targetPort 2015、nodePort 32546，selector 為 run: nginx](./images/img_005.png)
 
 稍等一段時間，約莫1分鐘
 
 #### 刷新頁面
 
-![](./images/img_006.png)
+![刷新後顯示 Caddy 的 PHP info 頁面，PHP Version 7.3.8，執行於 Linux 上的 nginx Pod](./images/img_006.png)
 
 有了！原來我們除了可以透過修改image外，也可以更改port的轉發規則，重新導向到別的服務上。
 
@@ -339,11 +339,11 @@ Starting to serve on 127.0.0.1:8001
 
 輸入： [http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login](http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login)
 
-![](./images/img_007.png)
+![Kubernetes Dashboard 登入頁，網址走 localhost:8001 的 kube-system proxy，頁面要求選擇 Kubeconfig 檔案](./images/img_007.png)
 
 登入後可看到Dashboard！
 
-![](./images/img_008.png)
+![登入後的 Dashboard Overview 頁，左側選單有 Cluster、Workloads、Namespaces、Nodes，右側為 Workloads Statuses](./images/img_008.png)
 
 OK，測試成功，我們進到下一步。
 
@@ -379,7 +379,7 @@ $kubectl port-forward -n weave "$(kubectl get -n weave pod --selector=weave-scop
 
 接著在VirtualBox裡面打開瀏覽器
 
-![](./images/img_009.png)
+![Weave Scope 頁面，網址為 localhost:4040，可依 Processes、Containers、Pods、Hosts 篩選並切換 Graph 與 Table](./images/img_009.png)
 
 有了！可以用囉～
 

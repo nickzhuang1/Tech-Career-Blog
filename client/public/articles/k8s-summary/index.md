@@ -14,7 +14,7 @@
 
 從最早的介紹，我們從4個不同的面向去理解k8s：
 
-![](./images/img_002.png)
+![以 k8s 為中心、周圍標出 Docker、Node、Object、12-factor 四大面向的概念示意圖](./images/img_002.png)
 
 Docker：這個部分是指k8s是基於Docker的容器管理框架，並且在一些指令的操作上面與Docker本身重疊。
 
@@ -116,7 +116,7 @@ Object：這個部分是從k8s的細部架構去看，這跟基礎篇、進階�
 
 雖然我們從剛開始到現在有介紹過很多與k8s相關的套件，避免疏漏，補個生態圖，鑑往知來。
 
-![](./images/img_003.png)
+![Kubernetes 生態圖，依 Public cloud、Management、Monitoring 等面向列出對應廠商與工具](./images/img_003.png)
 
 圖片來源： [https://spotinst.com/blog/kubernetes-ecosystem/](https://spotinst.com/blog/kubernetes-ecosystem/)
 
@@ -144,21 +144,21 @@ Tools：小工具，像是GitLab，這是Local端的git管理工具
 
 Docker：k8s是基於Docker的管理框架
 
-![](./images/img_004.png)
+![Docker 與 k8s 的架構示意圖，圖中標出 Google Cloud、AWS、AliCloud 等雲端環境與 app、web service 等元件](./images/img_004.png)
 
 圖片來源： [https://medium.com/@dpaunin/the-best-architecture-with-docker-and-kubernetes-myth-or-reality-77b4f8f3804d](https://medium.com/@dpaunin/the-best-architecture-with-docker-and-kubernetes-myth-or-reality-77b4f8f3804d)
 
 Node：分為Master和Slave
 
-![](./images/img_005.png)
+![k8s 架構圖：Master 端 kube-apiserver、kube-scheduler，Slave 端 kubelet、kube-proxy](./images/img_005.png)
 
 Object：分為basic和Abstraction
 
-![](./images/img_006.png)
+![k8s Object 分類圖，分 basic 與 Abstraction 兩層，列出 Pod、Service、Deployment 等物件](./images/img_006.png)
 
 12-factor：五大Aspect：Unify、Specify、Conform、Auto、Sync
 
-![](./images/img_007.png)
+![12-factor 對照圖，以 Unify、Specify、Conform、Auto 等 Aspect 分欄列出對應項目](./images/img_007.png)
 
 ## 小技巧
 
@@ -190,7 +190,7 @@ Object：分為basic和Abstraction
 
 剛開始寫幾天基本上沒什麼感覺，因為有先寫了大概10篇左右，不過到後面發現根本不夠用XD，上班忙起來整個就翻掉，中途差點翻船，不外乎Debug到半夜三四點，隔天還是要上班（肝到爆，後面總算是有些多餘的時間挺過來了，還有一次忘記把EKS集群關掉，多噴了三天的摳摳，比較有挑戰的部分應是你必須要在有限的時間把Bug修掉，不然就不用發文啦哈哈，直接Say Goodbye，有想挑戰的朋友，建議先寫個20篇再來會比較穩，有機會的話，可能會再寫些別的主題看看。整體來說，這整個30篇大概歸類在入門到進階之間，如下圖：
 
-![](./images/img_008.png)
+![以入門、進階、精通、專家四個等級標示的技能程度示意圖，用來指出這 30 篇內容的落點](./images/img_008.png)
 
 第一次發系列文，希望這一系列的文章有幫助到需要的朋友，筆者盡量呈現整體的完整性，若有誤請見諒，程式碼可以在Github下載，謝謝大家的收看囉！
 

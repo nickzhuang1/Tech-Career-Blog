@@ -16,7 +16,7 @@
 
 生成對抗網路（Generative Adversarial Network，GAN）是一種強大的生成模型，由生成器和判別器組成，透過對抗過程來訓練。
 
-![](./images/img_002.png)
+![GAN 訓練示意圖：random noise 經 Generator 產生 fake image，與 real 資料一同送進 Discriminator 判別真偽](./images/img_002.png)
 
 以下是有關生成對抗網路的簡要介紹：
 
@@ -48,13 +48,13 @@
 
 為了更好地表示其中不同種類的GAN之間的關係，茲整理列表如下：
 
-![](./images/img_003.png)
+![GAN 變體的分類表格，依代表變體、目標函數、訓練技巧、結構等面向分欄，列出 WGAN、DCGAN、PGGAN、StyleGAN 等名稱](./images/img_003.png)
 
 可以看到從幾種不同面向GAN的分類；例如，代表變體、訓練、及任務導向。
 
 在應用方面，GAN也有不同的種類，如下：
 
-![](./images/img_004.png)
+![GAN 應用分類表，以領域、子領域、方法三欄整理，涵蓋超解析度（SRGAN、ESRGAN）、影像合成、紋理合成、物件偵測與影片](./images/img_004.png)
 
 可以看到分為影像類的、還有文本類的，基本上就是二維資料和一維資料的差別，常見的面向上都有其應用。
 

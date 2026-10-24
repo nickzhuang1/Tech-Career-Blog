@@ -18,7 +18,7 @@
 
 ControlNet 是一個不用透過重新訓練 SD 模型就能做到客製化文生圖的一種方法，如下圖。
 
-![](./images/img_002.png)
+![兩組範例對照：一組以 Canny edge 線稿為輸入、搭配不同風格提示詞生成多張圖，另一組以 human pose 為輸入，生成姿勢相同的圖像。](./images/img_002.png)
 
 可以看到兩種模式的範例生成，一種是提供類似草圖作為輸入，並生成不同風格的圖像，生成的風格由ControlNet控制，也就是所謂的 Canny 模式，另一種以姿勢作為輸入，並以此作為依據去生成符合輸入風格的圖像，可以看到輸出的人都有保持相同的姿勢，這就是 Human pose 模式。
 
@@ -34,7 +34,7 @@ ControlNet 是一個不用透過重新訓練 SD 模型就能做到客製化文�
 
 左圖代表原始的網路架構，右圖代表新加入的 ControlNet 架構，它將零卷積加入到其中，以初始化權重。
 
-![](./images/img_003.png)
+![原始 SD 架構（左）與 ControlNet 架構（右）對照圖，右側多了可訓練副本與 zero convolution，圖上標有 SD Encoder Block 與 64x64 特徵尺寸。](./images/img_003.png)
 
 ControlNet 在 SD 的基礎上，將 SD 中的層凍結( Frozen )，並且添加一個可學習的分支，這個分支就是一個 Condition，並在 Condition 的起始位置和結束位置都增加零卷積，保證訓練的穩定性，並且 Condition 的特徵會疊加回 SD 的解碼器特徵上，以達成控制生成的效果。
 
@@ -54,7 +54,7 @@ ControlNet 提供了文生圖客製化的新方法，可以不用重新訓練 SD
 
 這個作法也與 ControlNet 及 T2I-Adaptor 類似，主要的概念是它將輸入分別 Global 和 Local，Global 負責將特徵輸入到 SD 當中的 U-Net 層及多注意力模組，Local 則是雜訊的圖片，雙管齊下去調整生成圖片的風格，簡言之，就是它將需要生成的特徵作抽離，逐步輸入像是色彩、紋理、乃至框架，以達成控制生成的效果，參考下圖。
 
-![](./images/img_004.png)
+![Composer 架構圖，UNet 區塊含 Multi-head Cross-Attention 與 Layer Norm，以 Scale、Shift 調節，最後用 concat 與 Sum 合併輸入。](./images/img_004.png)
 
 ## 小結
 

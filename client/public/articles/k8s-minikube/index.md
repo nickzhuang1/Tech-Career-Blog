@@ -219,7 +219,7 @@ Forwarding from [::1]:3333 -> 3000
 
 打開瀏覽器，這時候可以看到
 
-![](./images/img_002.png)
+![瀏覽器開啟 localhost:3333，頁面只顯示 Hello World! 一行字](./images/img_002.png)
 
 再按Crtl+C結束執行，大功告成！
 

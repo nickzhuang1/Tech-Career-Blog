@@ -45,7 +45,7 @@ Elastic Compute Cloud（EC2） ，是由 [亞馬遜公司](https://zh.wikipedia.
 
 在這裡可以看到
 
-![](./images/img_002.png)
+![AWS EC2 執行個體清單，兩台 eks-cluster-ng-c8598d87-Node，Instance Type 為 m5.large、狀態 running](./images/img_002.png)
 
 我們前面有提過，主節點是看不到的，也就是Master，因為它是由EKS所管理。
 

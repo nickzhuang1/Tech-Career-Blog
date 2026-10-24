@@ -381,42 +381,42 @@ Elastic Load Balancing 可在多個目標 (例如 EC2 執行個體、容器、IP
 
 先切換到Management Console，到EC2
 
-![](./images/img_002.png)
+![AWS Management Console 的服務搜尋畫面，搜尋框提示可輸入關鍵字或縮寫，Recently visited services 列出 EC2、VPC、Billing 等項目。](./images/img_002.png)
 
 接著到Load Balancers
 
-![](./images/img_003.png)
+![EC2 主控台在亞太（新加坡）區域的資源摘要：2 個 Running Instances、2 個 Volumes，並有 Load Balancers 連結。](./images/img_003.png)
 
 Create Load Balancer
 
-![](./images/img_004.png)
+![Load Balancers 清單頁面，欄位有 Name、DNS name、State、VPC ID，目前顯示此區域尚無任何 load balancer。](./images/img_004.png)
 
 建立ALB
 可以注意到有三種ELB：ALB、NLB、CLB
 
-![](./images/img_005.png)
+![Select load balancer type 頁面，並列 Application、Network、Classic 三種 ELB 及各自支援的 HTTP/HTTPS、TCP/TLS 標示。](./images/img_005.png)
 
 設置一些參數
 
-![](./images/img_006.png)
+![建立 ALB 精靈的 Step 1，頂端是六步驟進度列，表單填入 load balancer 名稱 eks-alb 與 HTTP port 80 的 listener。](./images/img_006.png)
 
-![](./images/img_007.png)
+![Availability Zones 設定區塊，選好 VPC 與 ap-southeast-1a 等子網（subnet-06c4b03…），IPv4 位址由 AWS 指派。](./images/img_007.png)
 
 設置Security Group
 
-![](./images/img_008.png)
+![精靈 Step 3 的 Configure Security Groups 頁面，說明 security group 是控制流量進出 load balancer 的防火牆規則，可新建或選用既有群組。](./images/img_008.png)
 
 最後將節點加入註冊，這樣才能監看
 
-![](./images/img_009.png)
+![Register Targets 頁面列出可註冊的 EC2 instance（i-0564386b36d617235 等），選取後指定 port 80 再按 Add to registered。](./images/img_009.png)
 
 好了會顯示這樣
 
-![](./images/img_010.png)
+![LoadBalancerCreationStatus 頁面顯示 Successfully created load balancer，並提示需數分鐘才能完成設定與健康檢查。](./images/img_010.png)
 
 還要再檢查Target Group，記得Forward到31742
 
-![](./images/img_011.png)
+![Target groups 清單中 eks-tg 的 Port 31742、Protocol HTTP、Target type instance，關聯的 Load Balancer 是 eks-alb。](./images/img_011.png)
 
 最後我們透過設置好的ALB的DNS Name去測試
 

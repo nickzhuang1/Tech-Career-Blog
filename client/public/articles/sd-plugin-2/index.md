@@ -38,13 +38,13 @@ git lfs clone https://huggingface.co/lllyasviel/ControlNet-v1-1
 這樣就全部下載下來了，然後要放到/Stable Diffusion/novelai-webui-aki-v3/extensions/sd-webui-controlnet/models的資料夾底下。
 完成後重啟 UI 就能看到操作介面，如下圖。
 
-![](./images/img_002.png)
+![ControlNet v1.1.410 面板展開後的介面，上方有三個 Unit 頁籤，中間是拖曳上傳圖片區，下方是控制類型與模型的下拉選單。](./images/img_002.png)
 
 ## After Detailer
 
 這是一款增加繪圖細節的插件，也可以透過 URL 去安裝，安裝好後可以在生圖的介面上操作。
 
-![](./images/img_003.png)
+![ADetailer 面板勾選「啟用 AfterDetailer」，含單元1、單元2 與模型 mediapipe_face_full，下方是提示詞與反向提示詞欄位。](./images/img_003.png)
 
 它也可以輸入自己想加入的 prompt，其他參數先用預設就可以，有需要再自行調整。
 
@@ -52,7 +52,7 @@ git lfs clone https://huggingface.co/lllyasviel/ControlNet-v1-1
 
 這個插件可以在 Extension 分頁中的 Download 的下載列表中找到，可以透過介面直接安裝，然後重新載入 UI 即可，非常方便，要看 civitai 的內容就不用刻意切換到網頁上，可以專注在 SD 的操作介面上。
 
-![](./images/img_004.png)
+![SD WebUI 的 CivitAI 分頁，頂端是模型列與 Search CivitAI 搜尋框，下方顯示 Page: 1/4870 及 Prev page、Next page 按鈕。](./images/img_004.png)
 
 最後我們結合這三個插件來一次操作：
 
@@ -60,13 +60,13 @@ git lfs clone https://huggingface.co/lllyasviel/ControlNet-v1-1
 
 切換至圖生圖，到 ControlNet 那操作。
 
-![](./images/img_005.png)
+![圖生圖頁面的 ControlNet Unit 展開狀態，上傳控制圖並啟用預覽後，跳出「預處理結果預覽」視窗與开始绘制、关闭按鈕。](./images/img_005.png)
 
 按照上圖操作，即可描繪邊緣，這邊筆者要測試邊緣重繪的功能。
 
 所有設定完成，就按生圖。
 
-![](./images/img_006.png)
+![生成結果對照圖，左邊是原圖、右邊是重繪後的新圖，兩張並排呈現。](./images/img_006.png)
 
 原圖在左，新圖在右，多了一股朦朧美，可能模糊條太多了囧。
 

@@ -21,15 +21,15 @@ HyperNetwork 是一種利用神經網路來生成模型參數的方法，是由�
 
 HyperNetwork 是一種模型微調的方法，與 LoRA 不同的是，它是在 U-Net 的架構底下，加入新的網路模塊，進而修改cross attention模塊的內容，不同於 LoRA 的 Low Rank 方式，架構參考下圖。
 
-![](./images/img_002.png)
+![HyperNetwork 原理示意圖，以 layer index 等權重資訊作為輸入，產生對應的 W 權重供原網路使用](./images/img_002.png)
 
 我們可以先回顧下原本的 Stable Diffusion 的交叉注意力模塊架構圖，
 
-![](./images/img_003.png)
+![Stable Diffusion 原本的 Cross Attention 模塊示意圖，顯示 query、key、value 三組輸入的流向](./images/img_003.png)
 
 加入HyperNetwork後的架構如下：
 
-![](./images/img_004.png)
+![加入 HyperNetwork 後的 Cross Attention 示意圖，query、key、value 之外多接上 Hyper Network 1 與 Hyper Network 2](./images/img_004.png)
 
 在訓練期間，Stable Diffusion 模型已經被Frozen，但額外添加的 Hypernetwork 允許改變。因為 Hypernetwork 很小，所以訓練時間很短並且只需要少量的運算資源即可。
 
@@ -39,7 +39,7 @@ Hypernetwork 的主要優點是快速訓練和檔案不會很大。這邊要正�
 
 我們回到 Stable Diffusion 的操作介面，看下HyperNetwork的訓練和使用要如何操作。
 
-![](./images/img_005.png)
+![WebUI 的 Create hypernetwork 頁面，含 Name 與 Modules 欄位並列出 320、640、768 等選項，層結構填 1,2,1](./images/img_005.png)
 
 基本上可以把 HyperNetwork 視為好幾層的FC ( Fully Connected ) 層，看你中間是否要夾雜 BN ( Batch Normalization ) 層或 Dropout 層，看個人喜好，決定好相關參數後點擊 Create hypernetwork 去訓練新的 HyperNetwork 即可。
 

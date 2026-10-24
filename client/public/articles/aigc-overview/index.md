@@ -23,7 +23,7 @@
 
 模型微調方面，介紹了 Parameter-Efficient Fine-Tuning (PEFT)，探討了 Pre-Trained Model 的概念，我們已經知道，由於大型模型參數量龐大，要重新訓練會相當耗費時間成本，有鑑於此，有效率的微調模型的手法就相當重要，常見的做法是 Linear probe，透過預訓練模型加上凍結部分不需要訓練的層，只訓練後面的少數的必要層。與 SD 相關的包含：Embedding ( [「Day17」：Embedding](https://nickzhuang.com/posts/embedding))、DreamBooth ( [「Day18」：DreamBooth](https://nickzhuang.com/posts/dreambooth))、LoRA ( [「Day19」：LoRA](https://nickzhuang.com/posts/lora-theory))、HyperNetwork ( [「Day20」：HyperNetwork](https://nickzhuang.com/posts/hypernetwork))。詳細的比較，參考下圖。
 
-![](./images/img_002.png)
+![四種 SD 微調方式比較圖：DreamBooth 用 special word 並 tune all layers，Embedding 用 existed word，LoRA、HyperNetwork 凍結部分層](./images/img_002.png)
 
 DreamBooth 會創造一個新詞作為詞嵌入，會重新訓練所有層；Embedding 會尋找一個既有的詞用作詞嵌入，凍結部分層去做訓練；LoRA 會從 U-Net 特定層加入特定權重，這種架構好比從一本書去加入書籤，書籤就是 LoRA 的內容，我們還會拿筆在加入書籤的地方寫些小筆記，即基於 low rank 的方法，並凍結部分層去做訓練；HyperNetwork 會從 U-Net 的交叉注意力模組中加入特定的網路模塊，並凍結部分層去做訓練。
 

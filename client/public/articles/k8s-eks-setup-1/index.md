@@ -16,11 +16,11 @@
 
 我們先回到Management Service的介面，尋找cloudformation這個服務
 
-![](./images/img_002.png)
+![Find Services 搜尋 cloudformation 的畫面，Recently visited 列出 CloudFormation、EC2](./images/img_002.png)
 
 接著Create Stack
 
-![](./images/img_003.png)
+![CloudFormation Stacks 頁面 0 個 stack（No stacks to display），右上是 Create stack](./images/img_003.png)
 
 接著我們導入一個VPC的template，詳細可參考 [文檔](https://docs.aws.amazon.com/en_us/codebuild/latest/userguide/cloudformation-vpc-template.html)
 
@@ -179,27 +179,27 @@
 
 接著應顯示如下，可以檢視Design去看它的設計拓墣架構，這裡筆者直接下一步
 
-![](./images/img_004.png)
+![Specify template 步驟選 Upload a template file，載入 eks-vpc.yaml 並顯示 S3 URL](./images/img_004.png)
 
 設定名稱EKS-stack，好了下一步
 
-![](./images/img_005.png)
+![Specify stack details：Stack name 填 EKS-stack，Parameters 有 Subnet01Block 等 CIDR](./images/img_005.png)
 
 後面都不用改什麼設定，直接下一步到Create Stack就行
 
 再來就是檢視完成介面
 
-![](./images/img_006.png)
+![EKS-stack 的 Events 分頁，最新事件狀態 CREATE_IN_PROGRESS，時間 2019-10-04](./images/img_006.png)
 
 會稍微花一點時間，要等它一下，喝口茶，休息一下。~~（睡個覺再來~~
 
 好了應該要有類似訊息
 
-![](./images/img_007.png)
+![EKS-stack 的 Events 分頁轉為 CREATE_COMPLETE，含 Subnet01、Subnet02RouteTableAssociation](./images/img_007.png)
 
 檢查Output
 
-![](./images/img_008.png)
+![EKS-stack 的 Outputs 分頁共 3 筆：SecurityGroups、SubnetIds、VpcId 及對應值](./images/img_008.png)
 
 OK，看起來沒啥問題，我們接續下個部分
 
@@ -209,7 +209,7 @@ OK，看起來沒啥問題，我們接續下個部分
 
 我們先回到Management Service的介面，尋找EKS這個服務，然後到那個頁面後，選擇Clusters
 
-![](./images/img_009.png)
+![Containers 服務頁左側選 Clusters，右側說明 EKS 是全託管 Kubernetes control plane](./images/img_009.png)
 
 這邊是要我們建立一個新的Cluster，我們先做些設定
 
@@ -217,27 +217,27 @@ OK，看起來沒啥問題，我們接續下個部分
 
 設定cluster name、k8s version、role name，目前EKS只支援到1.14，現在最新是1.16，也就是我們之前minikube用的k8s版本
 
-![](./images/img_010.png)
+![Create EKS cluster：Cluster name eks-cluster、Kubernetes Version 1.14、Role name EKS-role](./images/img_010.png)
 
 設置VPC及對應的子網域（這個在選定VPC後應會自動套入），它原本就有個預設的VPC，不要選錯了！
 
-![](./images/img_011.png)
+![Networking 選 192.168.0.0/16 的 VPC，下方列出各 Subnet 的 Availability Zone 與 CIDR](./images/img_011.png)
 
 設定Security groups，也是找EKS相關的
 
-![](./images/img_012.png)
+![Security groups 區塊勾選 EKS-stack-ControlPlaneSecurityGroup，另一筆是 default 群組](./images/img_012.png)
 
 Security group下面的可以用預設值不調，看個人喜好（筆者沒調，好了按Create
 
-![](./images/img_013.png)
+![Cluster logging 的 API server、Audit、Authenticator 等五項全為 Disabled，Tags 未設](./images/img_013.png)
 
 接著AWS就會幫我們建立EKS的cluster了，要等一段時間（這個蠻久的，可以小睡一下
 
-![](./images/img_014.png)
+![頁面提示 Cluster creation initiated，eks-cluster 狀態 CREATING、Platform 為 eks.1](./images/img_014.png)
 
 好了會長這樣，筆者大概等了10分左右
 
-![](./images/img_015.png)
+![eks-cluster 狀態 ACTIVE，列出 API server endpoint、OpenID Connect URL 與 Cluster ARN](./images/img_015.png)
 
 OK，到這邊關於創建k8s的控制介面的部分就結束囉！
 

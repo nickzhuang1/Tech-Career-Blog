@@ -10,7 +10,7 @@
 
 ## 那些年，單機是唯一真愛
 
-![](./images/img_002.png)
+![單機、虛擬機與容器的架構對比圖，從 App、Bin/Library 到作業系統、虛擬機層與容器層的堆疊差異](./images/img_002.png)
 
 很久很久以前，那是一個，單機系統當道的年代...
 
@@ -38,7 +38,7 @@
 
 我們來看張Cheet Sheet吧！
 
-![](./images/img_003.png)
+![Docker Cheat Sheet 速查表，依 BUILD、RUN、ORCHESTRATE 分類列出常用 docker 指令](./images/img_003.png)
 
 ### 以下列出幾個常用的重點：
 

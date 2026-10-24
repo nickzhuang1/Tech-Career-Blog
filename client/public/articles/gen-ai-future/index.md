@@ -26,7 +26,7 @@
 
 – 演進：SD -> SD XL -> SD XL Turbo -> … -> SD 3 -> Flux -> SD 3.5
 
-![](./images/img_003.jpg)
+![投影片上半部是圖像生成模型演進軸，從 SD 到 SD 3.5；下半部是 LLaVA、CLIP、DALL·E 三種多模態架構示意圖](./images/img_003.jpg)
 
 ## 文字生成模型：
 
@@ -36,7 +36,7 @@
 
 RIG（Retrieval-Integrated Generation）是一個和RAG密切相關的概念，但不同之處在於檢索和產生的混合方式。 RIG 沒有將檢索和生成視為不同的步驟，而是將它們更緊密地整合在一起，從而在整個響應生成階段允許檢索過程和生成模型之間動態相互作用。 – [https://reurl.cc/Ordpo9](https://reurl.cc/Ordpo9)
 
-![](./images/img_004.jpg)
+![投影片列出文字生成模型優化相關論文：原始 RAG、GraphRAG、RAPTOR，以及 RAG 與 RIG 的對比](./images/img_004.jpg)
 
 ## AI發展脈絡：
 
@@ -48,7 +48,7 @@ RIG（Retrieval-Integrated Generation）是一個和RAG密切相關的概念，�
 
 觀看此處有更詳細的討論： [https://www.youtube.com/watch?v=kMBjzxKYWw4](https://www.youtube.com/watch?v=kMBjzxKYWw4)
 
-![](./images/img_005.jpg)
+![投影片以過去、現在、未來三欄，對照硬體層（馮諾伊曼 CPU、GPU、存算訓一體）與解題思路的演進](./images/img_005.jpg)
 
 ## 結論：
 
@@ -58,7 +58,7 @@ RIG（Retrieval-Integrated Generation）是一個和RAG密切相關的概念，�
 
 我們再把維度拉高，就能追本朔源，思考到以神經元模擬人工智慧的方式，究竟合不合適？仿生學可能是種解法，有來賓提到量子運算，這蠻有啟發性的，究竟結果如何？就待未來驗證吧！
 
-![](./images/img_006.jpg)
+![投影片總結頁：回顧 Stable Diffusion、Ollama、Whisper，並附 1958 年到 GPT-3.5 的 AI 年表](./images/img_006.jpg)
 
 \# 希望有啟發到大家去思考更深層的問題
 

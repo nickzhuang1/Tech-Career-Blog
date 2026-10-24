@@ -38,31 +38,31 @@
 
 ## 確認ubuntu的ip
 
-![](./images/img_002.png)
+![ifconfig 指令輸出，可見 docker0 介面 IP 為 172.17.0.1，另有 enp0s3 網路介面](./images/img_002.png)
 
 可以注意到ip是172.20.10.5，而網路介面是enp0s3
 
 ## 將ssh的service安裝到ubuntu
 
-![](./images/img_003.png)
+![終端機畫面：執行 sudo apt install openssh-server -y，列出將新增與升級的套件清單](./images/img_003.png)
 
 ## 確認ssh的service狀態
 
-![](./images/img_004.png)
+![systemctl status ssh 輸出，ssh.service 狀態為 active (running)](./images/img_004.png)
 
 OK，確認無誤，我們先把Ubuntu關掉
 
-![](./images/img_005.png)
+![終端機輸入 sudo poweroff，系統提示輸入密碼準備關機](./images/img_005.png)
 
 ## 設置VirtualBox的網路
 
 網卡一：
 
-![](./images/img_018.png)
+![VirtualBox 設定視窗的網路頁籤，ubuntu-網路 虛擬機新增第一張網卡的設定畫面](./images/img_018.png)
 
 網卡二：
 
-![](./images/img_007.png)
+![VirtualBox 設定視窗的網路頁籤，ubuntu-網路 虛擬機新增第二張網卡的設定畫面](./images/img_007.png)
 
 接著啟動VirtualBox，直接把那個畫面縮小
 
@@ -273,43 +273,43 @@ OK，設置到這邊就結束囉！我們看一個Topic～
 
 先回到AWS Management Console，進到CloudFormation
 
-![](./images/img_008.png)
+![AWS Management Console 首頁，在服務搜尋列找到 CloudFormation 服務](./images/img_008.png)
 
 接著新增一個Stack，這個Stack是Node Group
 
-![](./images/img_009.png)
+![CloudFormation 建立 Stack 頁面，Prepare template 選 Template is ready](./images/img_009.png)
 
 其中的eks-nodegroup.yaml可以從 [這裡](https://www.dropbox.com/s/4arr5xa6w2wovbw/eks-nodegroup.yaml?dl=0) 下載
 
 再來是一些其他參數的設定
 
-![](./images/img_010.png)
+![指定 Stack 名稱為 eks-worker-nodes，並在 Parameters 區填入 ClusterName 等參數](./images/img_010.png)
 
 注意到AMI的部分，這個需要最佳化設定，參考 [這裡](https://docs.aws.amazon.com/zh_tw/eks/latest/userguide/getting-started-console.html)
 
-![](./images/img_011.png)
+![節點群組參數表：NodeAutoScalingGroupMaxSize 為 3、NodeInstanceType 為 t2.small](./images/img_011.png)
 
 三個Subnet都要放上去
 
-![](./images/img_012.png)
+![WorkerNetworkConfiguration 填入 VpcId 與 Subnets，VPC 為 EKS-stack-VPC](./images/img_012.png)
 
 大致這樣，好了下一步，按Next
 
 後面只是總覽，不用改，直接Create Stack就好
 
-![](./images/img_013.png)
+![建立 Stack 前需勾選 Capabilities，承認 CloudFormation 可能建立 IAM 資源後才能按 Create](./images/img_013.png)
 
 要稍等一下，好了之後我們去看一下EC2，那邊會有三台機器開起來
 
-![](./images/img_014.png)
+![EC2 執行個體列表出現三台 eks-cluster-n 開頭的節點，型號 m5.large，狀態為 running](./images/img_014.png)
 
 我們到Security Group那邊的NodeGroup去加個SSH的設置
 
-![](./images/img_015.png)
+![Security Group 新增 inbound rule：Custom TCP 1025-65535 與 HTTPS 443](./images/img_015.png)
 
 檢查Instance的IP
 
-![](./images/img_016.png)
+![EC2 執行個體列表顯示各節點公有 IP，如 ec2-54-179-135-5，分別位在 ap-southeast-1b 與 1a](./images/img_016.png)
 
 這樣的話，就能利用前面的eks.pem連進去囉
 
@@ -344,7 +344,7 @@ data:
 
 其中<<role-arn-from-previous-step>>要換成下方反白內容
 
-![](./images/img_017.png)
+![CloudFormation 的 nodegroup Stack Outputs 頁籤，反白處要填進 aws-auth 的 role ARN](./images/img_017.png)
 
 好了apply一下，官方有說這個檔案的其他內容最好不要亂動
 

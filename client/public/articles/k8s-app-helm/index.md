@@ -367,31 +367,31 @@ $wget https://eksworkshop.com/scaling/deploy_ca.files/cluster_autoscaler.yml
 
 從 [這裡](https://ap-southeast-1.console.aws.amazon.com/ec2/autoscaling/home?region=ap-southeast-1#AutoScalingGroups:id=;filter=eksworkshop;view=details) 開始設置，Create Auto Scaling group
 
-![](./images/img_002.png)
+![Auto Scaling 首頁，有 Create Auto Scaling group 按鈕與四項 Benefits 說明](./images/img_002.png)
 
 接著選擇Launch Template，Next
 
-![](./images/img_003.png)
+![Launch Template 選擇視窗，列出 eksctl 建立的節點群組範本及其 ID、版本](./images/img_003.png)
 
 再來設置一些對應參數，好了下一步
 
-![](./images/img_004.png)
+![建立 ASG 表單，Group name 為 asg-test、起始 2 個 instances，並選好 VPC 與三個 Subnet](./images/img_004.png)
 
 然後設定Scaling的條件，這裡是CPU使用率50以上
 
-![](./images/img_005.png)
+![Scaling policy 設定頁，policy 名 ScaleGroupSize、指標為 Average CPU Utilization](./images/img_005.png)
 
 好了就下一步，直接都Next，成功創建會長這樣
 
-![](./images/img_006.png)
+![建立完成頁顯示 Successfully created Auto Scaling group，並附 creation log 連結](./images/img_006.png)
 
 可以在ASG的面板看已經有的ASG狀態
 
-![](./images/img_007.png)
+![ASG 列表，asg-test 的 Desired 2、Min 2、Max 8，橫跨 ap-southeast-1a 等可用區](./images/img_007.png)
 
 因為這裡是設置`eksctl-eks-cluster-nodegroup-ng-4241ab92`，要將這名稱放到剛剛的YAML中
 
-![](./images/img_008.png)
+![cluster-autoscaler 啟動指令，含 --cloud-provider=aws 與 --nodes=2:8 的節點群組參數](./images/img_008.png)
 
 設置集群環境變數
 
@@ -547,7 +547,7 @@ nginx-to-scaleout-5bd9d899c7-vhhh4   0/1     ContainerCreating   0          9s
 
 接著我們看下EC2的Dashboard
 
-![](./images/img_009.png)
+![EC2 列表，四台 m5.large 皆 running、2/2 checks，跨 ap-southeast-1a/1b/1c](./images/img_009.png)
 
 可以注意到多了兩個Node，這是CA造成的結果！
 

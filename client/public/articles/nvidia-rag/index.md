@@ -6,7 +6,7 @@
 
 ## 什麼是LangChain？
 
-![](./images/img_002.png)
+![LangChain 架構圖，把 Document Loaders、Text Splitters、Vector Stores、Models、Prompts、Tools 等模組並列](./images/img_002.png)
 
 分享幾個重要的知識點：
 
@@ -16,7 +16,7 @@
 
 3. LanServe v.s. LangChain v.s. LlamaIndex：LangChain像是積木組合包，你可以拿不同種類的積木組合成你想要的東西；至於LanServe是用來開放服務用的，可以透過這個框架快速啟動API Server，讓你的旅館可以熱情開張；LlamaIndex是偏向資料處理的，如果你對RAG有更細緻操作需求可以考慮用。
 
-![](./images/img_003.png)
+![用 ragas 評估 RAG 的示意圖，generation 下分 faithfulness、answer relevancy，retrieval 下分 context precision、context recall](./images/img_003.png)
 
 ## 概念補充
 

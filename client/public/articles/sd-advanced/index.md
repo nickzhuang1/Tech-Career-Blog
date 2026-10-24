@@ -43,23 +43,23 @@ LLuL：https://github.com/hnmr293/sd-webui-llul
 
 Open Pose：
 
-![](./images/img_002.png)
+![SD WebUI 的 OpenPose 編輯器頁籤，寬度與高度預設 512 的畫布，可新增骨架節點](./images/img_002.png)
 
 3D Open Pose：
 
-![](./images/img_003.png)
+![3D Openpose 編輯器頁籤，畫面有编辑 Openpose、发送到 ControlNet 等按鈕與 3D 骨架編輯區](./images/img_003.png)
 
 Depth Library：
 
-![](./images/img_004.png)
+![Depth Library 頁籤，寬高 512 的深度圖畫布、基础深度欄位與添加按鈕](./images/img_004.png)
 
 Tag Complete：
 
-![](./images/img_005.png)
+![Tag Complete 自動補全清單，輸入 dark 後列出 dark(暗黑)_hair→black_hair 等標籤與使用次數](./images/img_005.png)
 
 最後將技巧合併一起，能生成高品質二次元圖：
 
-![](./images/img_006.png)
+![合併 OpenPose、Depth Library 等技巧後，用下方 prompt 生成的二次元人物插畫](./images/img_006.png)
 
 使用的Prompt：
 
@@ -71,7 +71,7 @@ Steps: 30, Sampler: DPM++ 2M Karras, CFG scale: 11, Seed: 3773110473, Size: 512x
 
 生圖的時候，可以搭配 Image Browsing 使用，有隨機到好的圖片，可以從中將其直接把prompt傳到文生圖修改，如下圖：
 
-![](./images/img_007.png)
+![Infinite Image Browsing 瀏覽 outputs/txt2img-images 的視窗，顯示 PNG 檔名與檔案大小，右鍵選單可发送到文生图](./images/img_007.png)
 
 ## 小結
 

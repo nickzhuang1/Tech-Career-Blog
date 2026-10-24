@@ -27,11 +27,11 @@
 
 首先，先上架構圖。
 
-![](./images/img_002.png)
+![DreamBooth 架構圖，輸入 3~5 張主體照片加上唯一識別符 V 與類別名稱 dog，微調出 Personalized Text-to-Image 模型](./images/img_002.png)
 
 可以看到先輸入了3~5張的狗狗照片，這邊同樣用到了 CLIP 的技術，將一組 key pair 輸入至 DreamBooth 做訓練，DreamBooth 本身會新建一個獨有的關鍵符去標示這個特徵，而在 Inference 的時候，就會依此規則輸出對應的合成圖像 ( Synthesis Image )。
 
-![](./images/img_003.png)
+![訓練細節圖，64×64 影像經 Super-Resolution 放大到 1024×1024，並標出 Reconstruction Loss 與 Prior Preservation Loss](./images/img_003.png)
 
 DreamBooth 使用到的方法與 Embedding 有些許不同，第一，Embedding 是從既有詞彙當中去尋找詞嵌入去標示這個特徵，而 DreamBooth 是創造一個新的關鍵詞，並加入該類別名稱去微調整個模型，換言之，Embedding 生成的效果上的變化會比 DreamBooth 要少，因為會侷限於原本的範圍；再者，因為 DreamBooth是針對整個模型做微調，所以它的效果會比較好；次者，它用到了 Class-Specific Prior Preservation Loss，這是一個將 \[Identifier\]標示詞拓展考慮其類別先驗的方法，原本只會以 \[Identifier\]的單個詞嵌入做訓練，他們發現這樣效果並不好，所以後來改成類別先驗 ( Class Prior ) 的方式，變成以 \[Identifier\]\[Class noun\]去做訓練，這樣生成圖片的效果會好很多，因此，Class-Specific Prior Preservation Loss 這個方法避免了過擬合 ( overfitting ) 及 語言偏移 ( language drift )，語言偏移指的是模型微調後遺忘之前學過的內容。
 
@@ -39,19 +39,19 @@ DreamBooth 使用到的方法與 Embedding 有些許不同，第一，Embedding 
 
 這節我們要將 DreamBooth 的使用實際應用在 SD 上面，參考下圖。
 
-![](./images/img_004.png)
+![Stable Diffusion WebUI 介面，切到 Extensions 分頁的 Install from URL，欄位中已填入擴充套件清單的 GitHub 網址](./images/img_004.png)
 
 切到Extension那個分頁，按下Load from，下面可以找到 DreamBooth 的 Extension：
 
-![](./images/img_005.png)
+![擴充套件清單中的 DreamBooth 項目，說明為基於 ShivamShiaro 的 repo、針對低 VRAM GPU 優化，附 Install 按鈕與 1620 stars](./images/img_005.png)
 
 按 Install 後它會自動安裝，若有問題就需自行下載並下指令安裝。
 
-![](./images/img_006.png)
+![Extensions 的 Installed 分頁，列出已安裝的擴充套件，下方有 Disable all extensions 與 Apply and restart UI 按鈕](./images/img_006.png)
 
 按下 Apply and restart UI，等它激活這個插件。
 
-![](./images/img_007.png)
+![Dreambooth 分頁畫面，提示 Select or create a model to begin.，提供 Model 下拉選單與 Create、Settings 按鈕](./images/img_007.png)
 
 可以看到安裝好後，多了一個DreamBooth的分頁，接下來就可利用這頁自行訓練要用的checkpoint。
 

@@ -34,29 +34,29 @@ Unconditional Training 及 Text-to-Image Training，可以理解為圖生圖及�
 
 透過 URL 安裝完插件後，切換到該介面上。
 
-![](./images/img_002.png)
+![Create Model 表單：Name 填 nick、Model Type 選 v2x-512、Source Checkpoint 用預設模型](./images/img_002.png)
 
 要決定 Name ，這是模型的名稱，Model Type v2x-512，稍後要準備約10張左右的 512 x 512 圖片供訓練使用，Source Checkpoint 就選預設模型即可。
 
-![](./images/img_003.png)
+![Settings 的 Basic 分頁，Training Steps Per Image (Epochs) 設 150，下方是存檔間隔欄位](./images/img_003.png)
 
 Input 將 Training Steps Per Image 調整成150，Save Model Frequency 調整為0。
 
-![](./images/img_004.png)
+![Tuning 區塊：Optimizer 8bit AdamW、Mixed Precision fp16、Memory Attention 為 default](./images/img_004.png)
 
 Optimizer 選 8bit AdamW，Mixed Precision 選 fp16，Memory Attention 可以的話選 xformers。
 
 Setting那分頁到這邊就結束了，可以存檔一下。
 
-![](./images/img_005.png)
+![Concepts 分頁：Name 為 NickZhuang，Instance Prompt 填 a photo of nickxxxawesome](./images/img_005.png)
 
 這裡的 Dataset Directory 要填10張圖片所在的目錄，Instance Prompt 可以看到筆者這邊輸入為：a photo of nickxxxawesome，注意到 nickxxxawesome是要找一個唯一的 token 供模型辨識所用。
 
-![](./images/img_006.png)
+![Saving 分頁：CustomModel Name 為 NickZhuang，下方是 Save EMA Weights 與 .ckpt 勾選項](./images/img_006.png)
 
 Half Model 可以減少模型大小，表現也不會差很多，可以試試看。
 
-![](./images/img_007.png)
+![訓練中的 Output 分頁顯示 LOSS:0.08、LR:8.36E-7、VRAM:4.1/6.3 GB，右側是 LR 與 VRAM 面板](./images/img_007.png)
 
 到這裡就是訓練階段了，以GTX 4090訓練約15分鐘內可以完成，就微調模型來說還蠻快的，完成後只要到文生圖介面，載入你訓練的 Checkpoint ，並輸入關鍵字 nickxxxawesome，就會出現我的照片。
 

@@ -89,7 +89,7 @@ $minikube dashboard --url &
 
 檢查minikube的Dashboard
 
-![](./images/img_002.png)
+![minikube Dashboard 的 Workloads 總覽，helloworld-deployment 的 Pods 顯示 3/3](./images/img_002.png)
 
 OK，代表集群擷取訊息正常。
 
@@ -502,7 +502,7 @@ weave-scope-app   NodePort   10.99.117.128   <none>        80:32102/TCP   109s
 
 可以注意到有開port出來了，我們可以藉由這個port去access瀏覽器上Weave Scope的資訊
 
-![](./images/img_003.png)
+![Weave Scope 的 Graph 檢視：coredns、weave-scope、helloworld 連線，底部 10 nodes、25 containers](./images/img_003.png)
 
 它這個套件有幾個有用的資訊：
 
@@ -512,7 +512,7 @@ weave-scope-app   NodePort   10.99.117.128   <none>        80:32102/TCP   109s
 
 這些狀態是即時的，隨時監控，另外點開還可以看到每個服務對於硬體的負載訊息
 
-![](./images/img_004.png)
+![Weave Scope 的 Resources 面板：Outbound 連線與 Pod 的 CPU 0.08%、Memory 46.2 MB](./images/img_004.png)
 
 其他一些比較細緻操作就自行嘗試囉！我們繼續介紹下個章節～
 

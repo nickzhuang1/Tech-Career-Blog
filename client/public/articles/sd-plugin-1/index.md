@@ -29,11 +29,11 @@ https://github.com/zanllp/sd-webui-infinite-image-browsing
 
 - 使用方式
 
-![](./images/img_002.png)
+![WebUI 分頁列多了 Infinite image browsing，頁面提供 Walk 模式、快速移動與啟動等功能按鈕](./images/img_002.png)
 
 這是安裝好後的介面總覽，「Walk模式」是巡訪圖片用的、「快速移動」是會幫你顯示資料夾、「啟動」是 Global 的功能，像是：快速查找圖片、批量下載等等。
 
-![](./images/img_003.png)
+![Walk 模式瀏覽 outputs/txt2img-images 的縮圖清單，右鍵選單可複製提示、複製正向提示並查看檔名](./images/img_003.png)
 
 這是使用walk文生圖的功能顯示的畫面，可以看到有縮圖檢視，以及從單張圖去檢視該圖所使用的prompt、解析度、使用的Model、及其他細部設定。
 
@@ -43,7 +43,7 @@ Prompt all in one這個插件是用在提示詞 ( prompt )使用的，它有各�
 
 - 安裝
 
-![](./images/img_004.png)
+![Extension 頁的 Install from URL 分頁，URL 欄填入 sd-webui-prompt-all-in-one 的 GitHub 網址，下方有 Install 按鈕](./images/img_004.png)
 
 切換到Extension的分頁，然後在Install from URL貼上
 
@@ -51,13 +51,13 @@ Prompt all in one這個插件是用在提示詞 ( prompt )使用的，它有各�
 https://github.com/Physton/sd-webui-prompt-all-in-one
 ```
 
-![](./images/img_005.png)
+![Extension 的 Installed 分頁列出已安裝的 sd-webui-infinite-image-browsing，並有 Apply and restart UI 按鈕](./images/img_005.png)
 
 點擊Install，然後切換到 Installed 的分頁，按下 Apply and restart UI。
 
 使用方式
 
-![](./images/img_006.png)
+![Prompt all in one 的提示詞面板，正向提示框內已有 female、gown、smile、highres，可依分類點選加入標籤](./images/img_006.png)
 
 可以看到有大類別可以供選擇，像是：人物、服飾、表情動作、畫面、...，非常多XD，小類別在點選定大類別後會出現選項，點擊就能把這些標籤放到介面上，並同步幫你把提示詞放上去。
 
@@ -77,7 +77,7 @@ https://github.com/hanamizuki-ai/stable-diffusion-webui-localization-zh_Hans
 
 接下來這步驟要注意一下：
 
-![](./images/img_007.png)
+![Settings 的 User interface 頁面，Localization 下拉選單選為 zh-Hans (Stable)，下方還有存檔路徑等設定](./images/img_007.png)
 
 這邊是要在 restart UI 後，切換到 Settings -> User interface -> Localization，將語系選擇 zh-Hans，它預設是簡體中文的，所以如果要用繁體版的話，可以將這個路徑底下的json檔修改即可：
 

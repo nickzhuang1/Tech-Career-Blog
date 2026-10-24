@@ -22,7 +22,7 @@ kubelet是在每個節點上運行的主要"節點代理"，並適用於描述po
 
 ## kubectl指令一覽
 
-![](./images/img_002.png)
+![kubectl 指令速查表，分 Pod & Container、Debugging、Objects、Introspection 四區](./images/img_002.png)
 
 我們來小小複習一下docker，以下是有關kubectl重疊的部分
 

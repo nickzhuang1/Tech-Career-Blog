@@ -18,19 +18,19 @@
 
 在看這個東西之前，我們先小複習一下Docker中的Volume掛載方式：
 
-![](./images/img_002.png)
+![Docker 三種掛載示意圖，Host 端標 Filesystem 與 Memory，Container 端為 Docker area](./images/img_002.png)
 
 - Volume模式：會在Docker空間額外建立一個與本地對應的區域
 
-![](./images/img_003.png)
+![同一張掛載示意圖裡對應 Volume 模式的部分，Host 的 Filesystem 對應到 Container 的 Docker area](./images/img_003.png)
 
 - bind mount模式：這個模式是直接把掛載與本地端檔案系統綁定，可以操作的選項比Volume模式少
 
-![](./images/img_004.png)
+![同一張掛載示意圖中對應 bind mount 模式的部分，Container 直接綁定 Host 的 Filesystem](./images/img_004.png)
 
 - tmpfs mount：掛載到記憶體中，暫存的，處理機敏資料或是測試資料用
 
-![](./images/img_005.png)
+![同一張掛載示意圖中對應 tmpfs mount 模式的部分，掛載路徑指向 Host 的 Memory](./images/img_005.png)
 
 以上三種模式，接著我們介紹Persistent Volume供比較，給個例子：
 
@@ -303,7 +303,7 @@ job.batch/install-adminer   0/1           5s         5s
 
 接著我們開啟瀏覽器，檢視http://192.168.99.100:30080/adminer.php
 
-![](./images/img_006.png)
+![瀏覽器開啟 Adminer 4.7.0 登入頁，欄位含資料庫系統 MySQL、伺服器 localhost、帳號與密碼，網址列標示不安全](./images/img_006.png)
 
 OK，可以透過網頁操作並設置MySQL資料庫，測試成功！
 

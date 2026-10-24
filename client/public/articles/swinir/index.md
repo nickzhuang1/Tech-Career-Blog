@@ -21,7 +21,7 @@ SwinIR 是基於 Swin Transformer 架構的重建演算法，不同於以往的�
 
 先上架構圖，如下所示。
 
-![](./images/img_002.png)
+![SwinIR 架構圖：Shallow Feature Extraction 接 6 個 RSTB（含 MSA、MLP），最後 Reconstruction](./images/img_002.png)
 
 主要分為三個模組，分別是：淺層特徵提取、深度特徵提取、及影像重建的模組。
 

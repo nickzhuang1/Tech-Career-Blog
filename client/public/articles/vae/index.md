@@ -17,7 +17,7 @@
 
 自編碼器（Autoencoder）是一種常見的無監督學習模型，用於學習數據的壓縮表示和特徵提取。
 
-![](./images/img_002.png)
+![圖中標出 European Community、Interbank markets、Energy markets、Legal/judicial 等多個新聞主題詞彙](./images/img_002.png)
 
 其中的思想最早來自於2006年的一篇論文，這篇是AI大神之一Hinton寫的，它主要是比較了主成份分析法(principal components analysis, PCA)，PCA是一種將數據降低維度的技術，這樣的好處是可以更容易地分析資料、及做好統計分析的優點，自編碼器的優勢在於它受惠於硬體算力的提升，使得它可以實現，經mnist數據集的實驗表示它的效果相較於PCA來說更好，以下是有關自編碼器的簡要介紹：
 
@@ -33,7 +33,7 @@
 
 自編碼器（Autoencoder）在不同的應用場景下，衍生出了多種不同類型的變體。
 
-![](./images/img_003.png)
+![自編碼器變體的分類示意圖，列出 AutoEncoder(AE)、Variational AE(VAE)、Denoising AE(DAE)、Sparse AE(SAE) 等類型](./images/img_003.png)
 
 以下是一些常見的自編碼器種類：
 
@@ -58,7 +58,7 @@
 
 變分自編碼器與自編碼器的差別，參考下圖。
 
-![](./images/img_004.png)
+![AE 與 VAE 架構對照圖，VAE 的 Encoder 輸出 m 與 σ，再從常態分布取樣 ε 組出 code，並以最小化重構誤差訓練](./images/img_004.png)
 
 ## 小結
 

@@ -136,7 +136,7 @@ sudo docker run --gpus '"device=0"' --network host --name test1 -it 105552010/sd
 
 介面會長這個樣子：
 
-![](./images/img_002.png)
+![Stable Diffusion WebUI 的 txt2img 主介面，可選 v1-5-pruned-emaonly checkpoint，含 Prompt、Negative prompt 輸入框與 Generate 按鈕](./images/img_002.png)
 
 ## 小結
 

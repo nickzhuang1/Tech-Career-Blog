@@ -20,7 +20,7 @@ Flow的架構是基於可逆變換的生成模型，透過一系列可逆變換�
 
 我們先回顧一下之前提過的內容；例如，VAE和GAN，同樣也是生成式模型的架構，三者在架構上有何差異，如下圖。
 
-![](./images/img_002.png)
+![GAN、VAE、Flow-based 三種生成模型架構對比：GAN 以 Generator 與 Discriminator 做 minimax，VAE 以 Encoder、Decoder 最大化 ELBO](./images/img_002.png)
 
 列表如下：
 
@@ -32,7 +32,7 @@ Flow的架構是基於可逆變換的生成模型，透過一系列可逆變換�
 
 有鑒於Flow架構的基本概念包含：Jacobian matrix、Determinant、及Change of Variable Theorem，簡單來說，在將流正規化 (Normalizing Flows) 的時候，透過這三個概念，就可以推導及簡化機率密度的函數，他這個作法是將一個個高斯分佈做疊加，達到模擬對數似然函數的目的，如下圖所示。
 
-![](./images/img_003.png)
+![Normalizing Flow 的變換鏈示意圖：z0 經 f1、fi 等可逆函數逐層變換到 zK 也就是 x，各層分別對應 p0 到 pK 的分佈](./images/img_003.png)
 
 關於Flow的變體有很多種類，但不外乎是基於Jacobian matrix的性質；例如，Nonlinear Independent Components Estimation (NICE)、Real Non-Volume Preserving (Real NVP)、Generative Flow (Glow)，也有結合auto regressive的Masked autoregressive flow (MAF)等等。
 

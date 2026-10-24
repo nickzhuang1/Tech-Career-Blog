@@ -21,7 +21,7 @@ Embedding 是一種尋找詞嵌入的方法，又稱作 Text inversion，它主�
 
 先上架構圖，如下所示。
 
-![](./images/img_002.png)
+![Textual inversion 架構圖：輸入「A photo of S*」，Tokenizer 切成多個 token，S* 對應新學的詞嵌入，再由 Embedding Lookup 取出向量。](./images/img_002.png)
 
 主要的核心概念是以「虛擬詞」作為詞嵌入 ( token embedding )，讓我們可以使用文本加上幾張圖片(3~5張)，實現個人化的文生圖功能。因其方法是Textual inversion，我們可以先回顧下它比較過的方法；例如，GAN inversion、Diffusion-based inversion。
 
@@ -49,7 +49,7 @@ sudo docker run --gpus 1 --network host --it 105552010/sd-test:v1.6.0 bash
 
 啟動後，切換到Train的分頁。
 
-![](./images/img_003.png)
+![SD WebUI 的 Train 分頁，上方有 Create embedding、Create hypernetwork、Preprocess images 等子頁籤，下方是 Name 欄位。](./images/img_003.png)
 
 定義好Name及其他設定後就能訓練Embedding了，Good Luck！
 

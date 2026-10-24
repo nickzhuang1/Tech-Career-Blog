@@ -31,7 +31,7 @@
 
 ### 節點狀態
 
-![](./images/img_002.png)
+![Node Condition 對照表：OutOfDisk、Ready、MemoryPressure、DiskPressure 等條件與說明](./images/img_002.png)
 
 ### 容量和可分配量
 
@@ -290,7 +290,7 @@ node"192.168.10.2" deleted
 
 今天我們理解了什麼是節點，並詳加介紹了它本身的特性及操作方式，關於節點其實還有些更細緻的操作，不過截至目前為止我們已經知道它是跟群集比較接近的範疇，部署好後大多的情況是不太需要更動的，除非是定期維護的時候就另當別論，當然這邊為了區分方便，我們就把Node稱作Slave，這是為了和主節點區分，也就是Master，避免混淆，我們來看張架構圖：
 
-![](./images/img_003.png)
+![k8s 架構圖：Master 含 etcd、kube-apiserver、kube-scheduler，Minion 含 kubelet、kube-proxy](./images/img_003.png)
 
 ### Ｍaster是由etcd、kube-controller manager、kube-apiserver、kubescheduler構成
 

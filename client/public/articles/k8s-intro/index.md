@@ -50,7 +50,7 @@ k8s提供了一個彈性運行分佈式系統的框架。它可以負責的擴�
 
 ## Kubernetes架構與使用
 
-![](./images/img_002.png)
+![k8s 叢集架構圖，Master 內含 API Server、ETCD、Controller Manager、Scheduler，Node1～NodeN 各有 Kubelet、Proxy 與數個 Pod](./images/img_002.png)
 
 首先，若要架設k8s的話，必須要在server上設定master node，至少要有一個master node
 

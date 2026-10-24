@@ -323,7 +323,7 @@ $minikubeservice my-helloworld-service --url
 
 接著打開瀏覽器輸入http://192.168.99.100:30633
 
-![](./images/img_002.png)
+![瀏覽器網址列為 http://192.168.99.100:30633（標示不安全），頁面顯示 HelloWorld! 字樣。](./images/img_002.png)
 
 OK，大功告成！
 

@@ -29,7 +29,7 @@
 
 我們來看張圖：
 
-![](./images/img_002.png)
+![12-factor 的部署圖：左側單一 Codebase 分出多條 Deploys，分別指向 production、staging 與 developer 1、2](./images/img_002.png)
 
 基準代碼和應用之間必須保持一對一的關係：
 
@@ -85,7 +85,7 @@ Debug流程
 
 我們來看張圖：
 
-![](./images/img_003.png)
+![Production 以 mysql://、smtp:// 等 URL 連到 MySQL、Twitter API、Amazon S3、email service](./images/img_003.png)
 
 部署可以按需加載或卸載資源。
 
@@ -143,7 +143,7 @@ Debug流程
 
 參考下圖：
 
-![](./images/img_004.png)
+![進程模型圖：process types 有 web.1、web.2、worker.1 到 4、clock.1，右側箭頭標示 Scale](./images/img_004.png)
 
 因為進程的無共享及水平分區的特性，上述進程模型會在系統擴展時有顯著的效用。
 
@@ -213,7 +213,7 @@ Debug流程
 
 我們看完了以下12個重要的應用組成要素，發現到可以分為幾個面向：
 
-![](./images/img_005.png)
+![把 12 要素分成 Unify、Specify、Conform、Auto、Sync 五類的彙整表，各類下列出對應要素](./images/img_005.png)
 
 Unify（單位化）：CodeBase、Processes
 

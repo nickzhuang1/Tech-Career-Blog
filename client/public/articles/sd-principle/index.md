@@ -15,7 +15,7 @@
 今天我們會介紹 Stable Diffusion 相關的內容，一路鋪陳下來，總算進入了系列文的核心，本日內容包含：什麼是Stable Diffusion、Stable Diffusion的演算法、及Stable Diffusion的特色。
 在開始之前，稍微花點時間回顧下之前講述過的內容，可以對照一下差異。
 
-![](./images/img_002.png)
+![生成模型比較圖，三向度是 High Quality Samples、Mode Coverage/Diversity、Fast Sampling，對象含 GAN、Diffusion、VAE、Flow](./images/img_002.png)
 
 我們前面提過了 [GAN](https://nickzhuang.com/posts/gan)、 [DDPM](https://nickzhuang.com/posts/diffusion)、 [VAE](https://nickzhuang.com/posts/vae)、及 [Flow](https://nickzhuang.com/posts/flow) 等模型，可以看到主要以三種維度做區分，其中：GAN 適合生成高品質的影像及能夠快速生成，DDPM 相較於 GAN 來說生成較慢、但模式覆蓋/多樣性較好，至於 VAE 及 Flow 是生成高品質影像較差。
 
@@ -27,7 +27,7 @@ Stable Diffusion 是基於 Diffusion 去改良的模型，主要的概念與 Dif
 
 先上架構圖，如下圖所示。
 
-![](./images/img_003.png)
+![Stable Diffusion 架構圖，Text 經 Conditioning 進入 Denoising U-Net，圖中標出 ZT 到 ZT−1 與 cross attention](./images/img_003.png)
 
 首先，紅色區塊，會有一個訓練好的自編碼器 ( Auto Encoder )，這是一個泛用的壓縮模型，可以用來生成不同的 Diffusion Model，整體的壓縮流程其實經過了兩個階段：第一階段做感知壓縮 ( perceptual compression )，這是將高頻訊息移除並保留細微語意變化 ( semantic variation ) 的部分，第二階段做語意壓縮 ( semantic compression )，為的是要找到感知等價但運算量更少的空間，就是下段綠色區塊要做的事情。
 

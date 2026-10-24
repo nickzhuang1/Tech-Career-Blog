@@ -106,7 +106,7 @@ data_volume: /data
 
 網頁登入(admin, Harbor12345)，新增test這個Project
 
-![](./images/img_002.png)
+![Harbor 的專案列表頁（網址 192.168.0.159/harbor/projects），欄位包含專案名稱、訪問級別與角色，右上角有新建項目](./images/img_002.png)
 
 依照新增的Project(如:test)，登入上傳image
 
@@ -120,11 +120,11 @@ $sudo docker push 192.168.0.159/test/newImage:v1
 
 可以看到新上傳的image
 
-![](./images/img_003.png)
+![Harbor 中 test 專案的頁面，分頁有镜像仓库、成员、标签、日志、机器人账户與配置管理](./images/img_003.png)
 
 在Project裡面可以直接刪除image，再進到裡面那層test，可以對個別image做更細緻的操作
 
-![](./images/img_004.png)
+![Harbor 中 test/complete_ins 映像的詳細頁，列出標籤與大小，並提供扫描、复制镜像、删除與 Pull命令](./images/img_004.png)
 
 ### 總結
 

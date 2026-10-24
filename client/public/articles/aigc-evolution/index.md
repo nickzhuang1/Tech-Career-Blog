@@ -36,7 +36,7 @@ graph TD
 
 ## GAI的歷史
 
-![](./images/img_002.png)
+![GAI 歷史時間軸，分 Unimodal 的 CV 與 NLP 兩條線，標出 VAE、GAN、BiGAN、StyleGAN、ViT、DDPM、GPT-3 等模型的位置](./images/img_002.png)
 
 - 文本生成
 文本方面的生成式AI最早可以追朔到1950年左右，當時的主要模型是隱式馬可夫模型(Hidden Markov Models, HMMs)、及高斯混合模型(Gaussian Mixture Models, GMMs)，這些模型可以生成序列資料；例如，語音、及時間序列。到了深度學習(Deep Learning, DL)，在自然語言處理(Natural Language Processing, NLP)中，是使用N-gram的方法對句子進行建模，它能透過單詞分佈去搜索最佳序列，但無法在長句中使用。因此，後來引入了循環神經網路(Recurrent Neural Networks, RNNs)去解決這個問題，並以此作為基底改良，提出了長短期記憶(Long Short-Term Memory, LSTM)、及門控循環單元(Gated Recurrent Unit, GRU)的架構，這些方法可以處理大約200個標記(token)。

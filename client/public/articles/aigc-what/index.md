@@ -13,7 +13,7 @@
 
 近年來，隨著 GPU 算力的等級躍升，利用 AI 算圖的商用性也越來越高，為了因應在大型語言模型 ( Large Language Model，LLM ) 的應用下，近期火熱的 ChatGPT、及 Stable Diffusion 的高速發展，進而評估以此方向作為數位轉型的參考，開啟了本次的 AIGC 調研之路。
 
-![](./images/img_002.png)
+![以參數量與訓練速度（V100 16G 為基準）為兩軸的散布圖，標出 GPT-3、PaLM、BLOOM、ChatGPT、DALL-E 等模型，範圍從 10B 到 1T](./images/img_002.png)
 
 近年來的GPU算力及LLM的參數量變化，如上圖所示。
 
@@ -58,7 +58,7 @@ AIGC 有潛在的應用領域；例如，新聞報導、商品描述、網站內
 
 AIGC 的出現其實受惠於近年的 GPU 進化，它是來自於生成式AI ( GAI, Generative AI ) 的演算法，並進一步將其做了改良，總結來說，該架構允許給予多個提示詞 (prompt)，並輸出一段合理的內容，如下圖所示。
 
-![](./images/img_003.png)
+![生成式AI模型架構示意圖，左側為 Unimodal 與 Multimodal 輸入，經 Prompt、Pre-train、Decode 產生 Result](./images/img_003.png)
 
 這邊給到的例子，給予提示詞讓模型輸出對應的內容；例如，Unimodal、及Multimodal，允許使用者作單個或多個輸入。
 
@@ -72,13 +72,13 @@ AIGC 的出現其實受惠於近年的 GPU 進化，它是來自於生成式AI (
 
 所以，AIGC是一種 GAI 的模式，它是基於 PGC、及UGC的綜合體，結合了兩者的優點。
 
-![](./images/img_004.png)
+![以 Production 與 Efficiency 為軸的比較圖，並列 PGC、UGC、AIGC 三種內容生產模式與各自的參與者](./images/img_004.png)
 
 ## AIGC的構成要件
 
 要能讓AIGC運作，必須要滿足三個條件，分別是：資料、演算法、及硬體。透過資料中的數據去驅動，就可以實作以資料為基底的演算法，並以此利用硬體去訓練模型，就大功告成。
 
-![](./images/img_005.png)
+![AIGC 構成示意圖，分為 Data、Algorithm、Hardware 三塊，資料含 training set、annotation，硬體標出 Local、Cloud、Edge computing](./images/img_005.png)
 
 ## 小結
 

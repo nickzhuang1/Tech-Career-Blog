@@ -44,7 +44,7 @@ apt install python3-tk
 
 安裝python tk的時候要設置時區：
 
-![](./images/img_002.png)
+![終端機的 tzdata 時區設定畫面，先在地理區域清單輸入 6 選 Asia，再從城市清單輸入 73](./images/img_002.png)
 
 選 6 和 73，接著往下。
 
@@ -59,7 +59,7 @@ chmod +x setup.sh
 
 ，不用緊張。
 
-![](./images/img_003.png)
+![setup.sh 安裝日誌，逐行印出 INFO Installing package，列出 torch、xformers、gradio 等套件版本](./images/img_003.png)
 
 最後輸入以下指令啟動，這會開啟在本地的：
 
@@ -67,33 +67,33 @@ chmod +x setup.sh
 ./gui.sh --server_port 8180 --listen 0.0.0.0 --headless
 ```
 
-![](./images/img_004.png)
+![gui.sh 啟動日誌，偵測到 NVIDIA GeForce RTX 4090 與 CUDA 11.8，最後印出 Running on local URL 0.0.0.0:8180](./images/img_004.png)
 
 ## LoRA的訓練
 
 啟動後，介面如下圖。
 
-![](./images/img_005.png)
+![kohya_ss 的 Gradio 介面，頂端為 Dreambooth、LoRA、Textual Inversion 頁籤，LoRA 頁含 Source model 與 Folders](./images/img_005.png)
 
 可以注意到它的介面與 Stable Diffusion UI 類似，都是用 Gradio 相關套件去開發的。這個工具也可以訓練其他種類的網路，像是 [「Day27」](https://nickzhuang.com/posts/dreambooth) 的 DreamBooth。
 
 回到 Stable Diffusion WebUI ，需要安裝 additional networks 的插件。
 
-![](./images/img_006.png)
+![WebUI 的 Extensions 分頁，Install from URL 填入 sd-webui-additional-networks 網址，下方顯示安裝路徑](./images/img_006.png)
 
 安裝好後重啟UI，接著進到 Train -> Preprocess images。
 
-![](./images/img_007.png)
+![WebUI 的 Preprocess images 頁，來源 /kohya_ss/train-images、目的 test-images，寬高皆 512](./images/img_007.png)
 
 設定 directory 的位置、及勾選對應選項，點擊 Preprocess，好了會顯示 Preprocessing finished。
 
-![](./images/img_008.png)
+![test-images 目錄的 ls 輸出，每個時間戳命名的 .png 旁都有一個同名的 .txt 檔](./images/img_008.png)
 
 可以看到每張圖片有多出對應的 txt 檔案。
 
 回到 kohya ss UI，到 LoRA -> Training。
 
-![](./images/img_009.png)
+![LoRA Training 的 Folders 頁，Image folder、Output folder、Logging folder 與模型名稱 nick_latest](./images/img_009.png)
 
 設定路徑及模型名稱，模型名稱不能空格，用下滑線連接。
 

@@ -10,7 +10,7 @@
 
 HA（High Availability），是指高可用性，它可以用在主節點的備援上，因為minikube是單節點的cluster，所以它沒法設置，EKS的話就可以，但我們也不需特別去設置它，因為在AWS上的EKS，主節點的管理是在EKS內進行的，底下看個架構圖：
 
-![](./images/img_002.png)
+![k8s 叢集架構圖：3 個 Master 與 3 個 ETCD 位於 Manage by EKS 範圍內，下方是 Worker Nodes](./images/img_002.png)
 
 可以看到EKS會自動幫我們把Master和ETCD自動Scale up成3個，我們能控制的只有藍色區塊的部分
 
@@ -365,7 +365,7 @@ OK，測試結束了！
 
 今天我們理解了HA、Federation的觀念及其所代表的重要性，這兩個的概念都是與備援有關係的，我們看張架構圖：
 
-![](./images/img_003.png)
+![Federation 架構圖：一個 Federation 底下掛 Cluster1 與 Cluster2，各自再分多個 namespace](./images/img_003.png)
 
 從Federation看到我們可以把一至多個Cluster（群集）指派給它，在每個Cluster中我們也可以設置多個Namespace（虛擬群集），當然，如果還是不放心的話，我們甚至可以設置多個Federation，達到全方位的控管備援機制。明天就是最後一天啦！會有一整個系列統整的內容帶給大家，敬請期待，我們明天見囉！
 

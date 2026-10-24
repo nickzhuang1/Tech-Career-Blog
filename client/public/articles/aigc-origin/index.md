@@ -2,7 +2,7 @@
 
 # [Day1] 緣起
 
-![](./images/img_002.png)
+![以 Stable Diffusion 生成的賽博龐克風格插畫，作為 AIGC 系列的開場圖](./images/img_002.png)
 
 這是一張利用Stable Diffusion生成的圖片，賽博龐克的風格，歡迎大家進入AIGC的世界。
 

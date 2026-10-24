@@ -25,7 +25,7 @@ SD XL 是以 SD 架構做為基礎改良的模型，主要改進三個方面：
 
 先上架構圖，如下圖所示。
 
-![](./images/img_002.png)
+![SD XL 架構圖：Base 接 Refiner 產生 Refined Latent，再由 VAE-Decoder 輸出 1024×1024](./images/img_002.png)
 
 這裡的方法是以 128x128 大小的圖片作為潛空間 ( Latent Space ) 的輸入，最後輸出 1024x1024 的圖片，主要分為三個部分：Base、Refiner、VAE-Decoder，其中的 Base 和 Refiner 構成了文生圖的模塊，而 VAE-Decoder 為圖生圖的模塊，兩者相連構成了整體文生圖的模型。
 

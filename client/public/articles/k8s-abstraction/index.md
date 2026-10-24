@@ -89,11 +89,11 @@
 
 這邊我們除了複習了Node相關的內容外，也介紹了k8s的物件總共有哪些種類，以及大致上的使用情境為何，這篇主要篇整體概念為主，只要對一些基本名詞有些認知即可，細節的部分後面會陸續補上，主要是想先介紹整體的架構，細節的部分再慢慢談，先有個架構再去談細部結構我覺得會比較好，簡言之，我們可以看到：
 
-![](./images/img_002.png)
+![k8s 節點架構圖，Master 上有 kube-apiserver、kube-scheduler、kube-controller-manager，Slave 節點上有 kubelet 與 kube-proxy](./images/img_002.png)
 
 以Node面向看k8s，Node有兩種，Master和Slave。跟斯斯有兩種一樣，一種治咳嗽，一種治鼻塞
 
-![](./images/img_003.png)
+![k8s 物件分類示意圖，分成 Basic 與 Abstraction 兩類，列出 Pod、Deployment、Service、Volume、StatefulSet、DaemonSet、Namespace、Job 等](./images/img_003.png)
 
 以Object面向看k8s，Object有兩種，Basic和Abstraction。
 

@@ -17,7 +17,7 @@
 
 LoRA 是微軟團隊在2021年提出的一種微調方法，它主要的概念是從pre-trained Model來的，一般來說，我們在使用預訓練的模型時候，會凍結已經訓練好的層，僅訓練新加入的層，就在前面有提過，就是Linear Probe，近年來大家開始研究有效率的微調模型，就是Parameter-Efficient Fine-Tuning (PEFT)，LoRA的精神是凍結原本的預訓練模型，像是GPT之類的，並搭配一個小的模型去微調就可以達到不錯的效果，就像 Adaptor 一樣，我們可以將 LoRA 視為一個插件，在特定層插入該模組，讓整個模型可以適應對應問題的處理，參考下圖。
 
-![](./images/img_002.png)
+![LoRA 微調示意投影片，在 Transformer layer 的 attention 與 Feed-forward 旁接上 LoRA 分支](./images/img_002.png)
 
 與有微調過的 GPT-3 模型相比，這個方法使用的參數減少了10,000倍，並只有佔用 GPU 3分之1的 loading，也減少了記憶體的使用量，使得這項技術可以應用在 Stable Diffusion 上。
 
@@ -31,7 +31,7 @@ Adapter 和 Prefixing 是兩種有效的 Parameter-Efficient Fine-Tuning 做法�
 
 LoRA 是基於 Adaptor 的方法，像我們前面看過的 Embedding 是屬於 Prefixing 的方法，它的核心概念就是找到關鍵的特徵參數並對其進行訓練，如下圖所示。
 
-![](./images/img_003.png)
+![LoRA 的低秩分解示意圖，在 pretrained weights W 旁加上 A、B 兩個低秩矩陣，A 取隨機常態初始化、B 初始為 0](./images/img_003.png)
 
 可以看到它是先將預訓練的模型額外接個迴路，A先將維，B再升維，用來模擬 intrinsic rank，這種模型中層與層之間的迴路設計最早我們可以從 ResNet 看到，不過它是跳過的作用，與此例不同。
 在 Stable Diffusion 當中，LoRA 是訓練 U-Net 當中的特定層的權重，讓原始的checkpoint模型，進而獲得處理特定任務的能力，生成特定風格及樣式的圖片。

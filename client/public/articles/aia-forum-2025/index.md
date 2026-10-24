@@ -24,7 +24,7 @@
 
 大腦的運作是非常耗能的，所以他會盡可能地偷懶，大部分系統一能用就用，不行才會切到系統二。
 
-![](./images/img_002.png)
+![AI 演進路徑的簡報頁，分成「探索 AI 能力」與「AI 普及化」兩條路徑，並標出 Pre-Train 到 Agentic AI 四個階段](./images/img_002.png)
 
 目前AI的時代，可以劃分為四個階段：預訓練(Pre-Train) -> 後訓練(Post-Train) -> 推理論證(Reasoning) -> AI代理(Agentic AI)，目前在三到四之間。
 
@@ -32,7 +32,7 @@
 
 ## aiDaptiv+
 
-![](./images/img_003.png)
+![「Expanding Model Size Capacity with aiDAPTIV+」簡報頁，列出 HGX H200、RTX 6000 ADA、RTX 5090 與 2B～70B 的模型規模](./images/img_003.png)
 
 開源模型論壇的環節，有個挺有意思的橋段是關於台灣大哥大資訊長
 
@@ -42,13 +42,13 @@
 
 ## LLMs的規則
 
-![](./images/img_004.png)
+![RULER 簡報頁，說明長上下文評測包含 Retrieval、Multi-hop Tracing、Question Answering 三類任務](./images/img_004.png)
 
 大型語言模型(LLM)是有PK的儀表板可以看的，常見的LLM Leaderboard可以參考LMSYS，大廠的開源模型真的會看排行（真是肝，壓力山大XD）；Context Window是個重要的概念，夠大的話可以不用RAG，也能讓用RAG的效果更好(CAG，用Cache快取加速)；另外關於MoE(Multi-of-Expert)的選擇是看有沒有多個GPU，有的話用效果才好，MoE在單個GPU的表現並不明顯。
 
 ## 中國的開源AI發展現狀
 
-![](./images/img_005.png)
+![整理中國與國際 AI 社群的簡報頁，列出 ModelScope 魔搭、Qwen、書生·浦語、Hugging Face、Datawhale、MetaGPT 等](./images/img_005.png)
 
 - [Richard Lin](https://www.linkedin.com/in/richardllin/)
 
@@ -56,7 +56,7 @@
 
 ## 好用的開源工具
 
-![](./images/img_006.png)
+![開源模型對照簡報頁，從大型語言模型走向多模態，列出 Gemma 3、Llama 3.3、Phi-4、Qwen2.5-VL、DeepSeek-R1](./images/img_006.png)
 
 - [Cheng Lin Tsai](https://www.linkedin.com/in/cheng-lin-tsai-448b6b119/)
 
@@ -64,7 +64,7 @@
 
 ## AI素養認證
 
-![](./images/img_007.png)
+![AIA TALENT CERTIFICATION 簡報頁，介紹「工程級：LLMs 於行政任務應用」認證與教材 Foundations of LLMs for Administrative Tasks](./images/img_007.png)
 
 - [Richie Tsai](https://www.linkedin.com/in/richietsai/)
 

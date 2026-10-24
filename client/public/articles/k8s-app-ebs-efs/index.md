@@ -180,7 +180,7 @@ wp-pv-claim      Bound    pvc-6cf53941-ecee-11e9-a674-0a822e4a246e   20Gi       
 
 我們檢查下AWS的EBS
 
-![](./images/img_002.png)
+![AWS EBS Volumes 清單，PVC 動態建立的兩顆 20 GiB gp2 磁碟，狀態為 available](./images/img_002.png)
 
 有的！
 
@@ -280,7 +280,7 @@ wordpress-mysql-7d4fc77fdc-hfms5   1/1     Running   0          104s   192.168.1
 
 我們從AWS上對照看看
 
-![](./images/img_003.png)
+![AWS EBS Volumes 清單，兩顆 20 GiB gp2 磁碟的 State 欄位，第一顆在 ap-southeast-1c 顯示 in-use](./images/img_003.png)
 
 可以發現到狀態已經從available變成in-use
 
@@ -365,7 +365,7 @@ wordpress-mysql-7d4fc77fdc-hfms5   1/1     Running   0          16m   192.168.15
 
 這時候我們在切到AWS上去看下
 
-![](./images/img_004.png)
+![AWS EBS Volumes 清單，Wordpress 部署後兩顆 20 GiB 的 gp2 磁碟狀態皆為 in-use](./images/img_004.png)
 
 可以發現到剛剛available的狀態變成in-use了
 
@@ -380,15 +380,15 @@ wordpress-mysql   ClusterIP      None             <none>                        
 
 接著我們透過EXTERNAL-IP去access它
 
-![](./images/img_005.png)
+![瀏覽器以 ELB 位址開啟 /wp-admin/install.php，網址列為 ap-southeast-1.elb.amazonaws.com](./images/img_005.png)
 
 有了，可以用囉！做一些簡單的設置就能登入了
 
-![](./images/img_006.png)
+![WordPress 安裝頁面，Site Title 填 test、Username 填 nick，下方為 Password 與 Email 欄位](./images/img_006.png)
 
 登入後找Customize
 
-![](./images/img_007.png)
+![WordPress 預設首頁，站名 TEST、標語 Just another WordPress site，選單有 Home、About、Blog、Contact](./images/img_007.png)
 
 ### 5. 清除
 
@@ -405,7 +405,7 @@ deployment.apps "wordpress-mysql" deleted
 
 刪除EBS
 
-![](./images/img_008.png)
+![AWS EBS Volumes 主控台展開 Actions 選單，列出 Modify Volume、Create Snapshot、Delete Volumes 等操作](./images/img_008.png)
 
 刪除PVC
 
@@ -440,19 +440,19 @@ Elastic Network Interface（ENI）：彈性網路界面是代表虛擬網路卡�
 
 VPC和Security groups要選eks相關的，好了下一步
 
-![](./images/img_009.png)
+![EFS 建立精靈的 Configure file system access 步驟，選定 VPC 並勾選 Create mount targets](./images/img_009.png)
 
 新增一個Tag
 
-![](./images/img_010.png)
+![EFS 精靈的 Add tags 頁面，新增 Key 為 Name、Value 為 efs-eks 的標籤](./images/img_010.png)
 
 好了會長這樣
 
-![](./images/img_011.png)
+![EFS 建立成功的 Success 提示與 File systems 清單，列出名稱、File system ID、Metered size 與 mount target 數量](./images/img_011.png)
 
 接著我們來檢查下ENI的狀態
 
-![](./images/img_012.png)
+![EC2 Network interfaces 清單共 9 筆，欄位含 Subnet ID、VPC ID、Zone、Security groups 與 Status](./images/img_012.png)
 
 OK，有建立與EFS的連接
 
@@ -476,7 +476,7 @@ ns-eks-efs    Active   51s
 
 efs-id和server的地方依照建立的EFS修改
 
-![](./images/img_013.png)
+![EFS 檔案系統詳細資訊，Name 為 efs-eks、File system ID 是 fs-d8c8b999、mount target 3 個、狀態 Available](./images/img_013.png)
 
 ```yaml
 $vim create-efs-provisioner.yaml
@@ -627,7 +627,7 @@ deployment.apps/wordpress created
 
 最後可以透過DNS去access它，得到相同的結果
 
-![](./images/img_014.png)
+![改用 EFS 部署後以 DNS 存取的 WordPress 首頁，同樣顯示 TEST 站名與 Home、About、Blog、Contact 選單](./images/img_014.png)
 
 就介紹到這邊囉！
 
