@@ -546,3 +546,61 @@ Workers 設定變更後（每項都要實測，不要假設）：
 11. PageSpeed Insights（手機）確認 LCP < 2.5s、CLS < 0.1
 12. 抽 3 篇圖片最多的文章，確認總傳輸量下降幅度
 13. 全站爬一遍（`wget --spider -r` 或 Screaming Frog），確認改設定後沒有新增 404
+
+---
+
+## 效能基線（2026-10，PageSpeed Insights 手機）
+
+### 量測結果
+
+| 指標 | 值 | 分數 | 判讀 |
+|---|---|---|---|
+| SEO | — | **100** | on-page 工作全部驗證通過 |
+| Best Practices | — | **100** | — |
+| Accessibility | — | 89 → 修復中 | 見 [`accessibility.md`](./accessibility.md) |
+| Performance | — | **89** | 只有 FCP 一項在扣分 |
+| **FCP** | **2.8 s** | **0.58** | 唯一的重傷 |
+| LCP | 2.8 s | 0.84 | 與 FCP 同值 → 是被 FCP 拖著走 |
+| Speed Index | 4.5 s | 0.72 | — |
+| TBT | **0 ms** | **1.00** | 沒有 CPU 瓶頸 |
+| CLS | **0** | **1.00** | — |
+| 伺服器回應 | 10 ms | 1.00 | — |
+
+電腦版 99 分，沒有可做的。
+
+### 關鍵判讀：LCP 是純文字，圖片優化已無空間
+
+用 headless Chrome + CDP 實測，LCP 元素是 **`<h1>` 的文字**，不是圖片：
+
+```
+mobile（4x CPU + Slow 4G）  LCP 320 ms   CLS 0
+desktop                     LCP 228 ms   CLS 0
+```
+
+首頁 HTML 裡**一張 `<img>` 都沒有**（首屏卡片是 CSS 漸層），
+所以「換 WebP、加 fetchpriority、preload 首圖」這類手段對 LCP 全部無效。
+
+**LCP = FCP = 2.8 s 的意思是「第一帧畫不出來」**，不是「最大元素太慢」。
+要改善只能縮短首次繪製前的前置鏈。
+
+### 已做
+
+| 項目 | 內容 |
+|---|---|
+| 字型自託管 | 移除 `fonts.googleapis.com` + `fonts.gstatic.com` 兩個第三方來源，改成同源 `/fonts/*` + `immutable` 快取（見 commit `8426905`） |
+| 建置目標 | `build.target: es2020`，減少為舊瀏覽器多轉譯的產物（`d2a8f1c`） |
+
+原本的字型 CSS 已經是 `media="print" onload` 的非阻塞載入，所以這兩項
+**不會戲劇性改變 FCP**，主要收益是拿掉兩個第三方連線與其快取不確定性。
+
+### 還沒做：內嵌關鍵 CSS
+
+目前唯一阻塞首次繪製的是自己那張樣式表（`/assets/index-*.css`，gzip 13.7 KB），
+PSI 的 `render-blocking-insight` 也是指這一張。
+
+`unused-css-rules` 顯示其中約 11 KB 在首頁用不到 → 真正關鍵的只有 3～4 KB。
+做法是在 `script/prerender.tsx` 產頁時把 CSS 內嵌進 `<head>` 並移除 `<link>`。
+
+**代價**：每頁 HTML 多 13 KB（gzip），且失去 CSS 的跨頁快取。
+因為 HTML 本來就是 `max-age=0` 每次重驗，冷啟動訪客是純賺、回訪者是純虧。
+**建議等 GSC 觀察期結束、確認目前改動的效果後再評估。**
