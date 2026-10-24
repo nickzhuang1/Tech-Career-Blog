@@ -2,6 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 字型自託管（原本從 fonts.googleapis.com + fonts.gstatic.com 抓）：
+   移除兩個第三方來源的 DNS／TLS 往返，也避免訪客 IP 被 Google 記錄。
+
+   兩個檔案都是 Google 的 latin 子集可變字型，加 unicode-range 讓中文（不在範圍內）
+   直接走系統字型，不會為了中文去下載西文字型。
+
+   檔名帶 -v1 是因為 /fonts/* 設了 immutable 快取（見 client/public/_headers）；
+   換字型時要一起改檔名與這裡的 src，否則訪客會一直用到舊檔。
+   來源：https://fonts.googleapis.com/css2?family=...&display=swap */
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/plus-jakarta-sans-latin-v1.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-latin-v1.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
   --button-outline: rgba(0,0,0, .10);
   --badge-outline: rgba(0,0,0, .05);
@@ -45,8 +75,11 @@
   --chart-3: 170 75% 40%;
   --chart-4: 330 80% 55%;
   --chart-5: 25 80% 50%;
-  --font-sans: 'Plus Jakarta Sans', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  /* 西文字型只涵蓋 latin 子集，中文要靠後面的系統字型鏈；
+     沒有列出 PingFang／JhengHei 時，Windows 會退到較醜的預設中文字型 */
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', 'Noto Sans TC', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   --radius: .625rem;
   --shadow-2xs: 0 1px 2px hsl(240 10% 50% / 0.04);
   --shadow-xs: 0 1px 3px hsl(240 10% 50% / 0.06);
