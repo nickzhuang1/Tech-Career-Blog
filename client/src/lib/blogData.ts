@@ -55,6 +55,15 @@ export const categories: Category[] = [
 export const blogPosts: BlogPost[] = [
   // 2026 新增文章
   {
+    id: "blog-health-check",
+    title: "兩年之後，我幫自己的部落格做了一次 SEO 健檢",
+    date: "2026-10-26",
+    category: "ai",
+    tags: ["SEO", "Cloudflare", "效能優化", "無障礙", "技術筆記"],
+    excerpt: "部落格跑了兩年多，Lighthouse 看起來沒問題，直到做了一次完整健檢：www 進不來、子網域都在服務同一份內容、沒有信箱卻留著舊主機的 DKIM 公鑰。這篇記錄這輪怎麼查、怎麼修，還有幾個決定不做的取捨。",
+    readTime: "20 min",
+  },
+  {
     id: "nvidia-cert-fathers-day",
     title: "父親節快樂：NVIDIA證書+1的故事",
     date: "2026-08-08",

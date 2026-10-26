@@ -5,8 +5,20 @@
     <link>https://nickzhuang.com/</link>
     <description>分享 AI 技術實戰、系統架構與職涯思索。12 年軟體開發經驗，從前端到後端、從雲端到人工智慧。這裡有 K8S 與生成式 AI 的實作筆記、NVIDIA 認證備考心法，以及技術管理路上的職涯觀察。</description>
     <language>zh-TW</language>
-    <lastBuildDate>Sat, 08 Aug 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 26 Oct 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://nickzhuang.com/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>兩年之後，我幫自己的部落格做了一次 SEO 健檢</title>
+      <link>https://nickzhuang.com/posts/blog-health-check/</link>
+      <guid isPermaLink="true">https://nickzhuang.com/posts/blog-health-check/</guid>
+      <pubDate>Mon, 26 Oct 2026 00:00:00 GMT</pubDate>
+      <description>部落格跑了兩年多，Lighthouse 看起來沒問題，直到做了一次完整健檢：www 進不來、子網域都在服務同一份內容、沒有信箱卻留著舊主機的 DKIM 公鑰。這篇記錄這輪怎麼查、怎麼修，還有幾個決定不做的取捨。</description>
+      <category>SEO</category>
+      <category>Cloudflare</category>
+      <category>效能優化</category>
+      <category>無障礙</category>
+      <category>技術筆記</category>
+    </item>
     <item>
       <title>父親節快樂：NVIDIA證書+1的故事</title>
       <link>https://nickzhuang.com/posts/nvidia-cert-fathers-day/</link>
@@ -288,15 +300,6 @@
       <description>HyperNetwork 是用神經網路去生成模型參數的微調方法，由早期參與 Stable Diffusion 開發的 Novel AI 提出。這篇說明它怎麼從模型內部找出相似參數生成同風格圖片，以及跟 LoRA 的差別。</description>
       <category>Gen AI</category>
       <category>Stable Diffusion</category>
-    </item>
-    <item>
-      <title>LoRA，微調方法的新突破</title>
-      <link>https://nickzhuang.com/posts/lora-theory/</link>
-      <guid isPermaLink="true">https://nickzhuang.com/posts/lora-theory/</guid>
-      <pubDate>Wed, 04 Oct 2023 00:00:00 GMT</pubDate>
-      <description>LoRA 是微軟 2021 年提出的微調方法：凍結原本訓練好的權重，只訓練額外加入的低秩矩陣，就能用很低成本把模型導向特定風格。這篇講它的演算法、為何有效與實際限制。</description>
-      <category>Gen AI</category>
-      <category>LoRA</category>
     </item>
   </channel>
 </rss>
