@@ -25,6 +25,8 @@ Nick Zhuang 的個人技術部落格。React SPA + 建置時靜態預渲染（SS
 SEO 健檢報告與待辦分級見 [`docs/seo-audit.md`](docs/seo-audit.md)。
 無障礙基線（色票規則、axe 驗證方式）見 [`docs/accessibility.md`](docs/accessibility.md)。
 DNS 與主機清理記錄見 [`docs/dns-and-hosting-cleanup.md`](docs/dns-and-hosting-cleanup.md)。
+這一輪整理的完整心得（含 Cloudflare / DNS 的來龍去脈）見
+[`docs/optimization-retrospective.md`](docs/optimization-retrospective.md)。
 
 ---
 
