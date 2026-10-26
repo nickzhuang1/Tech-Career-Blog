@@ -15,6 +15,7 @@
       <description>部落格跑了兩年多，Lighthouse 看起來沒問題，直到做了一次完整健檢：www 進不來、子網域都在服務同一份內容、沒有信箱卻留著舊主機的 DKIM 公鑰。這篇記錄這輪怎麼查、怎麼修，還有幾個決定不做的取捨。</description>
       <category>SEO</category>
       <category>Cloudflare</category>
+      <category>架站</category>
       <category>效能優化</category>
       <category>無障礙</category>
       <category>技術筆記</category>
@@ -133,6 +134,7 @@
       <description>出書之後發現網路上的文章太少，於是興起自建部落格的想法，也決定離開 WordPress。這篇記錄搬到 Notion 的取捨、發文流程怎麼簡化，以及用 Cloudflare Worker 補上平台不足的地方。</description>
       <category>人生探索</category>
       <category>規劃</category>
+      <category>架站</category>
     </item>
     <item>
       <title>2025 AIA 春季論壇: 開源模型的衝擊與對應</title>
