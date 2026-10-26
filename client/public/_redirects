@@ -6,6 +6,7 @@
 /posts/glm-5.2-rd-leader-reflections /posts/glm-rd-leader-reflections/ 301
 
 # 注意：不要加 `/* /index.html 200` 萬用回退——
-# Cloudflare Pages 驗證器會因 destination 自我匹配而報 100324 無限循環錯誤。
+# Cloudflare 的 _redirects 驗證器會因 destination 自我匹配而報 100324 無限循環錯誤
+# （Workers 靜態資產與 Pages 共用同一套規則，兩者都會擋）。
 # SPA 回退由 404.html（build.ts 複製自 index.html）負責，
 # 所有 SEO 路由則由 prerender.tsx 產出實體靜態 HTML。

@@ -1,6 +1,6 @@
 # DNS 與主機清理記錄
 
-> 2026-10 完成。目的是把舊 WordPress 時期（HostGator 主機）留在 DNS 裡的設定
+> 2026-10 完成。目的是把舊 WordPress 時期（Bluehost 主機）留在 DNS 裡的設定
 > 清乾淨，讓 `nickzhuang.com` 只有一條明確的服務路徑、不留下可被冒用的憑證宣告。
 >
 > 這份檔案記錄**發現過程**與**現況**，方便日後調整 DNS 或加子網域時對照。
@@ -18,9 +18,22 @@
 
 ### 背景
 
-現在的站是 Cloudflare Workers 靜態資產，手動上傳 `dist/public`。舊站是 WordPress，
-架在 HostGator。搬遷時只把 `nickzhuang.com` 綁到新的 Worker，
+現在的站是 Cloudflare Workers 靜態資產，手動上傳 `dist/public`。這個網域換過三次家：
+
+| 時期 | 站台 | 備註 |
+|---|---|---|
+| ~2024 | WordPress（Bluehost）| 網域在 GoDaddy 買、DNS 交給 Cloudflare |
+| 2025-04 | Notion + Cloudflare Worker（Fruition 式跳轉）| 只有首頁進得了索引，流量歸零 |
+| 2026-03 ~ | React 靜態站 | 部署在 **Workers 靜態資產**，手動上傳 `dist/public` |
+
+最早那次搬遷只把 `nickzhuang.com` 綁到新的 Worker，
 **舊的 DNS 記錄沒有一起清掉** —— 於是留下幾個互相矛盾的路徑。
+其餘兩次都沿用同一個網域與 Worker，所以問題一直沒被發現，直到 2026-10 才整個翻出來。
+
+> **Workers 與 Pages 的區別**：Cloudflare 後台把兩者放在同一個頁面（Workers & Pages），
+> `_headers`、`_redirects`、404 處理的規則也幾乎相同，所以很容易混稱。
+> 本站在 2026-03 之後一直是 **Workers 靜態資產**（證據：`workers.dev` 子網域存在、
+> `not_found_handling: 404-page` 的設定方式）。早期文章裡寫的「Pages」是同一個後台頁面的俗稱。
 
 ### 症狀（清理前）
 
@@ -133,9 +146,9 @@ curl -s https://nickzhuang.com/      | grep -o 'rel="canonical" href="[^"]*'
 
 | 記錄 | 值 | 問題 |
 |---|---|---|
-| SPF | `v=spf1 ip4:162.241.218.148 a mx include:websitewelcome.com ~all` | `~all` 是 **softfail** —— 收件端通常「標記可疑但照樣收下」。而 `include:websitewelcome.com` 與那組 IP 都是 **HostGator** 的，早就不用了 |
+| SPF | `v=spf1 ip4:162.241.218.148 a mx include:websitewelcome.com ~all` | `~all` 是 **softfail** —— 收件端通常「標記可疑但照樣收下」。而 `include:websitewelcome.com` 是 Bluehost（Newfold 集團）cPanel 的預設值，`ip4:162.241.218.148` 反查就是 `box5570.bluehost.com` —— 兩者都是舊主機留下的授權 |
 | DMARC | （無） | 完全沒有政策，Gmail／Outlook 想擋也沒有依據 |
-| DKIM | `default._domainkey`（有記錄） | **最危險的一項**：DNS 裡留著 HostGator 時代的**公鑰**，對應的**私鑰在舊主機上**。誰能存取那台舊機，就能簽出「通過 DKIM 驗證」的信 |
+| DKIM | `default._domainkey`（有記錄） | **最危險的一項**：DNS 裡留著舊主機時代的**公鑰**，對應的**私鑰在舊主機上**。誰能存取那台舊機，就能簽出「通過 DKIM 驗證」的信 |
 | MX | （無） | 從來沒有收信服務 |
 
 ### 修復：SPF 硬拒絕 + DMARC reject + 刪除舊公鑰
@@ -217,7 +230,7 @@ dig +short default._domainkey.nickzhuang.com TXT # 應為空
 | 服務 | SPF 需要加 | DKIM |
 |---|---|---|
 | Google Workspace / Gmail 轉寄 | `include:_spf.google.com` | 由 Google 提供 `google._domainkey` |
-| 主機商（如 HostGator） | 該主機商提供的 `include:` | 由主機商提供 |
+| 主機商（如 Bluehost） | 該主機商提供的 `include:` | 由主機商提供 |
 | 自架 SMTP | `ip4:<你的 IP>` | 自行產生金鑰並發布公鑰 |
 
 DMARC 建議的調校節奏：先用 `p=none` 觀察 1–2 週的報告，確認沒有正常信件被誤擋，
