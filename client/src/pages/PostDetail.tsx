@@ -92,7 +92,10 @@ function relatedPosts(current: (typeof blogPosts)[number], count = 3) {
         (p.series && p.series === current.series ? 1 : 0);
       return { post: p, score };
     })
-    .filter((x) => x.score > 0)
+    // 門檻 2 分＝至少一個共同標籤。只有「同分類」的 1 分不算相關：
+    // 全站分類只有 6 個，光憑分類會把毫無關係的文章湊在一起
+    // （實測：SEO 健檢文底部曾出現 NVIDIA 考照與研發主管心得）。
+    .filter((x) => x.score >= 2)
     .sort((a, b) => b.score - a.score || (a.post.date < b.post.date ? 1 : -1))
     .slice(0, count)
     .map((x) => x.post);
