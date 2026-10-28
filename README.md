@@ -1,6 +1,6 @@
 # Nick's Blog — AI 異想封印 | CTO 的爐邊雜談
 
-Nick Zhuang 的個人技術部落格。React SPA + 建置時靜態預渲染（SSG），79 篇文章以手寫 Markdown 保存，
+Nick Zhuang 的個人技術部落格。React SPA + 建置時靜態預渲染（SSG），80 篇文章以手寫 Markdown 保存，
 每一頁都輸出完整的 title / description / canonical / OG / JSON-LD 靜態 HTML。
 
 - 專案首頁：https://nickzhuang.com
@@ -15,7 +15,7 @@ Nick Zhuang 的個人技術部落格。React SPA + 建置時靜態預渲染（SS
 |------|------|
 | Frontend | React 18 + Vite 7 + TypeScript + TailwindCSS + shadcn/ui |
 | Routing | wouter（client-side SPA） |
-| 預渲染 | `script/prerender.tsx`，建置時以 `react-dom/server` 輸出 90 個靜態頁 |
+| 預渲染 | `script/prerender.tsx`，建置時以 `react-dom/server` 輸出 91 個靜態頁 |
 | 圖片 | 建置時用 sharp 轉 WebP（寬度上限 1600）並產生尺寸表 |
 | OG 圖 | 建置時用 sharp 合成 1200×630 標題卡（每篇專屬） |
 | 伺服器 | Express 僅供本機預覽；正式站是純靜態 |
@@ -54,12 +54,12 @@ DNS 與主機清理記錄見 [`docs/dns-and-hosting-cleanup.md`](docs/dns-and-ho
 | Gen AI | 31（其中 30 篇屬 2023 鐵人賽系列） |
 | K8S & Docker | 30（其中 30 篇屬 2019 鐵人賽系列） |
 | AI | 12 |
-| 人生探索 | 3 |
+| 人生探索 | 4 |
 | 職涯 | 2 |
 | 深度學習 | 1 |
 
 系列：`ironman-2023`（30 篇）、`ironman-2019`（30 篇）。
-Sitemap 共 90 筆 = 6 靜態頁 + 5 聚合頁 + 79 篇文章。
+Sitemap 共 91 筆 = 6 靜態頁 + 5 聚合頁 + 80 篇文章。
 
 ---
 
@@ -106,9 +106,17 @@ pnpm build
 
 - 圖片用**相對路徑**（`./images/x.png`）：webp 轉檔、`width`/`height`、首圖 eager 都靠這個對應。
   外部圖片網址不會被最佳化，會影響 CLS。
+- **封面圖**放 `images/img_001.png`，Markdown 第一行用 `![](./images/img_001.png)` 引用。
+  建置時會轉 WebP，首圖自動變成 `loading="eager"` + `fetchpriority="high"`（它是 LCP 元素）。
+  建議 1200×675（16:9，長邊上限 1600）；`alt` 留空，因為卡上的標題字與 h1 重複，唸出來只是噪音。
 - **不要寫 `Author:` / `Type:` 這種行**：沒有程式解析，會被當純文字渲染在內文裡。
+- **相關文章靠標籤決定**：`PostDetail.tsx` 的評分是「共同標籤 ×2 + 同分類 ×1」，門檻 2 分
+  （至少一個共同標籤）。同分類不算數，否則只有 6 個分類的站會把無關文章湊在一起。
+  想讓新文跟舊文互指，就去補一個共同標籤（例如自架站三部曲共用 `架站`）。
 - `readTime` 是手寫的欄位，可用 `--read` 指定。
 - 修訂既有文章時在 blogData 該篇加 `updated: "2026-09-01"`，頁面與 JSON-LD 會顯示更新時間。
+  但**只在這篇內容有實質修訂時才填**：搬家、清洗、換圖、調格式都不算，
+  硬填會讓 sitemap 的 `lastmod` 變成雜訊（理由寫在 `blogData.ts` 該欄位的註解）。
 
 ---
 
@@ -118,14 +126,14 @@ pnpm build
 
 | 步驟 | 腳本 | 產出 |
 |------|------|------|
-| 1 | `script/generate-sitemap.ts` | `client/public/sitemap.xml`（90 筆，全部結尾斜線） |
+| 1 | `script/generate-sitemap.ts` | `client/public/sitemap.xml`（91 筆，全部結尾斜線） |
 | 2 | `script/generate-feed.ts` | `client/public/rss.xml`（最新 30 篇） |
-| 3 | `script/optimize-images.ts` | 337 張 WebP + `client/src/lib/imageMeta.json`（132.8 MB → 20.4 MB） |
+| 3 | `script/optimize-images.ts` | 338 張 WebP + `client/src/lib/imageMeta.json`（132.8 MB → 20.4 MB） |
 | 4 | `vite build` | `dist/public`（前端 bundle 與靜態資源） |
 | 5 | `optimize-images（apply）` | 以 WebP 取代原圖並移除原檔 |
-| 6 | `script/generate-og.ts` | 84 張 1200×630 標題卡 → `dist/public/og/` |
+| 6 | `script/generate-og.ts` | 85 張 1200×630 標題卡 → `dist/public/og/` |
 | 7 | esbuild | `dist/index.cjs`（本機預覽用，**不需上傳**） |
-| 8 | `script/prerender.tsx` | 90 個含完整 meta 的靜態 HTML ＋ `404.html`（noindex、無 canonical） |
+| 8 | `script/prerender.tsx` | 91 個含完整 meta 的靜態 HTML ＋ `404.html`（noindex、無 canonical） |
 
 `script/` 底下的建置腳本不在 `tsconfig.json` 的 include 範圍內，型別檢查走獨立設定：
 
@@ -134,7 +142,7 @@ pnpm typecheck         # client + server + script 三邊都檢查
 pnpm typecheck:script  # 只檢查建置腳本（改 script/ 之後先跑這個）
 ```
 
-最終 `dist/public` 約 46 MB、703 個檔案。
+最終 `dist/public` 約 43 MB、721 個檔案。
 
 ---
 
@@ -148,13 +156,18 @@ pnpm typecheck:script  # 只檢查建置腳本（改 script/ 之後先跑這個�
 ```bash
 curl -sI https://nickzhuang.com/posts/<id>/ | head -1                        # 200
 curl -s https://nickzhuang.com/posts/<id>/ | grep -o '<link rel="canonical"[^>]*>'
-curl -s https://nickzhuang.com/sitemap.xml | grep -c '<loc>'                  # 90
+curl -s https://nickzhuang.com/sitemap.xml | grep -c '<loc>'                  # 91
 curl -sI https://nickzhuang.com/no-such-page | head -1                        # 404
 curl -s https://nickzhuang.com/404.html | grep -o 'noindex\|rel="canonical"'  # 只有 noindex
 curl -sI https://nickzhuang.com/articles/<id>/images/<file>.webp | grep -i cache-control
 ```
 
 `client/public/_headers` 控制快取（`/assets/*` immutable、`/articles/*` 30 天）。
+
+Worker 上有兩個自訂網域：apex 與 `www`。兩者都回 200、canonical 一律指回 apex
+（`www` 的 Redirect Rule 會被自訂網域優先序蓋掉，設了也不會動）。
+若 GSC 回報「重複網頁；Google 選擇的標準網頁不同」，先確認是不是 `www` 被 Google 選為標準版 ——
+細節與待決方案見 [`docs/dns-and-hosting-cleanup.md`](docs/dns-and-hosting-cleanup.md)。
 
 ---
 
@@ -183,7 +196,7 @@ curl -sI https://nickzhuang.com/articles/<id>/images/<file>.webp | grep -i cache
 `id` 不是合法 slug、標題超過 SERP 寬度、`updated` 早於 `date`、`category` 不在清單內。
 
 沒放進 hook 的三件事與理由寫在 `.husky/pre-commit` 的註解：Prettier／lint-staged
-（這個 repo 從未用過，硬加會把 79 篇 Markdown 整批重排）、`pnpm build`（40 秒以上，
+（這個 repo 從未用過，硬加會把 80 篇 Markdown 整批重排）、`pnpm build`（40 秒以上，
 且 `dist` 是手動上傳的）、測試（repo 沒有測試套件，`check:posts` 就是這個站的測試）。
 
 急用時可 `git commit --no-verify` 跳過；`pnpm install` 會透過 `prepare` 自動裝回 hook。
@@ -194,7 +207,7 @@ curl -sI https://nickzhuang.com/articles/<id>/images/<file>.webp | grep -i cache
 
 | 檔案 | 說明 |
 |------|------|
-| `client/src/lib/blogData.ts` | 79 篇文章 metadata、6 分類、2 系列、about 資料 |
+| `client/src/lib/blogData.ts` | 80 篇文章 metadata、6 分類、2 系列、about 資料 |
 | `client/src/lib/collections.ts` | 聚合頁定義與導讀文案 |
 | `client/src/lib/imageMeta.json` | 圖片尺寸對照表（建置產物，**需進版控**，否則 `pnpm dev` 會失敗） |
 | `client/src/pages/PostDetail.tsx` | 文章頁與自訂 Markdown 渲染器（圖片改寫、alt fallback、H1 降階） |
