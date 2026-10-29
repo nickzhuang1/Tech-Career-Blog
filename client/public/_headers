@@ -19,3 +19,8 @@
 
 /og-image.png
   Cache-Control: public, max-age=604800
+
+# RSS 是給閱讀器吃的，Google 抓了也不會索引（會一直掛在「已檢索-目前尚未建立索引」）。
+# noindex 不影響閱讀器，只是把這一格從 GSC 報告清掉。
+/rss.xml
+  X-Robots-Tag: noindex
