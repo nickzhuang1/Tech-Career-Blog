@@ -62,6 +62,9 @@ export const blogPosts: BlogPost[] = [
     tags: ["SEO", "Cloudflare", "架站", "效能優化", "無障礙", "技術筆記"],
     excerpt: "部落格跑了兩年多，Lighthouse 看起來沒問題，直到做了一次完整健檢：www 進不來、子網域都在服務同一份內容、沒有信箱卻留著舊主機的 DKIM 公鑰。這篇記錄這輪怎麼查、怎麼修，還有幾個決定不做的取捨。",
     readTime: "20 min",
+    // 2026-11-09：第一節的「www 回 200 靠 canonical 合併」被 GSC 數據推翻，
+    // 改成獨立轉址 Worker。這是實質修訂，不是格式調整，所以填 updated。
+    updated: "2026-11-09",
   },
   {
     id: "nvidia-cert-fathers-day",

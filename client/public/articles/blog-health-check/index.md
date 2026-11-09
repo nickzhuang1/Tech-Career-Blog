@@ -73,6 +73,21 @@ $ curl -s https://www.nickzhuang.com/ | grep -o 'rel="canonical" href="[^"]*'
 rel="canonical" href="https://nickzhuang.com/
 ```
 
+這個結論只對了一半，兩週後我自己推翻。
+
+GSC 的覆蓋率報告裡，www 的網址有 41 筆一直掛在未索引清單上：21 筆「頁面會重新導向」、20 筆「替代頁面」。canonical 確實會讓 Google 合併，但它只是建議；兩個主機各有一份完整的副本，對爬取預算跟訊號整併都是持續的損耗。
+
+要真的 301，就得有一個地方能寫邏輯。偏偏我的主站是「只有靜態資源」的 Worker，沒有 script 可以塞判斷，Redirect Rule 又被自訂網域蓋掉，兩邊都是死路。
+
+所以最後的做法是：另外建一支只做轉址的 Worker，把它綁在 www 上。請求一進來就回 301，順手補上結尾斜線，讓它直接落在最終會回 200 的那個網址：
+
+```bash
+$ curl -sI 'https://www.nickzhuang.com/posts?filter=K8S' | grep -i location
+location: https://nickzhuang.com/posts/?filter=K8S
+```
+
+一支 Worker 只做一件事看起來有點蠢，但這是唯一能繞過優先序的做法。這裡學到的不是「當初想錯了」，而是：canonical 是建議，轉址是命令。
+
 順便提一個容易搞混的地方：Cloudflare 把 Workers 跟 Pages 放在同一個後台頁面，`_headers`、`_redirects` 的規則也幾乎一樣，所以我一直以為自己是放在 Pages 上，其實是 Worker 的靜態資產。
 
 ## 二、沒有信箱，不代表不會被冒用
