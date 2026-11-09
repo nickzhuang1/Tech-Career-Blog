@@ -91,27 +91,42 @@ $ curl -s -o /dev/null -w '%{http_code}' https://random-sub-xyz.nickzhuang.com/
 ### 清理後現況
 
 ```
-nickzhuang.com          → 200（Worker 自訂網域）
-www.nickzhuang.com      → 200（Worker 自訂網域）
+nickzhuang.com          → 200（主站 Worker 自訂網域）
+www.nickzhuang.com      → 301 → https://nickzhuang.com/…（www-redirect Worker）
 random-sub-xyz…         → 無記錄
 imap / pop / smtp / mail → 無記錄
 ```
 
-`www` 回的是 **200 而不是 301**：Worker 自訂網域優先於 Redirect Rule，所以那條
-轉址規則實際上空轉。**不需要處理** —— 每一頁的 canonical 都是絕對網址
-`https://nickzhuang.com/…`，Google 會把 www 與 apex 合併成同一個頁面：
+### 為什麼 www 一開始只能回 200
 
-```bash
-$ curl -s https://www.nickzhuang.com/ | grep -o 'rel="canonical" href="[^"]*'
-rel="canonical" href="https://nickzhuang.com/
-```
+第一輪修復時 `www` 綁的是**主站**的自訂網域，而 Worker 自訂網域優先於 Redirect Rule，
+所以那條「www → apex 301」的規則實際上空轉。當時的判斷是「不影響索引」：每頁 canonical
+都是絕對網址 `https://nickzhuang.com/…`，Google 會自己把兩個主機合併。
+
+### 後來還是改成 301 了（2026-11）
+
+GSC 的覆蓋率報告顯示這個判斷不夠：`www` 的 41 個網址（21 筆「頁面會重新導向」、
+20 筆「替代頁面」）一直掛在未索引清單裡，而且 `www` 與 apex 各有一份完整副本，
+對爬取預算與訊號整併都是持續的損耗。
+
+主站是「只有靜態資源」的 Worker，沒有 script 可以寫判斷，因此**另建一支只做轉址的
+Worker** 綁在 `www` 上：`workers/www-redirect/`（含部署步驟與 17 個案例的行為測試）。
+
+| | 之前 | 現在 |
+|---|---|---|
+| `www` 綁在哪 | 主站 Worker 自訂網域 | `www-redirect` Worker 自訂網域 |
+| 回應 | 200（內容與 apex 相同）| 301 → apex |
+| GSC 上的 www 變體 | 41 筆掛在未索引 | 收斂到 apex |
+
+轉址 Worker 會順手補上結尾斜線（最後一段含「.」視為檔案不加），
+讓 301 直接落在最終回 200 的網址上，不必再讓 apex 多 307 一次。
 
 ### 驗證指令
 
 ```bash
-# 1. apex 與 www 都要 200
-curl -s -o /dev/null -w '%{http_code}\n' https://nickzhuang.com/
-curl -s -o /dev/null -w '%{http_code}\n' https://www.nickzhuang.com/
+# 1. apex 要 200、www 要 301
+curl -s -o /dev/null -w '%{http_code}\n' https://nickzhuang.com/            # 200
+curl -sI https://www.nickzhuang.com/ | head -2                              # 301 + location
 
 # 2. 隨機子網域必須解析不到
 dig +short random-sub-xyz.nickzhuang.com A @8.8.8.8     # 應為空
@@ -119,9 +134,9 @@ dig +short random-sub-xyz.nickzhuang.com A @8.8.8.8     # 應為空
 # 3. 郵件子網域必須解析不到
 dig +short imap.nickzhuang.com A @8.8.8.8               # 應為空
 
-# 4. www 與 apex 的 canonical 必須完全相同
-curl -s https://www.nickzhuang.com/  | grep -o 'rel="canonical" href="[^"]*'
-curl -s https://nickzhuang.com/      | grep -o 'rel="canonical" href="[^"]*'
+# 4. www 的轉址要保留路徑與查詢字串
+curl -sI 'https://www.nickzhuang.com/posts?filter=K8S' | grep -i '^location'
+#   預期 location: https://nickzhuang.com/posts/?filter=K8S
 ```
 
 ### 未來加子網域時注意

@@ -164,10 +164,11 @@ curl -sI https://nickzhuang.com/articles/<id>/images/<file>.webp | grep -i cache
 
 `client/public/_headers` 控制快取（`/assets/*` immutable、`/articles/*` 30 天）。
 
-Worker 上有兩個自訂網域：apex 與 `www`。兩者都回 200、canonical 一律指回 apex
-（`www` 的 Redirect Rule 會被自訂網域優先序蓋掉，設了也不會動）。
-若 GSC 回報「重複網頁；Google 選擇的標準網頁不同」，先確認是不是 `www` 被 Google 選為標準版 ——
-細節與待決方案見 [`docs/dns-and-hosting-cleanup.md`](docs/dns-and-hosting-cleanup.md)。
+兩個自訂網域：apex 綁**主站** Worker（靜態資源，回 200），`www` 綁
+[`workers/www-redirect/`](workers/www-redirect/README.md)（只做 301 → apex）。
+`www` 之所以要獨立一支 Worker，是因為自訂網域優先於 Redirect Rule ——
+只要 `www` 還綁在主站上，任何轉址規則都不會生效。詳見
+[`docs/dns-and-hosting-cleanup.md`](docs/dns-and-hosting-cleanup.md)。
 
 ---
 

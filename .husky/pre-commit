@@ -10,6 +10,8 @@
 #     Markdown 與手動排版的程式碼整批重排，diff 會蓋掉真正的改動。
 #   - pnpm build：要 40 秒以上，而且 dist 是手動上傳的，不適合每次提交都跑。
 #   - 測試：repo 沒有測試套件（check:posts 就是這個站的測試）。
+#     唯一的例外是 www-redirect Worker —— 它不在建置流程裡，錯了不會有任何徵兆，
+#     所以用 check:worker 跑那 17 個案例（純 node，0.1 秒）。
 
 set -e
 
@@ -18,6 +20,9 @@ pnpm -s typecheck
 
 # 不用管線：husky 用 sh 執行，POSIX sh 沒有 pipefail，
 # `cmd | tail` 會把 cmd 的失敗碼吃掉，錯誤就擋不住了。
+echo "▸ check:worker（www 轉址行為）"
+pnpm -s check:worker
+
 echo "▸ check:posts（有錯誤才擋，警告不擋）"
 LOG="$(mktemp -t check-posts)"
 if pnpm -s check:posts >"$LOG" 2>&1; then

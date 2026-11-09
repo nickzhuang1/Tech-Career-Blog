@@ -10,6 +10,7 @@
     "sitemap": "tsx script/generate-sitemap.ts",
     "new:post": "tsx script/new-post.ts",
     "check:posts": "tsx script/new-post.ts --check",
+    "check:worker": "node workers/www-redirect/test.mjs",
     "start": "NODE_ENV=production node dist/index.cjs",
     "check": "tsc",
     "db:push": "drizzle-kit push",
