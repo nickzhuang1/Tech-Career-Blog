@@ -580,6 +580,66 @@ https://www.nickzhuang.com/post-sitemap.xml
 無備份），因此無法建立「舊文章網址 → 新站 `/posts/<id>/`」的對照。
 舊站累積的外鏈無法承接，這點接受現況；新站往後的內外鏈建設從零開始累積。
 
+### P3-9 GSC 覆蓋率報告的判讀方式（2026-11 建立）
+
+GSC 匯出的覆蓋率報告（`logs/` 底下的 xlsx，不進版控）幾乎每次都會讓人想動手改程式，
+但**絕大多數的「問題」是爬蟲的歷史記憶，不是現在的缺陷**。判讀照這個順序走：
+
+#### 第一步：永遠先看「上次檢索」日期
+
+報告列的每一筆都附一個日期。**沒有先確認這個日期，後面的判斷都是空的。**
+xlsx 匯出是 Excel 序號（1899-12-30 起算的天數），換算方式：
+
+```python
+import datetime
+datetime.date(1899, 12, 30) + datetime.timedelta(days=46309)   # → 2026-10-14
+```
+
+GSC 介面上直接顯示 `YYYY-MM-DD`，只有匯出檔需要換算。
+
+#### 第二步：對照站台的重大變更時間軸
+
+| 日期 | 變更 | 影響 |
+|---|---|---|
+| 2026-10-23 | **靜態預渲染（SSG）上線** | 之前全站共用一份 HTML，canonical 寫死指首頁 |
+| 2026-10-24 | www 改為 Worker 自訂網域 | www 從壞掉（403/526）變成 200 |
+| 2026-11-09 | 站內連結補結尾斜線 | 不再製造 `沒有斜線 → 307` 的網址 |
+| 2026-11-09 | www 改為獨立轉址 Worker（301）| www 不再是第二份副本 |
+
+**SSG 上線（2026-10-23）是最大的一條分界線。** 在那之前，`client/index.html` 的 canonical 是：
+
+```html
+<link rel="canonical" href="https://nickzhuang.com" />
+```
+
+每一個網址都回這份殼，所以 Google 當時的結論是「這些頁都是首頁的替代頁」——
+不是它判斷錯誤，是**它看到的世界就是那樣**。
+
+#### 第三步：用三類對照歸類，而不是逐筆修
+
+| GSC 分類 | 抓取日期在 SSG 之前會怎樣 | 現在的成因 | 處理 |
+|---|---|---|---|
+| 替代頁面（有適當的標準標記）| 全部被併到首頁 | www 副本、`?filter=` 變體 | 改架構（www 301）後等重爬 |
+| 頁面會重新導向 | 查詢變體、缺斜線 | 站內連結缺斜線、www、http | 已修，等重爬 |
+| 找不到網頁（404）| 舊 no-slash 或 Notion 時代 URL | 沒有對應頁面 | 有對照就 301，沒有就留 404 |
+
+**2026-11-09 的實例**：報告顯示 132 筆未索引，組成是
+87（轉址）+ 37（替代頁面）+ 5（404）+ 3（已檢索未索引）= 132，
+而「已建立索引」是 96 頁 —— 也就是 91 個正式網址全都在索引裡。
+換句話說，**沒有一頁真實內容被排除**，清單裡全是網址變體。
+
+其中兩筆特別值得記：
+
+- `/certificates/`（抓 2026-10-14）與 `/posts/k8s-ingress-vol/`（抓 2026-10-12）
+  在 SSG 上線前被抓到，當時 canonical 指首頁 → 被歸類為「首頁的替代頁」。
+  現在兩頁都是 200 + 自我 canonical，**程式碼不用改**，要求建立索引即可。
+- `/contact/` 與 `/posts/cursor-ai-award/` 的「Google 選擇的標準網頁不同」
+  在重抓後自行消失（`網頁` 欄位歸 0、`驗證` 欄位變「通過」）。
+
+#### 第四步：修正是否生效，看「抓取日期是否晚於修正日」
+
+這是唯一有效的驗收標準。修正日之前的抓取結果，不管看起來多糟，都不構成立即處理的理由。
+
 ---
 
 ## 七、建議執行順序
@@ -602,19 +662,41 @@ https://www.nickzhuang.com/post-sitemap.xml
 
 Workers 設定變更後（每項都要實測，不要假設）：
 
-1. `curl -I https://nickzhuang.com/posts/<id>` → **200**（不是 307）
-2. `curl -I https://nickzhuang.com/posts` → **200**
-3. `curl -I https://nickzhuang.com/about/` → 307 回 `/about`（舊 URL 收斂）
+1. `curl -I https://nickzhuang.com/posts/<id>/` → **200**（結尾斜線是標準網址）
+2. `curl -I https://nickzhuang.com/posts/` → **200**
+3. `curl -I https://nickzhuang.com/about` → **307** 回 `/about/`（無斜線版本收斂到標準網址）
 4. `curl -I https://nickzhuang.com/nonexistent` → **404**（`404-page` 仍生效）
 5. `curl -I https://nickzhuang.com/articles/nvidia-cert-pro/images/AI-Factory.png` → `cache-control` 應為 `max-age=2592000` 以上
 6. `curl -I https://nickzhuang.com/_headers` → 404（確認設定檔沒有被公開提供）
 7. 文章頁 canonical 與實際回 200 的 URL 完全一致
 8. Search Console → 網址審查 → 測試實際網址 → 確認已提交索引
 9. Search Console → Sitemap 重新提交；檢查「覆蓋範圍」是否還有「頁面會重新導向」
+   （先確認那些網址的**上次檢索日期**晚於修正日，否則看到的是舊資料 —— 見 P3-9）
 10. Rich Results Test 驗證 `BlogPosting` / `BreadcrumbList` / `Person`
 11. PageSpeed Insights（手機）確認 LCP < 2.5s、CLS < 0.1
 12. 抽 3 篇圖片最多的文章，確認總傳輸量下降幅度
 13. 全站爬一遍（`wget --spider -r` 或 Screaming Frog），確認改設定後沒有新增 404
+14. `curl -I https://www.nickzhuang.com/` → **301**，`location` 為 `https://nickzhuang.com/`
+15. `curl -I 'https://www.nickzhuang.com/posts?filter=K8S'` → 301 且**保留查詢字串**、
+    並補上結尾斜線（`/posts/?filter=K8S`）
+16. `curl -I https://nickzhuang.com/rss.xml` → 有 `x-robots-tag: noindex`
+17. 站內連結全部帶結尾斜線（抽驗首頁與列表頁，輸出應為空）：
+
+    ```bash
+    curl -s https://nickzhuang.com/ \
+      | grep -o 'href="/[^"]*"' \
+      | sed 's/href="//; s/"$//' \
+      | grep -v '^/assets/' \
+      | sed 's/?.*$//' \
+      | grep -vE '\.(js|css|png|xml|ico|webp|svg|json|md)$' \
+      | grep -v '/$' | sort -u
+    ```
+
+    三個容易寫錯的地方：抓到的字串**結尾是引號不是斜線**（要先 `sed` 去掉）、
+    `?filter=…` 要**先切掉 query** 再看路徑、資源檔（`.js`／`.png` 等）不算。
+    我第一版就漏了前兩點，結果誤報 9 筆。
+18. 上傳後的檔案確實是新的：`curl -s https://nickzhuang.com/sitemap.xml | md5` 要等於
+    本地 `dist/public/sitemap.xml` 的 md5（HTML 頁面會被 Cloudflare 注入腳本，md5 不會相等）
 
 ---
 
