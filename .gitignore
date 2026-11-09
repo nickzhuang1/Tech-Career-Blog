@@ -7,3 +7,8 @@ vite.config.ts.*
 *.tar.gz
 .local
 .pnpm-store
+
+# 不進版控的個人資料／工作檔（避免 git add -A 掃進來）
+docs/social/
+docs/university-lecturer/
+logs/
