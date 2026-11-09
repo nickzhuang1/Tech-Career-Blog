@@ -103,13 +103,13 @@ export default function Home() {
                 </div>
               </div>
               <div className="space-y-1.5">
-                <Link href="/posts?series=ironman-2023">
+                <Link href="/posts/?series=ironman-2023">
                   <span className="flex items-center justify-between text-xs text-muted-foreground cursor-pointer hover-elevate rounded p-1 -mx-1" data-testid="link-series-2023">
                     <span>2023 鐵人賽 - Gen AI</span>
                     <span className="text-primary-strong font-mono">30</span>
                   </span>
                 </Link>
-                <Link href="/posts?series=ironman-2019">
+                <Link href="/posts/?series=ironman-2019">
                   <span className="flex items-center justify-between text-xs text-muted-foreground cursor-pointer hover-elevate rounded p-1 -mx-1" data-testid="link-series-2019">
                     <span>2019 鐵人賽 - K8S</span>
                     <span className="text-primary-strong font-mono">30</span>
@@ -127,7 +127,7 @@ export default function Home() {
             <Code2 className="w-4 h-4 text-primary-strong" />
             <h2 className="text-lg font-semibold" data-testid="text-all-posts">最新文章</h2>
           </div>
-          <Link href="/posts">
+          <Link href="/posts/">
             <span className="flex items-center gap-1 text-sm text-muted-foreground cursor-pointer" data-testid="link-view-all">
               查看全部
               <ArrowRight className="w-3.5 h-3.5" />
@@ -150,7 +150,7 @@ export default function Home() {
 
         <div className="flex flex-wrap gap-2">
           {topTags.map((tag) => (
-            <Link key={tag} href={`/posts?filter=${encodeURIComponent(tag)}`}>
+            <Link key={tag} href={`/posts/?filter=${encodeURIComponent(tag)}`}>
               <Badge
                 variant="tag"
                 className="cursor-pointer text-sm font-normal py-1.5 px-3.5"

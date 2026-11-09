@@ -40,7 +40,7 @@ export default function Collection({
     return (
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-20 text-center">
         <p className="text-muted-foreground mb-4">找不到這個主題</p>
-        <Link href="/posts">
+        <Link href="/posts/">
           <span className="text-primary-strong text-sm cursor-pointer" data-testid="link-back-to-posts">
             返回文章列表
           </span>
@@ -64,7 +64,7 @@ export default function Collection({
           <span className="hover:text-foreground cursor-pointer">首頁</span>
         </Link>
         <ChevronRight className="w-3 h-3" />
-        <Link href="/posts">
+        <Link href="/posts/">
           <span className="hover:text-foreground cursor-pointer">所有文章</span>
         </Link>
         <ChevronRight className="w-3 h-3" />
@@ -119,7 +119,7 @@ export default function Collection({
       )}
 
       <div className="border-t border-border/30 pt-6">
-        <Link href="/posts">
+        <Link href="/posts/">
           <span
             className="inline-flex items-center gap-1.5 text-sm text-muted-foreground cursor-pointer"
             data-testid="link-back-to-posts-bottom"

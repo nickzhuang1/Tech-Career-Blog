@@ -63,7 +63,7 @@ export const collections: CollectionDef[] = [
       "適合已經在玩生成式 AI、但對「為什麼這個參數有效」還想弄清楚的讀者。",
     ],
     posts: bySeries("ironman-2023"),
-    related: ["/tag/deep-learning", "/category/ai"],
+    related: ["/tag/deep-learning/", "/category/ai/"],
   },
   {
     kind: "series",
@@ -80,7 +80,7 @@ export const collections: CollectionDef[] = [
       "適合正在把服務搬上叢集，或想弄清楚每個資源物件為何存在的人。",
     ],
     posts: bySeries("ironman-2019"),
-    related: ["/category/ai"],
+    related: ["/category/ai/"],
   },
   {
     kind: "category",
@@ -96,7 +96,7 @@ export const collections: CollectionDef[] = [
       "另一部分偏向觀察與反思：開源模型的能力邊界、AI 素養與自學路徑、社群活動的現場筆記。相較於教學型的系列文章，這裡更接近「真實組織導入 AI 會遇到什麼」。",
     ],
     posts: byCategory("ai"),
-    related: ["/tag/nvidia", "/tag/deep-learning"],
+    related: ["/tag/nvidia/", "/tag/deep-learning/"],
   },
   {
     kind: "tag",
@@ -112,7 +112,7 @@ export const collections: CollectionDef[] = [
       "如果想先知道「DLI 課程到底難不難、考照要準備多久、企業導入 AI 該從哪一層開始」，這六篇是最短的入口。",
     ],
     posts: byTag("NVIDIA"),
-    related: ["/category/ai", "/tag/deep-learning"],
+    related: ["/category/ai/", "/tag/deep-learning/"],
   },
   {
     kind: "tag",
@@ -128,12 +128,17 @@ export const collections: CollectionDef[] = [
       "這個聚落適合當作「理解模型怎麼運作」的補充教材 —— 特別是對已經會操作工具、但想補上理論基礎的人。",
     ],
     posts: byTag("Deep Learning"),
-    related: ["/series/ironman-2023", "/tag/nvidia"],
+    related: ["/series/ironman-2023/", "/tag/nvidia/"],
   },
 ];
 
-/** 正規化的頁面路徑（不含結尾斜線，供 wouter Link 使用） */
-export const collectionPath = (c: CollectionDef) => `/${c.kind}/${c.slug}`;
+/**
+ * 聚合頁的標準路徑（含結尾斜線）。
+ * 這個值同時用於站內連結與 canonical，必須與 prerender 產出的目錄結構一致：
+ * Cloudflare 對 `/tag/nvidia` 會 307 到 `/tag/nvidia/`，內鏈直接寫斜線版本
+ * 才不會讓 Google 額外發現一批只會轉址的網址（GSC「頁面會重新導向」）。
+ */
+export const collectionPath = (c: CollectionDef) => `/${c.kind}/${c.slug}/`;
 
 export function findCollection(
   kind: CollectionKind,

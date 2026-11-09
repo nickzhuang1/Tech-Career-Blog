@@ -26,7 +26,7 @@ export function BlogCard({ post, headingLevel = 3 }: { post: BlogPost; headingLe
   const Heading = `h${headingLevel}` as "h2" | "h3";
   return (
     <Link
-      href={`/posts/${post.id}`}
+      href={`/posts/${post.id}/`}
       className="block hover-elevate active-elevate-2 rounded-md"
       data-testid={`card-post-${post.id}`}
     >
@@ -75,7 +75,7 @@ export function BlogCard({ post, headingLevel = 3 }: { post: BlogPost; headingLe
 export function HeroBlogCard({ post }: { post: BlogPost }) {
   return (
     <Link
-      href={`/posts/${post.id}`}
+      href={`/posts/${post.id}/`}
       className="block hover-elevate active-elevate-2 rounded-md h-full"
       data-testid={`card-featured-${post.id}`}
     >

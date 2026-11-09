@@ -46,7 +46,7 @@ function buildTagList(posts: typeof blogPosts) {
 }
 
 export default function Posts() {
-  usePageTitle(buildTitle("所有文章"), "瀏覽所有技術文章與職涯分享。", "/posts");
+  usePageTitle(buildTitle("所有文章"), "瀏覽所有技術文章與職涯分享。", "/posts/");
 
   const search = useSearch();
   const [, setLocation] = useLocation();
@@ -75,7 +75,7 @@ export default function Posts() {
       else next.set(key, value);
     }
     const qs = next.toString();
-    setLocation(qs ? `/posts?${qs}` : "/posts");
+    setLocation(qs ? `/posts/?${qs}` : "/posts/");
   };
 
   const filteredPosts = useMemo(() => {

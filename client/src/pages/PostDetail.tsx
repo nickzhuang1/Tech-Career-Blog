@@ -534,7 +534,7 @@ export default function PostDetail(
   usePageTitle(
     post ? buildTitle(post.seoTitle ?? post.title) : buildTitle("文章未找到"),
     post?.excerpt,
-    post ? `/posts/${post.id}` : "/posts"
+    post ? `/posts/${post.id}/` : "/posts/"
   );
   useEffect(() => { window.scrollTo(0, 0); }, [id]);
 
@@ -555,7 +555,7 @@ export default function PostDetail(
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-muted-foreground mb-4">找不到這篇文章</p>
-          <Link href="/posts">
+          <Link href="/posts/">
             <span className="text-primary-strong text-sm cursor-pointer" data-testid="link-back-to-posts">返回文章列表</span>
           </Link>
         </div>
@@ -582,7 +582,7 @@ export default function PostDetail(
               </li>
               <li aria-hidden="true"><ChevronRight className="w-3.5 h-3.5 opacity-40" /></li>
               <li>
-                <Link href="/posts">
+                <Link href="/posts/">
                   <span className="cursor-pointer hover:text-foreground" data-testid="link-back">所有文章</span>
                 </Link>
               </li>
@@ -688,7 +688,7 @@ export default function PostDetail(
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed mb-3">{shortBio}</p>
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
-                <Link href="/about">
+                <Link href="/about/">
                   <span className="text-primary-strong cursor-pointer hover:underline" data-testid="link-author-about">
                     關於我 →
                   </span>
@@ -725,7 +725,7 @@ export default function PostDetail(
             </div>
             <div className="flex items-center justify-between gap-3 text-sm">
               {prevInSeries ? (
-                <Link href={`/posts/${prevInSeries}`}>
+                <Link href={`/posts/${prevInSeries}/`}>
                   <span className="inline-flex items-center gap-1 text-muted-foreground cursor-pointer" data-testid="link-series-prev">
                     <ArrowLeft className="w-3.5 h-3.5" />
                     上一篇
@@ -738,13 +738,13 @@ export default function PostDetail(
                 href={
                   seriesHub
                     ? collectionPath(seriesHub)
-                    : `/posts?series=${post.series}`
+                    : `/posts/?series=${post.series}`
                 }
               >
                 <span className="text-primary-strong cursor-pointer" data-testid="link-series-index">系列目錄</span>
               </Link>
               {nextInSeries ? (
-                <Link href={`/posts/${nextInSeries}`}>
+                <Link href={`/posts/${nextInSeries}/`}>
                   <span className="inline-flex items-center gap-1 text-muted-foreground cursor-pointer" data-testid="link-series-next">
                     下一篇
                     <ArrowLeft className="w-3.5 h-3.5 rotate-180" />
@@ -763,7 +763,7 @@ export default function PostDetail(
           <h2 className="text-base font-semibold mb-3">相關文章</h2>
           <div className="grid gap-3 sm:grid-cols-3">
             {related.map((p) => (
-              <Link key={p.id} href={`/posts/${p.id}`} className="block hover-elevate rounded-md">
+              <Link key={p.id} href={`/posts/${p.id}/`} className="block hover-elevate rounded-md">
                 <article className="h-full rounded-md border border-border/40 bg-card p-4 gradient-border">
                   <p className="text-sm font-medium leading-snug mb-2 line-clamp-3">{p.title}</p>
                   <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
@@ -779,7 +779,7 @@ export default function PostDetail(
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 pb-12">
         <div className="border-t border-border/30 pt-6 flex items-center justify-between">
-          <Link href="/posts">
+          <Link href="/posts/">
             <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground cursor-pointer" data-testid="link-bottom-back">
               <ArrowLeft className="w-3.5 h-3.5" />
               返回文章列表

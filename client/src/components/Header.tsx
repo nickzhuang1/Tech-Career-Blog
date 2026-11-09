@@ -6,10 +6,18 @@ import { useState } from "react";
 
 const navItems = [
   { label: "首頁", path: "/" },
-  { label: "文章", path: "/posts" },
-  { label: "關於", path: "/about" },
-  { label: "聯繫", path: "/contact" },
+  { label: "文章", path: "/posts/" },
+  { label: "關於", path: "/about/" },
+  { label: "聯繫", path: "/contact/" },
 ];
+
+/**
+ * 導覽列「目前頁面」的比對：忽略結尾斜線。
+ * 內鏈一律輸出結尾斜線版本（與 canonical、prerender 的目錄結構一致），
+ * 但使用者手動輸入或站外舊連結可能不帶斜線，兩種都要能點亮同一項。
+ */
+const isActive = (current: string, target: string) =>
+  current.replace(/\/+$/, "") === target.replace(/\/+$/, "");
 
 export function Header() {
   const { theme, toggleTheme } = useTheme();
@@ -37,7 +45,7 @@ export function Header() {
               <Link key={item.path} href={item.path}>
                 <span
                   className={`px-3.5 py-2 rounded-md text-sm cursor-pointer transition-colors ${
-                    location === item.path
+                    isActive(location, item.path)
                       ? "text-foreground font-medium bg-muted/50"
                       : "text-muted-foreground"
                   }`}
@@ -84,7 +92,7 @@ export function Header() {
               <Link key={item.path} href={item.path}>
                 <span
                   className={`block px-3.5 py-2.5 rounded-md text-sm cursor-pointer ${
-                    location === item.path
+                    isActive(location, item.path)
                       ? "text-foreground font-medium bg-muted/50"
                       : "text-muted-foreground"
                   }`}
