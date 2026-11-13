@@ -15,7 +15,7 @@ Nick Zhuang 的個人技術部落格。React SPA + 建置時靜態預渲染（SS
 |------|------|
 | Frontend | React 18 + Vite 7 + TypeScript + TailwindCSS + shadcn/ui |
 | Routing | wouter（client-side SPA） |
-| 預渲染 | `script/prerender.tsx`，建置時以 `react-dom/server` 輸出 91 個靜態頁 |
+| 預渲染 | `script/prerender.tsx`，建置時以 `react-dom/server` 輸出 92 個靜態頁 |
 | 圖片 | 建置時用 sharp 轉 WebP（寬度上限 1600）並產生尺寸表 |
 | OG 圖 | 建置時用 sharp 合成 1200×630 標題卡（每篇專屬） |
 | 伺服器 | Express 僅供本機預覽；正式站是純靜態 |
@@ -59,7 +59,7 @@ DNS 與主機清理記錄見 [`docs/dns-and-hosting-cleanup.md`](docs/dns-and-ho
 | 深度學習 | 1 |
 
 系列：`ironman-2023`（30 篇）、`ironman-2019`（30 篇）。
-Sitemap 共 91 筆 = 6 靜態頁 + 5 聚合頁 + 80 篇文章。
+Sitemap 共 92 筆 = 6 靜態頁 + 6 聚合頁 + 80 篇文章。
 
 ---
 
@@ -126,14 +126,14 @@ pnpm build
 
 | 步驟 | 腳本 | 產出 |
 |------|------|------|
-| 1 | `script/generate-sitemap.ts` | `client/public/sitemap.xml`（91 筆，全部結尾斜線） |
+| 1 | `script/generate-sitemap.ts` | `client/public/sitemap.xml`（92 筆，全部結尾斜線） |
 | 2 | `script/generate-feed.ts` | `client/public/rss.xml`（最新 30 篇） |
 | 3 | `script/optimize-images.ts` | 338 張 WebP + `client/src/lib/imageMeta.json`（132.8 MB → 20.4 MB） |
 | 4 | `vite build` | `dist/public`（前端 bundle 與靜態資源） |
 | 5 | `optimize-images（apply）` | 以 WebP 取代原圖並移除原檔 |
 | 6 | `script/generate-og.ts` | 85 張 1200×630 標題卡 → `dist/public/og/` |
 | 7 | esbuild | `dist/index.cjs`（本機預覽用，**不需上傳**） |
-| 8 | `script/prerender.tsx` | 91 個含完整 meta 的靜態 HTML ＋ `404.html`（noindex、無 canonical） |
+| 8 | `script/prerender.tsx` | 92 個含完整 meta 的靜態 HTML ＋ `404.html`（noindex、無 canonical） |
 
 `script/` 底下的建置腳本不在 `tsconfig.json` 的 include 範圍內，型別檢查走獨立設定：
 
@@ -142,7 +142,7 @@ pnpm typecheck         # client + server + script 三邊都檢查
 pnpm typecheck:script  # 只檢查建置腳本（改 script/ 之後先跑這個）
 ```
 
-最終 `dist/public` 約 43 MB、721 個檔案。
+最終 `dist/public` 約 43 MB、723 個檔案。
 
 ---
 

@@ -12,6 +12,14 @@ import { blogPosts, type BlogPost } from "./blogData";
  * - 只做「排除系列後仍有獨立內容」的聚落；gen-ai（31 篇中 30 篇在系列內）、
  *   k8s-docker（30 篇全在系列內）、Stable Diffusion（15 篇全在系列內）等
  *   會與系列頁近乎重複，因此不建獨立頁
+ *
+ * 2026-11 複核（80 篇實測，結果支持上面這條原則，不要重開）：
+ * - 80 篇中 60 篇在兩個系列內、20 篇在外
+ * - 標籤層幾乎全部落在系列內 → 建了就是系列頁的翻版：
+ *     Stable Diffusion 15/15、AWS 9/9、EKS 7/7、AIGC 5/5、Docker 5/5、K8S 29/30
+ * - 系列外真正成形的聚落只有 life（4 篇：寫作緣起 + 三次換架構 + SEO 健檢），已建立
+ * - career（3 篇）暫不建：其中 2 篇是「關於我」性質，獨立價值不足，
+ *   等累積到 5 篇以上再評估
  */
 export type CollectionKind = "series" | "category" | "tag";
 
@@ -97,6 +105,23 @@ export const collections: CollectionDef[] = [
     ],
     posts: byCategory("ai"),
     related: ["/tag/nvidia/", "/tag/deep-learning/"],
+  },
+  {
+    kind: "category",
+    slug: "life",
+    source: "life",
+    name: "人生探索",
+    seoTitle: "人生探索：從 WordPress 到自架 Cloudflare（4 篇）",
+    description:
+      "為什麼開始寫、三次換掉部落格底層架構的取捨（WordPress → Notion → Cloudflare Worker），以及自架兩年後的全站 SEO 健檢紀錄。",
+    scope: "4 篇 · 寫作緣起、三次換架構、SEO 健檢",
+    intro: [
+      "這個分類不談技術教學，談的是「這個網站是怎麼來的」。四篇文章沿著同一條時間線：先是為什麼開始寫（2013 年入行，從工程師、技術主管到合夥創業的軌跡），再來是三次換掉底層架構的決定 —— 出書之後發現網路上的文章太少而決定自建，於是離開 WordPress 搬到 Notion；一年後發現 Notion 的前端跳轉讓只有首頁進得了 Google 索引，GSC 上的數字慘不忍睹，於是再搬到 Cloudflare 自架；最後是自架一年後的全站健檢。",
+      "每次搬家都有一個具體的觸發點，也都被迫犧牲一些東西，文中把取捨寫得比結論多：省下多少錢、多花多少時間、哪些坑是自己找的。最後一篇〈兩年之後，我幫自己的部落格做了一次 SEO 健檢〉是全站規模最大的一次整理 —— 三百多張圖、七百多個標題，也包含幾個「決定不做」的判斷。",
+      "適合也在考慮自架部落格的人，或想看看「不外包、自己維護一個站」實際上長什麼樣子的人。建議依時間順序從〈為什麼你會看到這篇部落格？〉讀起。",
+    ],
+    posts: byCategory("life"),
+    related: ["/category/ai/"],
   },
   {
     kind: "tag",
