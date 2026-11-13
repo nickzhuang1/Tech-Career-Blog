@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, Link } from "wouter";
 import { blogPosts, series, aboutData, shortBio } from "@/lib/blogData";
 import { contactChannels } from "@/lib/contactLinks";
@@ -120,31 +120,17 @@ function renderMarkdown(md: string, articleId?: string, fallbackAlt?: string): J
   // 為什麼要先掃一遍而不是邊渲染邊算：「提要」清單的錨點連結出現在所有標題之前，
   // 等渲染到它時後面的標題都還沒登記，只能靠預掃才對得上。
   // 重複標題（6 篇文章有）依出現順序加上 -2、-3，避免重複 id 讓第二個錨點永遠跳到第一個。
+  // 文章目錄（TOC）吃的是同一份清單，兩邊才不會各算一套而對不上。
+  const headings = extractHeadings(md);
   const headingIdBySlug = new Map<string, string>();
-  {
-    let inFence = false;
-    for (const line of rawLines) {
-      if (line.replace(/^[\u200B\uFEFF\u00A0\u180E\u2060]+/, "").startsWith("```")) {
-        inFence = !inFence;
-        continue;
-      }
-      if (inFence) continue;
-      const m = line.match(/^#{1,4} (.*)$/);
-      if (!m) continue;
-      const slug = slugifyHeading(m[1]) || "section";
-      // 只記每個 slug 的第一次出現：內文的 `#錨點` 一律指向第一個同名標題，
-      // 後面的重複標題會拿到 -2、-3 後綴（見下面的渲染計數）。
-      if (!headingIdBySlug.has(slug)) headingIdBySlug.set(slug, slug);
-    }
+  for (const h of headings) {
+    // 只記每個 slug 的第一次出現：內文的 `#錨點` 一律指向第一個同名標題，
+    // 後面的重複標題會拿到 -2、-3 後綴。
+    if (!headingIdBySlug.has(h.base)) headingIdBySlug.set(h.base, h.id);
   }
-  // 重複標題必須拿到不同 id，否則第二個以後的錨點永遠跳到第一個
-  const usedHeadingIds = new Map<string, number>();
-  const headingId = (text: string) => {
-    const base = slugifyHeading(text) || "section";
-    const n = (usedHeadingIds.get(base) ?? 0) + 1;
-    usedHeadingIds.set(base, n);
-    return n === 1 ? base : `${base}-${n}`;
-  };
+  let headingCursor = 0;
+  /** 依文件順序取用預先算好的 id —— 順序與 extractHeadings 的走訪完全一致 */
+  const nextHeadingId = () => headings[headingCursor++]?.id ?? "section";
   /** 內文寫的 `#錨點` 也走同一套轉換，才不會因為大小寫或標點全形半形而斷鏈 */
   const anchorHref = (frag: string) => {
     const slug = slugifyHeading(frag);
@@ -361,7 +347,7 @@ function renderMarkdown(md: string, articleId?: string, fallbackAlt?: string): J
         "text-lg font-bold mt-8 mb-3 scroll-mt-20",
         "text-base font-bold mt-6 mb-2 scroll-mt-20",
       ][lv - 1];
-      out.push(<Tag key={nk()} id={headingId(txt)} className={hcls} dangerouslySetInnerHTML={{ __html: inline(txt) }} />);
+      out.push(<Tag key={nk()} id={nextHeadingId()} className={hcls} dangerouslySetInnerHTML={{ __html: inline(txt) }} />);
     } else if (line.startsWith("![")) {
       const m = line.match(/!\[([^\]]*)\]\(([^)]+)\)/);
       if (m) {
@@ -492,6 +478,82 @@ function slugifyHeading(text: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
+/**
+ * 內文標題的完整清單（文件順序）。
+ *
+ * 這份清單是「唯一真相」：`renderMarkdown` 依序取用 id、文章目錄也只從這裡挑，
+ * 兩邊各算一套的話，重複標題（-2、-3 後綴）遲早會對不上而變成斷鏈。
+ *
+ * `renderLevel` 反映實際渲染層級：內文的 `# ` 會降階成 `h2`
+ * （文章標題已是頁面唯一的 h1，見 renderMarkdown 的說明）。
+ * 第一個標題若寫成 `# …`，視為文章標題本身，不列進目錄。
+ */
+interface TocHeading {
+  mdLevel: number;
+  renderLevel: number;
+  text: string;
+  /** 正規化後的 slug（不含重複編號） */
+  base: string;
+  /** 實際使用的 id（重複標題為 base-2、base-3…） */
+  id: string;
+  isTitle: boolean;
+}
+
+function extractHeadings(md: string): TocHeading[] {
+  const out: TocHeading[] = [];
+  const used = new Map<string, number>();
+  let inFence = false;
+  let firstSeen = false;
+  for (const line of md.split("\n")) {
+    if (line.replace(/^[\u200B\uFEFF\u00A0\u180E\u2060]+/, "").startsWith("```")) {
+      inFence = !inFence;
+      continue;
+    }
+    if (inFence) continue;
+    const m = line.match(/^(#{1,4}) (.*)$/);
+    if (!m) continue;
+    const mdLevel = m[1].length;
+    const base = slugifyHeading(m[2]) || "section";
+    const n = (used.get(base) ?? 0) + 1;
+    used.set(base, n);
+    out.push({
+      mdLevel,
+      renderLevel: mdLevel === 1 ? 2 : mdLevel,
+      text: m[2],
+      base,
+      id: n === 1 ? base : `${base}-${n}`,
+      isTitle: !firstSeen && mdLevel === 1,
+    });
+    firstSeen = true;
+  }
+  return out;
+}
+
+/** 目錄只收 h2 / h3：h4 太細，文章標題本身不算一個章節 */
+function tocHeadings(md: string): TocHeading[] {
+  return extractHeadings(md).filter(
+    (h) => !h.isTitle && (h.renderLevel === 2 || h.renderLevel === 3),
+  );
+}
+
+/** 目錄清單本體（行動版與桌面版共用，只是外層容器不同） */
+function TocList({ items }: { items: TocHeading[] }) {
+  return (
+    <ol className="space-y-1 text-[13px]">
+      {items.map((h) => (
+        <li key={h.id} className={h.renderLevel === 3 ? "pl-4" : ""}>
+          <a
+            href={`#${h.id}`}
+            className="block py-0.5 break-words text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {plainHeading(h.text)}
+          </a>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 export default function PostDetail(
   { postId, initialContent }: { postId?: string; initialContent?: string } = {}
 ) {
@@ -511,6 +573,11 @@ export default function PostDetail(
   const related = post ? relatedPosts(post, 3) : [];
   const [content, setContent] = useState<string | undefined>(initialContent);
   const { theme } = useTheme();
+
+  // 文章目錄（P3-3）：建置期就把清單算好寫進靜態 HTML，不靠 JS 生成。
+  // 少於 4 節的文章不顯示 —— 兩三個小節的目錄只是多一層視覺噪音。
+  const tocItems = useMemo(() => (content ? tocHeadings(content) : []), [content]);
+  const showToc = tocItems.length >= 4;
 
   // 隨 theme 動態切換 highlight.js CSS 主題
   useEffect(() => {
@@ -658,11 +725,28 @@ export default function PostDetail(
         </div>
       </div>
 
-      <article className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-10" data-testid="article-content">
+      <div className="xl:flex xl:items-start xl:justify-center xl:gap-10">
+      <article className="w-full max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-10 xl:mx-0" data-testid="article-content">
         {content ? (
-          <div className="text-sm sm:text-[15px] text-foreground/90">
-            {renderMarkdown(content, id, post.title)}
-          </div>
+          <>
+            {/* 行動版目錄：<details> 純 HTML 就能收合，不需要一行 JS */}
+            {showToc && (
+              <details
+                className="xl:hidden mb-8 rounded-md border border-border/40 bg-card/40 px-4 py-3"
+                data-testid="toc-mobile"
+              >
+                <summary className="cursor-pointer select-none text-sm font-medium">
+                  目錄 · {tocItems.length} 個章節
+                </summary>
+                <div className="mt-3">
+                  <TocList items={tocItems} />
+                </div>
+              </details>
+            )}
+            <div className="text-sm sm:text-[15px] text-foreground/90">
+              {renderMarkdown(content, id, post.title)}
+            </div>
+          </>
         ) : (
           <div className="text-center py-12">
             <p className="text-muted-foreground mb-4">此文章內容尚未收錄</p>
@@ -672,6 +756,22 @@ export default function PostDetail(
           </div>
         )}
       </article>
+
+      {/* 桌面版目錄：xl 以上固定貼在右側，行動版不出現（避免壓縮內文寬度） */}
+      {showToc && content && (
+        <aside
+          className="hidden xl:block w-52 shrink-0 sticky top-24 self-start"
+          data-testid="toc-desktop"
+        >
+          <nav aria-label="文章目錄">
+            <p className="mb-2 text-xs font-semibold text-muted-foreground">目錄</p>
+            <div className="border-l border-border/40 pl-3">
+              <TocList items={tocItems} />
+            </div>
+          </nav>
+        </aside>
+      )}
+      </div>
 
       {/* 關於作者：文章讀完的當下是唯一會想「這誰寫的」的時刻。
           資料全部來自 aboutData／shortBio，不在這裡另寫一份。 */}
