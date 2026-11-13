@@ -326,3 +326,75 @@ workers_dev = false
 
 用 Dashboard 手動上傳則在該 Worker 的 **Settings → Domains & Routes** 確認
 沒有 `<name>.workers.dev` 這一項；沒列出來就是關閉狀態。
+
+---
+
+## 四、部署後的邊緣改寫：Cloudflare 會注入 JSD 腳本（2026-11 結案）
+
+### 現象
+
+線上 HTML 的 `<body>` 結尾固定多出一段約 **1.1 KB** 的腳本，本地的 `dist` 裡完全沒有：
+
+```html
+<script>(function(){function c(){var b=a.contentDocument||...;
+  window.__CF$cv$params={r:'a57e...',t:'MTc5...'};
+  ...'/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a57e...'...
+})();</script>
+```
+
+這是 Cloudflare 的 **JavaScript Detections（JSD）**：把一段偵測腳本塞進一個 1×1 的隱藏 iframe，
+用來做被動的機器人指紋收集，不會擋任何請求。
+
+### 怎麼確認是「即時注入」而不是「快取裡的舊副本」
+
+腳本裡嵌了當次請求的 ray ID。連兩次請求比對：
+
+```bash
+for i in 1 2; do
+  curl -s https://nickzhuang.com/ | grep -o "r:'[a-f0-9]*'" | head -1
+done
+#   兩次不同 → 每次請求都在注入（不是快取）
+#   兩次相同 → 快取裡有舊副本，清快取即可
+```
+
+另外比對大小最直觀：本地首頁 45,578 bytes、線上 46,692 bytes，**差 1,114 bytes 就是它**。
+
+### 排除了什麼（都實測過）
+
+| 假設 | 驗證方式 | 結果 |
+|---|---|---|
+| Bot Fight Mode 開著 | Security → Bots 的開關截圖（灰＝關）| ✅ 已關，仍注入 |
+| WAF 自訂規則的挑戰動作 | 帳號內無任何 Custom rules／Rate limiting rules | ✅ 排除 |
+| 托管規則集（Cloudflare Managed … Default）| 關閉後等 2 分鐘再測 ×3 | ✅ 仍注入，已還原 |
+| Under Attack Mode | 若開啟，`curl` 會被擋成挑戰頁 | ✅ 排除（`curl` 拿到完整 200 HTML）|
+| 依啟發式判斷（Managed Challenge）| 純 `curl`／完整瀏覽器標頭／Googlebot UA／帶 cookie 全部一樣 | ✅ 四個都是 1（無條件全面注入）|
+
+**結論：Free 版沒有對應開關，關不掉。** 這是帳號層級的 bot 管理元件自行套用的。
+
+### 影響評估：不用處理
+
+| 面向 | 影響 |
+|---|---|
+| Google 索引與排名 | **零**。Googlebot UA 實測拿到完整 HTML，canonical、JSON-LD、內文都正常 |
+| 效能 | 每頁 +1.1 KB、+1 個 `/cdn-cgi/` 請求 |
+| 隱私 | Cloudflare 的指紋偵測，站長拿不到資料 |
+| **實務困擾** | **線上 HTML 的 md5 永遠不等於本地 `dist`** |
+
+### 實務對策
+
+**驗證「上傳的檔案是不是新版」時，比對 `sitemap.xml` 而不是 HTML：**
+
+```bash
+md5 -q dist/public/sitemap.xml
+curl -s https://nickzhuang.com/sitemap.xml | md5 -q
+#   兩者相同 = 檔案已是最新（HTML 頁面因為注入，md5 一定不同）
+```
+
+`docs/seo-audit.md` 第八章的驗收清單第 18 項就是這一條。
+
+### 不要做的事
+
+**不要為了 strip 這 1.1 KB 把主站改成 script 型 Worker。** 那會把「手動上傳 `dist/public`」
+換成「維護 `wrangler` 部署流程」，代價遠大於收益。同理也不建議加一層 Worker 做 HTML 後處理。
+
+**這條路已經走完，三個月後再看到線上 HTML 跟本地不一樣時，直接跳過。**
