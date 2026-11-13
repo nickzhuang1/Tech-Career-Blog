@@ -227,6 +227,32 @@ c) 補 alt：可以先用「文章標題 + 圖序」自動補齊，再由你人�
 重點：每個聚合頁都要有**獨一無二的介紹文案**，不要只是列表，否則會變成 thin content 反而扣分。
 這些頁面同樣要納入 `prerender.tsx` 與 sitemap。
 
+#### 2026-11 複核：最終 6 頁，標籤頁一頁都不建
+
+上面列的 `/category/gen-ai`、`/category/k8s-docker`、`/tag/aws`、`/tag/stable-diffusion`
+在複核時全部否決 —— 它們的文章清單與系列頁**完全相同**：
+
+| 候選頁 | 文章數 | 其中在系列內 | 結果 |
+|---|---|---|---|
+| `/tag/stable-diffusion/` | 15 | 15 | 與 `/series/ironman-2023/` 重複 |
+| `/tag/aws/` | 9 | 9 | 與 2019 系列重複 |
+| `/tag/eks/` | 7 | 7 | 同上 |
+| `/tag/aigc/` | 5 | 5 | 與 2023 系列重複 |
+| `/tag/docker/` | 5 | 5 | 與 2019 系列重複 |
+| `/tag/k8s/` | 30 | 29 | 29/30 重複 |
+| `/category/gen-ai/` | 30 | 30 | 與 2023 系列重複 |
+| `/category/k8s-docker/` | 30 | 30 | 與 2019 系列重複 |
+
+建這些頁等於把同一批文章發布兩次，正是這份健檢在修的問題（canonical 收斂）。
+**80 篇中有 60 篇在兩個系列內**，系列外的 20 篇才是唯一有獨立聚合價值的範圍。
+
+因此 2026-11 新增的是 `/category/life/`（4 篇：為什麼開始寫 → 離開 WordPress →
+離開 Notion 改用 Cloudflare 自架 → 全站 SEO 健檢），全部在系列外，時間線連貫。
+
+最終 6 頁：2 系列 + 2 分類（ai、life）+ 2 標籤（nvidia、deep-learning）。
+`/category/career/`（3 篇，其中 2 篇是「關於我」性質）暫緩，等累積到 5 篇再評估。
+判斷依據同步寫在 `client/src/lib/collections.ts` 的檔頭註解。
+
 ### P1-2 結構化資料只有一半 ✅
 
 現在只有文章頁的 `BlogPosting`。建議補：
