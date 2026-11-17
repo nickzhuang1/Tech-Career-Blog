@@ -370,7 +370,7 @@ export const aboutData = {
     /** iThome 鐵人賽個人頁：兩屆鐵人賽的原始出處，也是身分佐證 */
     ithome: "https://ithelp.ithome.com.tw/users/20120468/ironman",
     linkedin: "https://www.linkedin.com/in/nick-zhuang/",
-    blog: "https://www.nickzhuang.com",
+    blog: "https://nickzhuang.com",
     email: "mailto:nickzhuang1@gmail.com",
     github: "https://github.com/nickzhuang1",
   },
