@@ -145,7 +145,7 @@ pnpm typecheck         # client + server + script 三邊都檢查
 pnpm typecheck:script  # 只檢查建置腳本（改 script/ 之後先跑這個）
 ```
 
-最終 `dist/public` 約 43 MB、723 個檔案。
+最終 `dist/public` 約 40.6 MiB、722 個檔案（以位元組加總為準；`du` 會因區塊對齊而虛胖）。
 
 ---
 
