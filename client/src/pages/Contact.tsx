@@ -43,18 +43,26 @@ export default function Contact() {
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         <div className="max-w-lg mx-auto space-y-4">
-          {/* 演講照片 */}
-          <div className="rounded-md border border-border/40 bg-card overflow-hidden gradient-border">
+          {/* 這頁在邀請演講，照片就放演講 —— 旅照放在「技術合作、演講邀約」下面語意對不上。
+              去年（2025）的照片不影響說服力：它證明的是「這件事發生過」，不是「今年還在活動」。
+              帶 width / height 是為了讓瀏覽器先留好空間，否則載入時下方聯絡方式會往下跳（CLS）。 */}
+          <figure className="rounded-md border border-border/40 bg-card overflow-hidden gradient-border">
             <img
-              src="/contact-photo.jpg"
-              alt="Nick Zhuang 旅遊照"
+              src="/aia-conference-2025.jpg"
+              alt="Nick Zhuang 於 2025 AIA 年會演講 vLLM 推論加速"
+              width={1280}
+              height={960}
+              loading="lazy"
+              decoding="async"
               className="w-full object-cover"
             />
-            <div className="px-4 py-3">
-              <p className="text-xs font-medium">Nick Zhuang 旅遊寫真</p>
-              <p className="text-xs text-muted-foreground mt-0.5">Salzburg, Austria · 2025</p>
-            </div>
-          </div>
+            <figcaption className="px-4 py-3">
+              <p className="text-xs font-medium">2025 AIA 年會</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Unlocking LLM Inference with vLLM
+              </p>
+            </figcaption>
+          </figure>
           {contactChannels.map((channel) => {
             const style = CHANNEL_STYLE[channel.key];
             const Icon = style.icon;
